@@ -1,0 +1,246 @@
+/* Components: page sections and event cards */
+.section {
+    padding-inline: var(--content-gutter);
+    padding-block: var(--section-space);
+}
+
+.events {
+    display: grid;
+    gap: var(--space-6);
+}
+
+.section__heading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-6);
+}
+
+.section__title {
+    color: var(--color-text-primary);
+    font-size: var(--font-size-xl);
+}
+
+.events__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+}
+
+.event-card {
+    min-width: 0;
+    overflow: hidden;
+    border-radius: var(--radius-card);
+    background: var(--color-surface-strong);
+    color: var(--color-text-inverse);
+}
+
+.event-card__visual {
+    position: relative;
+    height: auto;
+    aspect-ratio: 1.62;
+    padding: var(--space-2);
+}
+
+.event-card__image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.event-card__favorite,
+.event-card__category {
+    position: absolute;
+    z-index: 1;
+    top: var(--space-2);
+}
+
+.event-card__favorite {
+    left: var(--space-2);
+    display: grid;
+    width: 2rem;
+    height: 2rem;
+    place-items: center;
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius-pill);
+    background: var(--color-background);
+    color: var(--color-text-primary);
+    cursor: pointer;
+}
+
+.event-card__favorite-icon {
+    width: 1.125rem;
+    height: 1.125rem;
+    overflow: visible;
+    fill: transparent;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: fill 160ms ease, transform 160ms ease;
+}
+
+.event-card__favorite[aria-pressed="true"] .event-card__favorite-icon {
+    fill: var(--color-accent);
+    transform: scale(1.08);
+}
+
+.event-card__category {
+    right: var(--space-2);
+    padding: var(--space-1) var(--space-2);
+    border-radius: var(--radius-small);
+    background: var(--color-accent);
+    color: var(--color-text-primary);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    line-height: 1.2;
+}
+
+.event-card__details {
+    display: grid;
+    min-height: 0;
+    align-content: start;
+    gap: var(--space-3);
+    padding: var(--space-4);
+}
+
+.event-card__title {
+    font-family: var(--font-body);
+    font-size: var(--font-size-s);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-body);
+}
+
+.event-card__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--font-size-xs);
+}
+
+.event-card__price {
+    font-weight: var(--font-weight-semibold);
+}
+
+.event-card__venue {
+    font-size: var(--font-size-xs);
+}
+
+/* Components: discipline cards and steps */
+.disciplines {
+    display: grid;
+    gap: var(--space-6);
+}
+
+.disciplines__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+}
+
+.discipline-item {
+    display: grid;
+    justify-items: center;
+    gap: var(--space-3);
+    color: var(--color-text-primary);
+    text-align: center;
+}
+
+.discipline-card {
+    display: grid;
+    min-height: 10rem;
+    width: 100%;
+    place-items: center;
+    padding: var(--space-4);
+    border-radius: var(--radius-card);
+    background: var(--color-surface-strong);
+}
+
+.discipline-card__icon {
+    width: 5.25rem;
+    height: 5.25rem;
+    object-fit: contain;
+}
+
+.discipline-card__title {
+    font-size: var(--font-size-s);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-inverse);
+    -webkit-user-select: text;
+    user-select: text;
+}
+
+.how-it-works {
+    display: grid;
+    min-height: 0;
+    align-content: start;
+    justify-items: center;
+    gap: var(--space-8);
+    padding-bottom: calc(var(--section-space) * 2);
+}
+
+.how-it-works__intro {
+    display: grid;
+    max-width: 40rem;
+    justify-items: center;
+    gap: var(--space-3);
+    text-align: center;
+}
+
+.how-it-works__intro p {
+    font-size: var(--font-size-s);
+}
+
+.steps__grid {
+    display: grid;
+    width: 100%;
+    grid-template-columns: 1fr;
+    gap: var(--space-8);
+}
+
+.step-card {
+    display: flex;
+    min-height: 0;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-4);
+    padding: var(--space-6);
+    border: 1px solid #8c8c8c;
+    border-radius: var(--radius-card);
+    text-align: center;
+}
+
+.step-card__number {
+    display: grid;
+    width: 2.5rem;
+    height: 2.5rem;
+    flex: 0 0 2.5rem;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--color-surface-strong);
+    color: var(--color-accent);
+    font-weight: var(--font-weight-semibold);
+}
+
+.step-card__copy {
+    display: grid;
+    gap: var(--space-2);
+    font-size: var(--font-size-s);
+    line-height: var(--line-height-body);
+}
+
+.step-card__copy h3 {
+    font-family: var(--font-body);
+    font-size: var(--font-size-s);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-tight);
+}
+
+.step-card__copy p {
+    font-size: var(--font-size-xs);
+}
