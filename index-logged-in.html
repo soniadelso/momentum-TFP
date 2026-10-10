@@ -16,6 +16,7 @@
 	<link rel="stylesheet" href="css/hero.css">
 	<link rel="stylesheet" href="css/sections-cards.css">
 	<link rel="stylesheet" href="css/footer.css">
+	<link rel="stylesheet" href="css/buttons.css">
 	<link rel="stylesheet" href="css/responsive.css">
 	<script src="header-menu.js" defer></script>
 	<title>momentum | Mis eventos</title>
@@ -30,8 +31,8 @@
 			</button>
 			<nav class="header__nav" id="header-nav" aria-label="Main navigation">
 				<a class="header__link header__link--host" href="#host-event">Host Event</a>
-				<a class="header__link" href="#interests">Explore</a>
-				<a class="header__map" href="#community" aria-label="Map">
+				<a class="header__link" href="explorar.html">Explore</a>
+				<a class="header__map" href="map.html" aria-label="Map">
 					<span>Map</span>
 					<img src="assets/icon-map.svg" alt="">
 				</a>
@@ -57,8 +58,8 @@
 	</header>
 
 	<main id="home">
-		<section class="attending section" aria-labelledby="attending-title">
-			<h1 class="section__title" id="attending-title">Asistiendo</h1>
+		<section class="attending section" aria-label="Asistiendo">
+			<h1 class="section__title">Asistiendo</h1>
 
 			<div class="attending__groups">
 				<section class="attending__group" aria-labelledby="attending-date-one">
@@ -130,10 +131,10 @@
 			</div>
 		</section>
 
-		<section class="events section" id="interests" aria-labelledby="interests-title">
+		<section class="events section" id="interests" aria-label="Según tus intereses">
 			<div class="section__heading">
-				<h2 class="section__title" id="interests-title">Según tus intereses</h2>
-				<a class="button button--outline" href="#interests-grid">View all</a>
+				<h2 class="section__title">Según tus intereses</h2>
+				<a class="button button--secondary-outline" href="#interests-grid">View all</a>
 			</div>
 			<div class="events__grid" id="interests-grid">
 				<article class="event-card">
@@ -163,10 +164,10 @@
 			</div>
 		</section>
 
-		<section class="events section" id="community" aria-labelledby="community-title">
+		<section class="events section" id="community" aria-label="Según tu comunidad">
 			<div class="section__heading">
-				<h2 class="section__title" id="community-title">Según tu comunidad</h2>
-				<a class="button button--outline" href="#community-grid">View all</a>
+				<h2 class="section__title">Según tu comunidad</h2>
+				<a class="button button--secondary-outline" href="#community-grid">View all</a>
 			</div>
 			<div class="events__grid" id="community-grid">
 				<article class="event-card">

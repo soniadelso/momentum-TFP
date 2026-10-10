@@ -4,13 +4,16 @@
 
     /* Colors */
     --color-background: #fffef5;
+    --background-white: #ffffff;
     --color-text-primary: #272727;
     --color-surface-strong: #272727;
+    --color-surface-white: #ffffff;
     --color-border-strong: #272727;
     --color-text-inverse: #fffef5;
     --color-accent: #edff57;
     --color-text-muted: #8c8c8c;
     --color-text-secondary: #edff57;
+    --color-neutral-line: #8c8c8c;
     --color-footer-line: #3c3c3c;
     --color-field-background: var(--color-background);
     --color-text-subtle: #666666;
