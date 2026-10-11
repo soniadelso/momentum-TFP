@@ -97,14 +97,6 @@
         min-height: 28rem;
     }
 
-    .hero__content {
-        padding: var(--space-10) var(--space-10) var(--space-10) var(--content-gutter);
-    }
-
-    .hero__media {
-        padding: var(--space-8) var(--content-gutter) var(--space-8) var(--space-6);
-    }
-
     .hero__image-wrap {
         height: 19rem;
         aspect-ratio: auto;
@@ -181,7 +173,7 @@
 /* --breakpoint-desktop */
 @media (min-width: 1101px) {
     :root {
-        --content-gutter: 4rem;
+        --content-gutter: 5.90rem;
     }
 
     .header {
@@ -195,10 +187,6 @@
 
     .hero {
         min-height: 34.75rem;
-    }
-
-    .hero__content {
-        padding-left: 5rem;
     }
 
     .hero__image-wrap {

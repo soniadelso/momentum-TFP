@@ -9,6 +9,10 @@ body {
     -webkit-font-smoothing: antialiased;
 }
 
+main {
+    padding-inline: var(--content-gutter);
+}
+
 h1,
 h2,
 h3 {

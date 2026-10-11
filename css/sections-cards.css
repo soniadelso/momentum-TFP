@@ -1,6 +1,5 @@
 /* Components: page sections and event cards */
 .section {
-    padding-inline: var(--content-gutter);
     padding-block: var(--section-space);
 }
 
@@ -45,201 +44,6 @@ main > section:last-child {
     }
 }
 
-.event-card-map {
-    display: flex;
-    min-height: 7.125rem;
-}
-
-.event-card-map .event-card__visual {
-    width: 8.75rem;
-    min-height: 7.125rem;
-    flex: 0 0 8.75rem;
-    padding: 0;
-}
-
-.event-card-map .event-card__details {
-    min-width: 0;
-    flex: 1;
-    align-content: center;
-    gap: var(--space-2);
-    padding: var(--space-4);
-}
-
-.event-card-map .event-card__meta {
-    width: 100%;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--space-2);
-}
-
-.event-card-map .event-card__title {
-    overflow: hidden;
-    font-size: var(--font-size-xs);
-    line-height: 1.2;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-    line-clamp: 2;
-}
-
-main#home[aria-label="Mapa de eventos"] {
-    height: calc(100dvh - 4.5rem);
-    display: grid;
-    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
-}
-
-main#home[aria-label="Mapa de eventos"] > .event-card__visual {
-    width: 100%;
-    height: auto;
-    aspect-ratio: 1810 / 1214;
-    align-self: center;
-    padding: 0;
-}
-
-main#home[aria-label="Mapa de eventos"] > .event-card__visual > .event-card__image {
-    object-fit: cover;
-}
-
-main#home[aria-label="Mapa de eventos"] > .event-card__visual > details {
-    position: absolute;
-    z-index: 2;
-    display: flex;
-    max-width: calc(100% - var(--space-4));
-    align-items: center;
-    gap: var(--space-2);
-    color: var(--color-text-primary);
-}
-
-main#home[aria-label="Mapa de eventos"] > .event-card__visual > details:nth-of-type(1) {
-    top: 42%;
-    left: 12%;
-}
-
-main#home[aria-label="Mapa de eventos"] > .event-card__visual > details:nth-of-type(2) {
-    top: 58%;
-    right: 42%;
-    flex-direction: row-reverse;
-}
-
-main#home[aria-label="Mapa de eventos"] > .event-card__visual > details:nth-of-type(3) {
-    top: 74%;
-    left: 17%;
-}
-
-main#home[aria-label="Mapa de eventos"] > .event-card__visual > details > summary {
-    display: block;
-    flex: 0 0 auto;
-    list-style: none;
-    cursor: pointer;
-}
-
-main#home[aria-label="Mapa de eventos"] > .event-card__visual > details > summary::-webkit-details-marker {
-    display: none;
-}
-
-main#home[aria-label="Mapa de eventos"] > .event-card__visual > details > summary:focus-visible {
-    outline: 2px solid var(--color-accent);
-    outline-offset: 3px;
-}
-
-main#home[aria-label="Mapa de eventos"] > .event-card__visual > details > summary > img {
-    width: 2rem;
-    height: 2.25rem;
-}
-
-.event-card-map__category {
-    position: static;
-    min-width: 0;
-    max-width: 16rem;
-    overflow-wrap: anywhere;
-}
-
-main#home[aria-label="Mapa de eventos"] > .events {
-    min-width: 0;
-    height: 100%;
-    min-height: 0;
-    grid-template-rows: auto minmax(0, 1fr) auto;
-    gap: 0;
-    overflow: hidden;
-    padding: 0;
-    background: var(--color-surface-white);
-}
-
-main#home[aria-label="Mapa de eventos"] .explore-filters {
-    gap: var(--space-4);
-    padding: var(--space-8) var(--space-6) var(--space-5);
-    background: var(--color-background);
-}
-
-main#home[aria-label="Mapa de eventos"] .section__title {
-    display: none;
-}
-
-main#home[aria-label="Mapa de eventos"] .events__grid {
-    min-height: 0;
-    grid-template-columns: minmax(0, 1fr);
-    align-content: start;
-    gap: var(--space-3);
-    overflow-y: auto;
-    padding: var(--space-5);
-}
-
-@media (max-width: 700px) {
-    main#home[aria-label="Mapa de eventos"] {
-        height: auto;
-        grid-template-columns: minmax(0, 1fr);
-    }
-
-    main#home[aria-label="Mapa de eventos"] > .event-card__visual {
-        height: auto;
-        max-height: calc(100dvh - 7rem);
-    }
-
-    main#home[aria-label="Mapa de eventos"] > .event-card__visual > details:nth-of-type(1) {
-        top: 20%;
-        left: 5%;
-    }
-
-    main#home[aria-label="Mapa de eventos"] > .event-card__visual > details:nth-of-type(2) {
-        top: 48%;
-        right: 40%;
-    }
-
-    main#home[aria-label="Mapa de eventos"] > .event-card__visual > details:nth-of-type(3) {
-        top: 76%;
-        left: 6%;
-    }
-
-    .event-card-map__category {
-        max-width: calc(60vw - var(--content-gutter) - var(--space-10));
-    }
-
-    main#home[aria-label="Mapa de eventos"] > .events {
-        height: auto;
-        grid-template-rows: auto auto auto;
-        gap: var(--space-4);
-        overflow: visible;
-    }
-
-    main#home[aria-label="Mapa de eventos"] .explore-filters {
-        padding: var(--space-4) var(--content-gutter) 0;
-        background: transparent;
-    }
-
-    main#home[aria-label="Mapa de eventos"] .section__title {
-        display: block;
-        padding-inline: var(--content-gutter);
-        font-size: var(--font-size-s);
-    }
-
-    main#home[aria-label="Mapa de eventos"] .events__grid {
-        overflow: visible;
-        padding: 0 var(--content-gutter) var(--space-8);
-    }
-
-}
-
 .event-card__visual {
     position: relative;
     height: auto;
@@ -255,8 +59,7 @@ main#home[aria-label="Mapa de eventos"] .events__grid {
     object-fit: cover;
 }
 
-.event-card__category,
-.event-card-map__category {
+.event-card__category {
     position: absolute;
     z-index: 1;
     top: var(--space-2);
@@ -268,12 +71,6 @@ main#home[aria-label="Mapa de eventos"] .events__grid {
     font-size: var(--font-size-xs);
     font-weight: var(--font-weight-semibold);
     line-height: 1.2;
-}
-
-.event-card-map__category {
-    position: static;
-    top: auto;
-    right: auto;
 }
 
 .event-card__details {

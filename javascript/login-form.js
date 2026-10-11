@@ -19,6 +19,7 @@ const loginForm = document.querySelector(".login-form");
 if (loginForm) {
     loginForm.addEventListener("submit", (event) => {
         event.preventDefault();
+        localStorage.setItem("momentum-authenticated", "true");
         window.location.assign("index-logged-in.html");
     });
 }

@@ -150,6 +150,28 @@
     }
 }
 
+/* Compact secondary filter trigger and its colorable SVG icon. */
+.map-filter-trigger {
+    width: 2.25rem;
+    flex: 0 0 2.25rem;
+    padding: 0;
+}
+
+.map-filter-trigger:hover {
+    background-color: var(--color-accent);
+}
+
+.map-filter-trigger__icon {
+    display: block;
+    width: 14px;
+    height: 14px;
+    transition: filter 180ms var(--transition-ease);
+}
+
+.map-filter-trigger:hover .map-filter-trigger__icon {
+    filter: grayscale(1) brightness(0.163);
+}
+
 .button--filter-outline {
     min-height: calc(2.25rem - 1px);
     padding: 0 calc(var(--space-6) - 1px);
@@ -157,6 +179,7 @@
     font-size: calc(var(--font-size-xs) - 1px);
     transition: background-color 180ms var(--transition-ease), border-color 180ms var(--transition-ease), color 180ms var(--transition-ease);
 }
+
 
 .button--filter-outline {
     border-color: var(--color-neutral-line);
@@ -220,7 +243,7 @@
 }
 
 .event-card__favorite[aria-pressed="true"] .event-card__favorite-icon {
-    fill: var(--color-accent);
+    fill: var(--color-surface-strong);
     transform: scale(1.08);
 }
 

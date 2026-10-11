@@ -156,6 +156,17 @@
     gap: var(--space-6);
 }
 
+.profile-settings-grid[hidden] {
+    display: none;
+}
+
+.profile-section .profile-logout {
+    width: 25%;
+    min-width: max-content;
+    gap: var(--space-2);
+    padding-inline: var(--space-3);
+}
+
 .profile-setting-card {
     display: grid;
     gap: var(--space-3);

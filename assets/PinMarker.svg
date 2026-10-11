@@ -1,8 +1,8 @@
 <svg width="32" height="36" viewBox="0 0 32 36" fill="none" xmlns="http://www.w3.org/2000/svg">
 <g filter="url(#filter0_d_93_3685)">
-<rect x="4" y="2" width="24" height="24" rx="12" fill="#1F1F1F"/>
+<rect x="4" y="2" width="24" height="24" rx="12" fill="#EDFF57" stroke="#272727" stroke-width="1.5"/>
 </g>
-<path d="M16 36L11.6699 30H20.3301L16 36Z" fill="#1F1F1F"/>
+<path d="M16 36L11.6699 30H20.3301L16 36Z" fill="#272727"/>
 <defs>
 <filter id="filter0_d_93_3685" x="0" y="0" width="32" height="32" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
 <feFlood flood-opacity="0" result="BackgroundImageFix"/>

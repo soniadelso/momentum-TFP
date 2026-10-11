@@ -10,7 +10,7 @@ document.querySelectorAll(".explore-filters__group").forEach((group) => {
     };
 
     group.addEventListener("pointerdown", (event) => {
-        if (event.pointerType === "touch" || event.button !== 0) {
+        if (event.pointerType === "touch" || event.button !== 0 || event.target.closest(".map-filter-trigger")) {
             return;
         }
 
