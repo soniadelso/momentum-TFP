@@ -6,13 +6,13 @@ let favoriteNoticeTimeout;
 // Muestra el total actualizado de favoritos durante un segundo junto al perfil.
 const showFavoriteAddedNotice = (count) => {
 	if (!favoriteNotice) {
-		favoriteNotice = document.createElement("div");
+		favoriteNotice = document.createElement("a");
 		favoriteNotice.className = "favorite-added-notice";
-		favoriteNotice.setAttribute("role", "status");
+		favoriteNotice.href = "user-profile.html";
 		favoriteNotice.setAttribute("aria-live", "polite");
 		favoriteNotice.setAttribute("aria-atomic", "true");
-		favoriteNotice.innerHTML = '<span>Añadido a mi <a class="favorite-added-notice__link" href="user-profile.html" aria-label="Ver mi perfil">perfil</a></span><span class="favorite-added-notice__count" aria-hidden="true"></span>';
-		(document.querySelector(".header") || document.body).append(favoriteNotice);
+		favoriteNotice.innerHTML = '<span>Añadido a mi perfil</span><span class="favorite-added-notice__count" aria-hidden="true"></span>';
+		document.body.append(favoriteNotice);
 	}
 
 	favoriteNotice.querySelector(".favorite-added-notice__count").textContent = String(count);

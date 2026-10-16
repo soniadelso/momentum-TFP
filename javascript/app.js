@@ -5,6 +5,7 @@ const isAuthenticated = localStorage.getItem(authStorageKey) === "true";
 const homeHref = isAuthenticated ? "index-logged-in.html" : "index.html";
 
 if (headerMount) {
+	const homeCurrent = ["index.html", "index-logged-in.html"].includes(currentPage) ? ' aria-current="page"' : "";
 	const exploreCurrent = currentPage === "explorar.html" ? ' aria-current="page"' : "";
 	const mapCurrent = currentPage === "map.html" ? ' aria-current="page"' : "";
 	const profileCurrent = currentPage === "user-profile.html" ? ' aria-current="page"' : "";
@@ -14,11 +15,15 @@ if (headerMount) {
 	const accountAction = isAuthenticated
 		? `<a class="header__profile" href="user-profile.html" aria-label="Your profile"><img src="assets/profile-avatar-2.jpg" alt=""></a>`
 		: `<a class="button button--primary" href="log-in.html">Log In</a>`;
+	const mobileProfileAction = isAuthenticated
+		? `<a class="mobile-bottom-nav__link" href="user-profile.html"${profileCurrent}><span class="mobile-bottom-nav__avatar" aria-hidden="true"><img src="assets/profile-avatar-2.jpg" alt=""></span><span>Perfil</span></a>`
+		: `<a class="mobile-bottom-nav__link" href="log-in.html"><span class="mobile-bottom-nav__user" aria-hidden="true"><img src="assets/icon-user.svg" alt=""></span><span>Log In</span></a>`;
 	const searchAction = currentPage === "map.html" ? "map.html" : "explorar.html";
 
 	headerMount.innerHTML = `
 		<header class="header">
 			<a class="header__brand" href="${homeHref}" aria-label="momentum home">momentum</a>
+			<a class="button button--primary header__host-mobile" href="index.html#how-it-works">Host Event</a>
 			<div class="header__menu">
 				<button class="header__menu-toggle" type="button" aria-controls="header-nav" aria-expanded="false" aria-label="Open navigation menu">
 					<span class="header__menu-icon" aria-hidden="true"></span>
@@ -50,7 +55,13 @@ if (headerMount) {
 				<div class="explore-filters__facet-menu" id="event-search-suggestions" role="listbox" aria-label="Sugerencias de eventos" hidden></div>
 			</div>
 			${accountAction}
-		</header>`;
+		</header>
+		<nav class="mobile-bottom-nav" aria-label="Navegación principal">
+			<a class="mobile-bottom-nav__link" href="${homeHref}"${homeCurrent}><span class="mobile-bottom-nav__icon mobile-bottom-nav__icon--home"><img src="assets/icon-home-mobile.svg" alt=""></span><span>Home</span></a>
+			<a class="mobile-bottom-nav__link" href="explorar.html"${exploreCurrent}><span class="mobile-bottom-nav__icon mobile-bottom-nav__icon--search"><img src="assets/icon-search.svg" alt=""></span><span>Explorar</span></a>
+			<a class="mobile-bottom-nav__link" href="map.html"${mapCurrent}><span class="mobile-bottom-nav__icon"><img src="assets/icon-map.svg" alt=""></span><span>Mapa</span></a>
+			${mobileProfileAction}
+		</nav>`;
 
 }
 
