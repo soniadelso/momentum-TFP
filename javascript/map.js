@@ -1,5 +1,5 @@
 
-import { Circle, CircleMarker, DivIcon, LeafletMap, Marker, TileLayer } from "leaflet";
+import { Circle, DivIcon, LeafletMap, Marker, TileLayer } from "leaflet";
 
 const map = new LeafletMap("map", { zoomSnap: 0.25 }).setView([41.3874, 2.1686], 13);
 // Informa al filtro qué eventos caben en la vista actual del mapa.
@@ -31,13 +31,17 @@ if (navigator.geolocation) {
 	navigator.geolocation.getCurrentPosition(({ coords }) => {
 		const userCoordinates = getApproximateCoordinates([coords.latitude, coords.longitude]);
 		map.setView(userCoordinates, 13);
-		new CircleMarker(userCoordinates, {
-			radius: 8,
-			color: "#fff",
-			weight: 2,
-			fillColor: "#3388ff",
-			fillOpacity: 1,
-			interactive: false
+		new Marker(userCoordinates, {
+			icon: new DivIcon({
+				className: "map-user-location",
+				html: '<span class="map-user-location__pulse" aria-hidden="true"></span><span class="map-user-location__dot" aria-hidden="true"></span>',
+				iconSize: [32, 32],
+				iconAnchor: [16, 16]
+			}),
+			title: "Tu ubicación aproximada",
+			alt: "Tu ubicación aproximada",
+			interactive: false,
+			zIndexOffset: 1000
 		}).addTo(map);
 		document.dispatchEvent(new CustomEvent("user-location-found", {
 			detail: { coordinates: userCoordinates }

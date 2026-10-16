@@ -40,6 +40,37 @@ main#home[aria-label="Mapa de eventos"] > .map-canvas {
 	background: transparent;
 }
 
+.leaflet-div-icon.map-user-location {
+	border: 0;
+	background: transparent;
+}
+
+@keyframes map-user-location-pulse {
+	0% { opacity: 0.7; transform: scale(0.25); }
+	100% { opacity: 0; transform: scale(1); }
+}
+
+.map-user-location__pulse {
+	position: absolute;
+	inset: 0;
+	border-radius: 50%;
+	background: rgb(51 136 255 / 35%);
+	animation: map-user-location-pulse 1.6s ease-out infinite;
+}
+
+.map-user-location__dot {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 14px;
+	height: 14px;
+	transform: translate(-50%, -50%);
+	border: 2px solid #fff;
+	border-radius: 50%;
+	background: #3388ff;
+	box-shadow: 0 1px 4px rgb(0 0 0 / 35%);
+}
+
 @keyframes map-event-card-appear {
 	from { opacity: 0; }
 	to { opacity: 1; }
@@ -100,7 +131,8 @@ main#home[aria-label="Mapa de eventos"] .events__grid .event-card:not([hidden]) 
 
 @media (prefers-reduced-motion: reduce) {
 	main#home[aria-label="Mapa de eventos"] .events__grid .event-card:not([hidden]),
-	.map-event-marker__pin {
+	.map-event-marker__pin,
+	.map-user-location__pulse {
 		animation: none;
 	}
 }
