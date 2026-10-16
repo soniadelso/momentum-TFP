@@ -15,14 +15,6 @@ if (navigator.geolocation) {
 	navigator.geolocation.getCurrentPosition(({ coords }) => {
 		const userCoordinates = getApproximateCoordinates([coords.latitude, coords.longitude]);
 		map.setView(userCoordinates, 13);
-		new Circle(userCoordinates, {
-			radius: 500,
-			color: "#3388ff",
-			weight: 1,
-			fillColor: "#3388ff",
-			fillOpacity: 0.15,
-			interactive: false
-		}).addTo(map);
 		new CircleMarker(userCoordinates, {
 			radius: 8,
 			color: "#fff",
