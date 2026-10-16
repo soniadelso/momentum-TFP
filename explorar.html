@@ -17,10 +17,15 @@
 	<link rel="stylesheet" href="css/sections-cards.css">
 	<link rel="stylesheet" href="css/footer.css">
 	<link rel="stylesheet" href="css/buttons.css">
+	<link rel="stylesheet" href="css/login.css">
 	<link rel="stylesheet" href="css/filters.css">
 	<link rel="stylesheet" href="css/responsive.css">
 	<script src="javascript/app.js" defer></script>
 	<script src="javascript/favorites.js" defer></script>
+	<script src="javascript/events.js" defer></script>
+	<script src="javascript/login-dialog.js" defer></script>
+	<script src="javascript/login-form.js" defer></script>
+	<script src="javascript/discipline-filter.js" defer></script>
 	<script src="javascript/header-menu.js" defer></script>
 	<script src="javascript/filter-scroll.js" defer></script>
 	<title>momentum | Explorar</title>
@@ -30,122 +35,35 @@
 
 	<main id="home">
 		<section class="explore-filters section" aria-label="Filtros de eventos">
-			<div class="explore-filters__group" role="group" aria-label="Disciplina">
-				<button class="button button--secondary" type="button" aria-pressed="true">Todos</button>
-				<button class="button button--secondary-outline" type="button" aria-pressed="false">Digital &amp; Producto</button>
-				<button class="button button--secondary-outline" type="button" aria-pressed="false">Visual &amp; Brand</button>
-				<button class="button button--secondary-outline" type="button" aria-pressed="false">Motion &amp; 3D</button>
-				<button class="button button--secondary-outline" type="button" aria-pressed="false">Foto &amp; Audiovisual</button>
+			<div class="explore-filters__discipline-wrap">
+				<div class="explore-filters__group" role="group" aria-label="Disciplina">
+					<button class="button button--secondary" type="button" aria-pressed="true">Todos</button>
+					<button class="button button--secondary-outline" type="button" aria-pressed="false">Digital Product</button>
+					<button class="button button--secondary-outline" type="button" aria-pressed="false">Brand &amp; Graphic</button>
+					<button class="button button--secondary-outline" type="button" aria-pressed="false">Media &amp; Motion</button>
+					<button class="button button--secondary-outline" type="button" aria-pressed="false">Industrial Design</button>
+				</div>
+				<button class="button button--secondary map-filter-trigger" type="button" aria-label="Abrir filtros" aria-haspopup="dialog" aria-expanded="false" aria-controls="map-filter-sheet">
+					<img class="map-filter-trigger__icon" src="assets/filters-icon.svg" alt="">
+					<span class="map-filter-trigger__count" data-filter-count hidden></span>
+				</button>
 			</div>
-			<div class="explore-filters__group" role="group" aria-label="Más filtros">
-				<button class="button button--filter-outline explore-filters__facet" type="button">Formato <span aria-hidden="true">▾</span></button>
-				<button class="button button--filter-outline explore-filters__facet" type="button">Fechas <span aria-hidden="true">▾</span></button>
-				<button class="button button--filter-outline explore-filters__facet" type="button">Ubicación <span aria-hidden="true">▾</span></button>
-				<button class="button button--filter-outline explore-filters__facet" type="button">Precio <span aria-hidden="true">▾</span></button>
-			</div>
+			<div class="explore-filters__group explore-filters__group--facets" role="group" aria-label="Más filtros" data-desktop-filters></div>
+			<dialog class="map-filter-sheet" id="map-filter-sheet" aria-labelledby="map-filter-title">
+				<div class="map-filter-sheet__header"><h2 id="map-filter-title">Filtros</h2><button class="map-filter-sheet__close" type="button" aria-label="Cerrar filtros">×</button></div>
+				<form method="dialog" class="map-filter-sheet__form">
+					<div class="map-filter-sheet__fields" data-mobile-filter-fields></div>
+					<div class="map-filter-sheet__actions"><button class="button button--secondary-outline" type="button" data-clear-filters>Limpiar</button><button class="button button--primary" type="submit">Listo</button></div>
+				</form>
+			</dialog>
 		</section>
 
 		<section class="events section" id="interests" aria-label="Según tus intereses">
 			<div class="section__heading">
 				<h2 class="section__title">Explorar</h2>
 			</div>
-			<div class="events__grid" id="interests-grid">
-				<article class="event-card">
-					<div class="event-card__visual">
-						<img class="event-card__image" src="assets/event-typography.png" alt="A design workspace with a colorful interface on screen" loading="lazy">
-						<button class="event-card__favorite" type="button" aria-label="Favorite: Typography and Grids" aria-pressed="false"><svg class="event-card__favorite-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78Z" /></svg></button>
-						<span class="event-card__category">Brand &amp; Graphic</span>
-					</div>
-					<div class="event-card__details"><h3 class="event-card__title">Typography and Grids: Editorial Design</h3><div class="event-card__meta"><span>Thursday, 16 Oct · 18:30h</span><span class="event-card__price">Free</span></div><p class="event-card__venue">Barcelona Design Club</p></div>
-				</article>
-				<article class="event-card">
-					<div class="event-card__visual">
-						<img class="event-card__image" src="assets/event-art-direction.png" alt="Audience at a design presentation" loading="lazy">
-						<button class="event-card__favorite" type="button" aria-label="Favorite: Art Direction and Storytelling" aria-pressed="false"><svg class="event-card__favorite-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78Z" /></svg></button>
-						<span class="event-card__category">Industrial Design</span>
-					</div>
-					<div class="event-card__details"><h3 class="event-card__title">Art Direction and Storytelling</h3><div class="event-card__meta"><span>Friday, 24 Oct · 19:00h</span><span class="event-card__price">40€</span></div><p class="event-card__venue">Studio XYZ</p></div>
-				</article>
-				<article class="event-card">
-					<div class="event-card__visual">
-						<img class="event-card__image" src="assets/event-networking.png" alt="Design professionals meeting at an event" loading="lazy">
-						<button class="event-card__favorite" type="button" aria-label="Favorite: Networking for UX Researchers" aria-pressed="false"><svg class="event-card__favorite-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78Z" /></svg></button>
-						<span class="event-card__category">Digital Product</span>
-					</div>
-					<div class="event-card__details"><h3 class="event-card__title">Networking: UX Researchers</h3><div class="event-card__meta"><span>Wednesday, 16 Oct · 18:30h</span><span class="event-card__price">Free</span></div><p class="event-card__venue">UX Researchers Bcn</p></div>
-				</article>
-				<article class="event-card">
-					<div class="event-card__visual">
-						<img class="event-card__image" src="assets/event-accessibility.png" alt="Design team reviewing a project together" loading="lazy">
-						<button class="event-card__favorite" type="button" aria-label="Favorite: Accessible Design" aria-pressed="false"><svg class="event-card__favorite-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78Z" /></svg></button>
-						<span class="event-card__category">Brand &amp; Graphic</span>
-					</div>
-					<div class="event-card__details"><h3 class="event-card__title">Accessible Design: WCAG 2.2 Guidelines</h3><div class="event-card__meta"><span>Wednesday, 22 Oct · 18:00h</span><span class="event-card__price">10€</span></div><p class="event-card__venue">Access Barcelona</p></div>
-				</article>
-				<article class="event-card">
-					<div class="event-card__visual">
-						<img class="event-card__image" src="assets/event-after-effects.png" alt="Motion design workstation with a large display" loading="lazy">
-						<button class="event-card__favorite" type="button" aria-label="Favorite: After Effects Introduction" aria-pressed="false"><svg class="event-card__favorite-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78Z" /></svg></button>
-						<span class="event-card__category">Media &amp; Motion</span>
-					</div>
-					<div class="event-card__details"><h3 class="event-card__title">After Effects Introduction for Designers</h3><div class="event-card__meta"><span>Tuesday, 21 Oct · 19:30h</span><span class="event-card__price">Free</span></div><p class="event-card__venue">Motion Studio</p></div>
-				</article>
-				<article class="event-card">
-					<div class="event-card__visual">
-						<img class="event-card__image" src="assets/event-interviews.png" alt="A presentation screen at a product research event" loading="lazy">
-						<button class="event-card__favorite" type="button" aria-label="Favorite: User Interviews" aria-pressed="false"><svg class="event-card__favorite-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78Z" /></svg></button>
-						<span class="event-card__category">Digital Product</span>
-					</div>
-					<div class="event-card__details"><h3 class="event-card__title">User Interviews: Real-World Practices</h3><div class="event-card__meta"><span>Monday, 20 Oct · 17:00h</span><span class="event-card__price">15€</span></div><p class="event-card__venue">Research Lab BCN</p></div>
-				</article>
-				<article class="event-card">
-					<div class="event-card__visual">
-						<img class="event-card__image" src="assets/event-typography.png" alt="A design workspace with a colorful interface on screen" loading="lazy">
-						<button class="event-card__favorite" type="button" aria-label="Favorite: Typography and Grids" aria-pressed="false"><svg class="event-card__favorite-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78Z" /></svg></button>
-						<span class="event-card__category">Brand &amp; Graphic</span>
-					</div>
-					<div class="event-card__details"><h3 class="event-card__title">Typography and Grids: Editorial Design</h3><div class="event-card__meta"><span>Thursday, 16 Oct · 18:30h</span><span class="event-card__price">Free</span></div><p class="event-card__venue">Barcelona Design Club</p></div>
-				</article>
-				<article class="event-card">
-					<div class="event-card__visual">
-						<img class="event-card__image" src="assets/event-art-direction.png" alt="Audience watching a creative direction presentation" loading="lazy">
-						<button class="event-card__favorite" type="button" aria-label="Favorite: Art Direction and Storytelling" aria-pressed="false"><svg class="event-card__favorite-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78Z" /></svg></button>
-						<span class="event-card__category">Media &amp; Motion</span>
-					</div>
-					<div class="event-card__details"><h3 class="event-card__title">Art Direction and Storytelling</h3><div class="event-card__meta"><span>Friday, 24 Oct · 19:00h</span><span class="event-card__price">40€</span></div><p class="event-card__venue">Studio XYZ</p></div>
-				</article>
-				<article class="event-card">
-					<div class="event-card__visual">
-						<img class="event-card__image" src="assets/event-networking.png" alt="Design professionals meeting at an event" loading="lazy">
-						<button class="event-card__favorite" type="button" aria-label="Favorite: Networking for UX Researchers" aria-pressed="false"><svg class="event-card__favorite-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78Z" /></svg></button>
-						<span class="event-card__category">Digital Product</span>
-					</div>
-					<div class="event-card__details"><h3 class="event-card__title">Networking: UX Researchers</h3><div class="event-card__meta"><span>Wednesday, 16 Oct · 18:30h</span><span class="event-card__price">Free</span></div><p class="event-card__venue">UX Researchers Bcn</p></div>
-				</article>
-				<article class="event-card">
-					<div class="event-card__visual">
-						<img class="event-card__image" src="assets/event-accessibility.png" alt="Design team reviewing a project together" loading="lazy">
-						<button class="event-card__favorite" type="button" aria-label="Favorite: Accessible Design" aria-pressed="false"><svg class="event-card__favorite-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78Z" /></svg></button>
-						<span class="event-card__category">Brand &amp; Graphic</span>
-					</div>
-					<div class="event-card__details"><h3 class="event-card__title">Accessible Design: WCAG 2.2 Guidelines</h3><div class="event-card__meta"><span>Wednesday, 22 Oct · 18:00h</span><span class="event-card__price">10€</span></div><p class="event-card__venue">Access Barcelona</p></div>
-				</article>
-				<article class="event-card">
-					<div class="event-card__visual">
-						<img class="event-card__image" src="assets/event-after-effects.png" alt="Motion design workstation with a large display" loading="lazy">
-						<button class="event-card__favorite" type="button" aria-label="Favorite: After Effects Introduction" aria-pressed="false"><svg class="event-card__favorite-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78Z" /></svg></button>
-						<span class="event-card__category">Media &amp; Motion</span>
-					</div>
-					<div class="event-card__details"><h3 class="event-card__title">After Effects Introduction for Designers</h3><div class="event-card__meta"><span>Tuesday, 21 Oct · 19:30h</span><span class="event-card__price">Free</span></div><p class="event-card__venue">Motion Studio</p></div>
-				</article>
-				<article class="event-card">
-					<div class="event-card__visual">
-						<img class="event-card__image" src="assets/event-interviews.png" alt="A presentation screen at a product research event" loading="lazy">
-						<button class="event-card__favorite" type="button" aria-label="Favorite: User Interviews" aria-pressed="false"><svg class="event-card__favorite-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78Z" /></svg></button>
-						<span class="event-card__category">Digital Product</span>
-					</div>
-					<div class="event-card__details"><h3 class="event-card__title">User Interviews: Real-World Practices</h3><div class="event-card__meta"><span>Monday, 20 Oct · 17:00h</span><span class="event-card__price">15€</span></div><p class="event-card__venue">Research Lab BCN</p></div>
-				</article>
+			<div class="events__grid" id="interests-grid" data-event-ids="typography,art-direction,networking,accessibility,after-effects,interviews,illustration,ai-workshop,uxui-talks"></div>
+			<p data-search-empty role="status" hidden>No se encontraron eventos para esa búsqueda.</p>
 		</section>
 	</main>
 

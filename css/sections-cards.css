@@ -44,6 +44,14 @@ main > section:last-child {
     }
 }
 
+.event-card:has(.event-card__title a) {
+    cursor: pointer;
+}
+
+.event-card[hidden] {
+    display: none;
+}
+
 .event-card__visual {
     position: relative;
     height: auto;
@@ -71,6 +79,24 @@ main > section:last-child {
     font-size: var(--font-size-xs);
     font-weight: var(--font-weight-semibold);
     line-height: 1.2;
+}
+
+.event-card__attending {
+    position: absolute;
+    z-index: 2;
+    top: var(--space-2);
+    right: var(--space-2);
+    padding: var(--space-1) var(--space-2);
+    border-radius: var(--radius-small);
+    background: var(--color-surface-white);
+    color: var(--color-text-primary);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    line-height: 1.2;
+}
+
+.event-card__attending + .event-card__category {
+    top: calc(var(--space-2) + 1.75rem);
 }
 
 .event-card__details {

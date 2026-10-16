@@ -1,129 +1,77 @@
-const mapFilterTrigger = document.querySelector(".map-filter-trigger");
-const mapFilterSheet = document.querySelector("#map-filter-sheet");
 
-if (mapFilterTrigger && mapFilterSheet) {
-	const closeMapFilterSheet = () => {
-		mapFilterSheet.close();
-		mapFilterTrigger.setAttribute("aria-expanded", "false");
-	};
+import { DivIcon, LeafletMap, Marker, TileLayer } from "leaflet";
 
-	document.addEventListener("click", (event) => {
-		if (event.target.closest(".map-filter-trigger")) {
-			mapFilterSheet.showModal();
-			mapFilterTrigger.setAttribute("aria-expanded", "true");
-			return;
-		}
+const map = new LeafletMap("map").setView([41.3874, 2.1686], 13);
+new TileLayer('https://basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png?key=cb1_4iai_1_1d3ce10022d7a760e0ece1ee', {
+  maxZoom: 20,
+  attribution: '&copy; OpenStreetMap &copy; CARTO'
+}).addTo(map);
 
-		if (event.target.closest(".map-filter-sheet__close") && mapFilterSheet.open) {
-			closeMapFilterSheet();
-			return;
-		}
-
-		if (event.target === mapFilterSheet && mapFilterSheet.open) {
-			closeMapFilterSheet();
-		}
+const mapMarkerIcon = new DivIcon({
+	className: "map-event-marker",
+	html: '<span class="map-event-marker__pin" aria-hidden="true"></span>',
+	iconSize: [36, 42],
+	iconAnchor: [18, 41],
+	popupAnchor: [0, -38]
 	});
 
-	mapFilterSheet.addEventListener("close", () => mapFilterTrigger.setAttribute("aria-expanded", "false"));
-}
+const mapMarkers = new Map();
 
-const mapCanvas = document.querySelector('main#home[aria-label="Mapa de eventos"] > .event-card__visual');
-const mapEventPopup = document.querySelector("#map-event-popup");
-const mapEventPopupContent = mapEventPopup?.querySelector(".map-event-popup__content");
+window.eventsDataReady.then((eventsData) => {
+	eventsData.forEach((eventData) => {
+	if (!eventData.coordinates) {
+		return;
+	}
 
-if (mapCanvas && mapEventPopup && mapEventPopupContent) {
-	const closeMapEventPopup = (restoreFocus = true) => {
-		const activePinId = mapEventPopup.dataset.eventCardId;
-		const closeButton = mapEventPopup.querySelector(".map-event-popup__close");
-		mapEventPopup.insertBefore(closeButton, mapEventPopupContent);
-		mapEventPopup.hidden = true;
-		mapEventPopupContent.replaceChildren();
-		delete mapEventPopup.dataset.eventCardId;
-		mapCanvas.querySelectorAll(".map-pin").forEach((pin) => {
-			pin.open = false;
-		});
+	const sourceCard = document.getElementById(`map-event-${eventData.id}`);
+	if (!sourceCard) {
+		return;
+	}
 
-		if (restoreFocus && activePinId) {
-			mapCanvas.querySelector(`[data-event-card-id="${CSS.escape(activePinId)}"] .map-pin__toggle`)?.focus();
-		}
-	};
+	const popupCard = sourceCard.cloneNode(true);
+	popupCard.removeAttribute("id");
+	popupCard.dataset.mapPopupSource = sourceCard.id;
+	const popupCloseButton = document.createElement("button");
+	popupCloseButton.className = "map-event-popup__close";
+	popupCloseButton.type = "button";
+	popupCloseButton.setAttribute("aria-label", `Cerrar tarjeta de ${eventData.title}`);
+	popupCloseButton.innerHTML = '<span aria-hidden="true">×</span>';
+	const popupVisual = popupCard.querySelector(".event-card__visual");
+	const favoriteButton = popupVisual.querySelector(".event-card__favorite");
+	if (favoriteButton) {
+		favoriteButton.insertAdjacentElement("afterend", popupCloseButton);
+	} else {
+		popupVisual.append(popupCloseButton);
+	}
 
-	const positionMapEventPopup = (pin) => {
-		if (window.matchMedia("(max-width: 700px)").matches) {
-			mapEventPopup.style.left = "";
-			mapEventPopup.style.top = "";
-			return;
-		}
+	const marker = new Marker(eventData.coordinates, {
+		icon: mapMarkerIcon,
+		title: eventData.title,
+		alt: eventData.title
+	});
+	marker.bindPopup(popupCard, {
+		maxWidth: 300,
+		minWidth: 240,
+		className: "map-event-popup",
+		closeButton: false
+	});
+	popupCloseButton.addEventListener("click", () => marker.closePopup());
+	marker.addTo(map);
+	mapMarkers.set(sourceCard.id, marker);
+	});
+	syncMapMarkersWithFilters();
+});
 
-		const mapBounds = mapCanvas.getBoundingClientRect();
-		const pinBounds = pin.getBoundingClientRect();
-		const popupBounds = mapEventPopup.getBoundingClientRect();
-		const inset = 12;
-		let left = pinBounds.right - mapBounds.left + inset;
-
-		if (left + popupBounds.width > mapBounds.width - inset) {
-			left = pinBounds.left - mapBounds.left - popupBounds.width - inset;
-		}
-
-		mapEventPopup.style.left = `${Math.max(inset, Math.min(left, mapBounds.width - popupBounds.width - inset))}px`;
-		mapEventPopup.style.top = `${Math.max(inset, Math.min(pinBounds.top - mapBounds.top + (pinBounds.height - popupBounds.height) / 2, mapBounds.height - popupBounds.height - inset))}px`;
-	};
-
-	document.addEventListener("click", (event) => {
-		const pinToggle = event.target.closest(".map-pin__toggle");
-
-		if (pinToggle && mapCanvas.contains(pinToggle)) {
-			event.preventDefault();
-			const pin = pinToggle.closest(".map-pin");
-			const eventCardId = pin.dataset.eventCardId;
-
-			if (mapEventPopup.dataset.eventCardId === eventCardId && !mapEventPopup.hidden) {
-				closeMapEventPopup();
-				return;
-			}
-
-			const sourceCard = document.getElementById(eventCardId);
-			if (!sourceCard) {
-				return;
-			}
-
-			const card = sourceCard.cloneNode(true);
-			card.removeAttribute("id");
-			card.dataset.mapPopupSource = eventCardId;
-			mapEventPopupContent.replaceChildren(card);
-			card.querySelector(".event-card__visual").append(mapEventPopup.querySelector(".map-event-popup__close"));
-			mapEventPopup.dataset.eventCardId = eventCardId;
-			mapEventPopup.setAttribute("aria-label", card.querySelector(".event-card__title")?.textContent.trim() || "Tarjeta del evento");
-			mapEventPopup.hidden = false;
-			positionMapEventPopup(pin);
-			mapEventPopup.querySelector(".map-event-popup__close").focus({ preventScroll: true });
-			return;
-		}
-
-		if (event.target.closest(".map-event-popup__close") && !mapEventPopup.hidden) {
-			closeMapEventPopup();
-			return;
-		}
-
-		if (!mapEventPopup.hidden && !event.target.closest(".map-event-popup")) {
-			closeMapEventPopup(false);
+const syncMapMarkersWithFilters = () => {
+	mapMarkers.forEach((marker, cardId) => {
+		const sourceCard = document.getElementById(cardId);
+		if (!sourceCard || sourceCard.hidden) {
+			marker.closePopup();
+			marker.remove();
+		} else if (!map.hasLayer(marker)) {
+			marker.addTo(map);
 		}
 	});
+};
 
-	document.addEventListener("keydown", (event) => {
-		if (event.key === "Escape" && !mapEventPopup.hidden) {
-			closeMapEventPopup();
-		}
-	});
-
-	window.addEventListener("resize", () => {
-		if (mapEventPopup.hidden) {
-			return;
-		}
-
-		const activePin = mapCanvas.querySelector(`[data-event-card-id="${CSS.escape(mapEventPopup.dataset.eventCardId)}"]`);
-		if (activePin) {
-			positionMapEventPopup(activePin);
-		}
-	});
-}
+document.addEventListener("map-events-filtered", syncMapMarkersWithFilters);

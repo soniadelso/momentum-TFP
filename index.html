@@ -18,9 +18,13 @@
     <link rel="stylesheet" href="css/sections-cards.css">
     <link rel="stylesheet" href="css/footer.css">
     <link rel="stylesheet" href="css/buttons.css">
+    <link rel="stylesheet" href="css/login.css">
     <link rel="stylesheet" href="css/responsive.css">
     <script src="javascript/app.js" defer></script>
     <script src="javascript/favorites.js" defer></script>
+    <script src="javascript/events.js" defer></script>
+    <script src="javascript/login-dialog.js" defer></script>
+    <script src="javascript/login-form.js" defer></script>
     <script src="javascript/header-menu.js" defer></script>
 
     <title>momentum | Design events in Barcelona</title>
@@ -154,19 +158,53 @@
                         <p class="event-card__venue">Research Lab BCN</p>
                     </div>
                 </article>
+
+                <article class="event-card">
+                    <div class="event-card__visual">
+                        <img class="event-card__image" src="assets/ilustracion-digital.jpg" alt="Ilustración digital en una tableta gráfica" loading="lazy">
+                        <button class="event-card__favorite" type="button" aria-label="Añadir Taller de Ilustración Digital a favoritos" aria-pressed="false">
+                            <svg class="event-card__favorite-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78Z" />
+                            </svg>
+                        </button>
+                        <span class="event-card__category">Brand &amp; Graphic</span>
+                    </div>
+                    <div class="event-card__details">
+                        <h3 class="event-card__title">Taller de Ilustración Digital</h3>
+                        <div class="event-card__meta"><span>Sáb, 25 Oct · 11:00h</span><span class="event-card__price">25€</span></div>
+                        <p class="event-card__venue">Atelier Gràcia</p>
+                    </div>
+                </article>
+
+                <article class="event-card">
+                    <div class="event-card__visual">
+                        <img class="event-card__image" src="assets/ai-workshops.jpg" alt="Asistentes a un taller de inteligencia artificial" loading="lazy">
+                        <button class="event-card__favorite" type="button" aria-label="Añadir Taller de IA para Diseñadores a favoritos" aria-pressed="false">
+                            <svg class="event-card__favorite-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78Z" />
+                            </svg>
+                        </button>
+                        <span class="event-card__category">Digital Product</span>
+                    </div>
+                    <div class="event-card__details">
+                        <h3 class="event-card__title">Taller de IA para Diseñadores</h3>
+                        <div class="event-card__meta"><span>Dom, 26 Oct · 10:30h</span><span class="event-card__price">Free</span></div>
+                        <p class="event-card__venue">Design Hub BCN</p>
+                    </div>
+                </article>
             </div>
         </section>
 
         <section class="disciplines section" id="disciplines" aria-label="Explore by discipline">
             <h2 class="section__title">Explore by discipline</h2>
             <div class="disciplines__grid">
-                <a class="discipline-item" href="#events">
+                <a class="discipline-item" href="explorar.html?digitalproduct">
                     <span class="discipline-card">
                         <img class="discipline-card__icon" src="assets/icon-digital-product.svg" alt="" loading="lazy">
                         <span class="discipline-card__title">Digital Product</span>
                     </span>
                 </a>
-                <a class="discipline-item" href="#events">
+                <a class="discipline-item" href="explorar.html?brandgraphic">
                     <span class="discipline-card">
                         <img class="discipline-card__icon" src="assets/icon-brand-graphic-2.svg" alt="" loading="lazy">
                         <span class="discipline-card__title">Brand &amp; Graphic</span>

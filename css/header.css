@@ -42,6 +42,10 @@
     pointer-events: none;
 }
 
+.header:has(.header__menu-toggle[aria-expanded="true"]) {
+    z-index: 1200;
+}
+
 .header__menu {
     position: static;
     grid-area: menu;
@@ -125,10 +129,18 @@
     background: transparent;
     color: var(--color-text-primary);
     font-size: var(--font-size-xs);
+
+    &::-webkit-search-cancel-button {
+        appearance: none;
+    }
 }
 
 .search-form__input::placeholder {
     color: var(--color-text-muted);
+}
+
+.search-form .explore-filters__clear {
+    padding: var(--space-1) var(--space-2);
 }
 
 .header__nav {

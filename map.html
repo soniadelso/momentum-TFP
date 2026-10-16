@@ -5,7 +5,9 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta name="description" content="Explora eventos de diseño en Barcelona sobre el mapa.">
-	<meta name="theme-color" content="#fffef5">
+	<meta name="theme-color" content="--color-surface-white">
+
+	<!--CSS-->
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Instrument+Sans:wght@400;600&display=swap" rel="stylesheet">
@@ -17,68 +19,35 @@
 	<link rel="stylesheet" href="css/sections-cards.css">
 	<link rel="stylesheet" href="css/footer.css">
 	<link rel="stylesheet" href="css/buttons.css">
+	<link rel="stylesheet" href="css/login.css">
 	<link rel="stylesheet" href="css/filters.css">
 	<link rel="stylesheet" href="css/responsive.css">
 	<link rel="stylesheet" href="css/map.css">
-	<script src="javascript/app.js" defer></script>
-	<script src="javascript/favorites.js" defer></script>
-	<script src="javascript/map.js" defer></script>
-	<script src="javascript/header-menu.js" defer></script>
-	<script src="javascript/filter-scroll.js" defer></script>
+
+	<!-- API Leaflet-->
+
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@2.0.0-alpha.1/dist/leaflet.css"
+     integrity="sha256-P+hWJNlpL+GBSRYC7cdsDbQH91URmpDeOzLp7DbFRtE="
+     crossorigin=""/>
+
+	 <script type="importmap">
+ {
+     "imports": {
+         "leaflet": "https://cdn.jsdelivr.net/npm/leaflet@2.0.0-alpha.1/dist/leaflet.js"
+     },
+     "integrity": {
+         "https://cdn.jsdelivr.net/npm/leaflet@2.0.0-alpha.1/dist/leaflet.js": "sha256-gj5JhNAaMi6LCs+jVFOk8sXDe1sWSS2Zlc87m+trLiQ="
+     }
+ }
+ </script>
+
 	<title>momentum | Mapa</title>
 </head>
 <body>
 	<div data-app-header></div>
 
 	<main id="home" aria-label="Mapa de eventos">
-		<div class="event-card__visual">
-			<img class="event-card__image" src="assets/maps-image.png" alt="Mapa de Barcelona y sus alrededores">
-			<details class="map-pin map-pin--typography" data-event-card-id="map-event-typography">
-				<summary class="map-pin__toggle" aria-label="Mostrar tarjeta de Tipografía y Rejilla: Maquetación Editorial">
-					<img class="map-pin__icon" src="assets/PinMarker.svg" alt="">
-				</summary>
-			</details>
-			<details class="map-pin map-pin--interviews" data-event-card-id="map-event-interviews">
-				<summary class="map-pin__toggle" aria-label="Mostrar tarjeta de Entrevistas con Usuarios: Prácticas Reales">
-					<img class="map-pin__icon" src="assets/PinMarker.svg" alt="">
-				</summary>
-			</details>
-			<details class="map-pin map-pin--after-effects" data-event-card-id="map-event-after-effects">
-				<summary class="map-pin__toggle" aria-label="Mostrar tarjeta de Introducción a After Effects para Diseñadores">
-					<img class="map-pin__icon" src="assets/PinMarker.svg" alt="">
-				</summary>
-			</details>
-			<details class="map-pin map-pin--art-direction" data-event-card-id="map-event-art-direction">
-				<summary class="map-pin__toggle" aria-label="Mostrar tarjeta de Dirección de Arte y Storytelling">
-					<img class="map-pin__icon" src="assets/PinMarker.svg" alt="">
-				</summary>
-			</details>
-			<details class="map-pin map-pin--networking" data-event-card-id="map-event-networking">
-				<summary class="map-pin__toggle" aria-label="Mostrar tarjeta de Networking: UX Researchers">
-					<img class="map-pin__icon" src="assets/PinMarker.svg" alt="">
-				</summary>
-			</details>
-			<details class="map-pin map-pin--accessibility" data-event-card-id="map-event-accessibility">
-				<summary class="map-pin__toggle" aria-label="Mostrar tarjeta de Diseño Accesible: Guías WCAG 2.2">
-					<img class="map-pin__icon" src="assets/PinMarker.svg" alt="">
-				</summary>
-			</details>
-			<details class="map-pin map-pin--illustration" data-event-card-id="map-event-illustration">
-				<summary class="map-pin__toggle" aria-label="Mostrar tarjeta de Taller de Ilustración Digital">
-					<img class="map-pin__icon" src="assets/PinMarker.svg" alt="">
-				</summary>
-			</details>
-			<details class="map-pin map-pin--ai-workshop" data-event-card-id="map-event-ai-workshop">
-				<summary class="map-pin__toggle" aria-label="Mostrar tarjeta de Taller de IA para Diseñadores">
-					<img class="map-pin__icon" src="assets/PinMarker.svg" alt="">
-				</summary>
-			</details>
-			<div class="map-event-popup" id="map-event-popup" hidden role="dialog" aria-modal="false" aria-label="Tarjeta del evento seleccionado">
-				<button class="header__menu-toggle map-event-popup__close" type="button" aria-label="Cerrar tarjeta del evento" aria-expanded="true">
-					<span class="header__menu-icon" aria-hidden="true"></span>
-				</button>
-				<div class="map-event-popup__content"></div>
-			</div>
+		<div class="map-canvas" id="map" aria-label="Mapa de eventos en Barcelona">
 		</div>
 
 		<section class="events" aria-label="Eventos en Barcelona">
@@ -86,58 +55,25 @@
 				<div class="explore-filters__discipline-wrap">
 					<div class="explore-filters__group" role="group" aria-label="Disciplina">
 						<button class="button button--secondary" type="button" aria-pressed="true">Todos</button>
-						<button class="button button--secondary-outline" type="button" aria-pressed="false">Digital &amp; Producto</button>
-						<button class="button button--secondary-outline" type="button" aria-pressed="false">Visual &amp; Brand</button>
-						<button class="button button--secondary-outline" type="button" aria-pressed="false">Motion &amp; 3D</button>
-						<button class="button button--secondary-outline" type="button" aria-pressed="false">Foto &amp; Audiovisual</button>
+						<button class="button button--secondary-outline" type="button" aria-pressed="false">Digital Product</button>
+						<button class="button button--secondary-outline" type="button" aria-pressed="false">Brand &amp; Graphic</button>
+						<button class="button button--secondary-outline" type="button" aria-pressed="false">Media &amp; Motion</button>
+						<button class="button button--secondary-outline" type="button" aria-pressed="false">Industrial Design</button>
 					</div>
 					<button class="button button--secondary map-filter-trigger" type="button" aria-label="Abrir filtros" aria-haspopup="dialog" aria-expanded="false" aria-controls="map-filter-sheet">
 						<img class="map-filter-trigger__icon" src="assets/filters-icon.svg" alt="">
+						<span class="map-filter-trigger__count" data-filter-count hidden></span>
 					</button>
 				</div>
-				<div class="explore-filters__group explore-filters__group--facets" role="group" aria-label="Más filtros">
-					<button class="button button--filter-outline explore-filters__facet" type="button">Formato <span aria-hidden="true">▾</span></button>
-					<button class="button button--filter-outline explore-filters__facet" type="button">Fechas <span aria-hidden="true">▾</span></button>
-					<button class="button button--filter-outline explore-filters__facet" type="button">Ubicación <span aria-hidden="true">▾</span></button>
-					<button class="button button--filter-outline explore-filters__facet" type="button">Precio <span aria-hidden="true">▾</span></button>
-				</div>
+				<div class="explore-filters__group explore-filters__group--facets" role="group" aria-label="Más filtros" data-desktop-filters></div>
 				<dialog class="map-filter-sheet" id="map-filter-sheet" aria-labelledby="map-filter-title">
 					<div class="map-filter-sheet__header">
 						<h2 id="map-filter-title">Filtros</h2>
-						<button class="header__menu-toggle map-filter-sheet__close" type="button" aria-label="Cerrar filtros" aria-controls="map-filter-sheet" aria-expanded="true">
-							<span class="header__menu-icon" aria-hidden="true"></span>
-						</button>
+						<button class="map-filter-sheet__close" type="button" aria-label="Cerrar filtros" aria-controls="map-filter-sheet">×</button>
 					</div>
 					<form method="dialog" class="map-filter-sheet__form">
-						<label class="map-filter-sheet__field">Formato
-							<select name="format">
-								<option value="">Todos los formatos</option>
-								<option value="presencial">Presencial</option>
-								<option value="online">Online</option>
-							</select>
-						</label>
-						<label class="map-filter-sheet__field">Fechas
-							<select name="date">
-								<option value="">Cualquier fecha</option>
-								<option value="week">Esta semana</option>
-								<option value="month">Este mes</option>
-							</select>
-						</label>
-						<label class="map-filter-sheet__field">Ubicación
-							<select name="location">
-								<option value="">Cualquier ubicación</option>
-								<option value="barcelona">Barcelona</option>
-								<option value="online">Online</option>
-							</select>
-						</label>
-						<label class="map-filter-sheet__field">Precio
-							<select name="price">
-								<option value="">Cualquier precio</option>
-								<option value="free">Gratis</option>
-								<option value="paid">De pago</option>
-							</select>
-						</label>
-						<button class="button button--primary" type="submit">Listo</button>
+						<div class="map-filter-sheet__fields" data-mobile-filter-fields></div>
+						<div class="map-filter-sheet__actions"><button class="button button--secondary-outline" type="button" data-clear-filters>Limpiar</button><button class="button button--primary" type="submit">Listo</button></div>
 					</form>
 				</dialog>
 			</section>
@@ -186,7 +122,7 @@
 				<article class="event-card event-card-map" id="map-event-art-direction">
 					<div class="event-card__visual">
 						<img class="event-card__image" src="assets/event-art-direction.png" alt="Público en una presentación de dirección creativa">
-						<span class="event-card__category">Media &amp; Motion</span>
+						<span class="event-card__category">Industrial Design</span>
 						<button class="event-card__favorite" type="button" aria-label="Añadir Dirección de Arte y Storytelling a favoritos" aria-pressed="false"><svg class="event-card__favorite-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78Z" /></svg></button>
 					</div>
 					<div class="event-card__details">
@@ -279,6 +215,17 @@
 			<nav aria-label="Legal information"><a href="#terms">Términos y condiciones</a><a href="#privacy">Política de privacidad</a><a href="#cookies">Cookies</a><a href="#legal">Aviso legal</a></nav>
 		</div>
 	</footer>
+
+	<!-- JavaScript runs after the map container and Leaflet import map are available. -->
+	<script src="javascript/app.js"></script>
+	<script src="javascript/favorites.js"></script>
+	<script src="javascript/events.js"></script>
+	<script src="javascript/login-dialog.js"></script>
+	<script src="javascript/login-form.js"></script>
+	<script src="javascript/discipline-filter.js"></script>
+	<script src="javascript/header-menu.js"></script>
+	<script src="javascript/filter-scroll.js"></script>
+	<script type="module" src="javascript/map.js"></script>
 </body>
 </html>
  

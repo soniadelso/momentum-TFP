@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="Detalle del evento de diseño en Barcelona.">
+	<meta name="theme-color" content="#fffef5">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Instrument+Sans:wght@400;600&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="css/reset.css">
+	<link rel="stylesheet" href="css/tokens.css">
+	<link rel="stylesheet" href="css/typography.css">
+	<link rel="stylesheet" href="css/styles.css">
+	<link rel="stylesheet" href="css/header.css">
+	<link rel="stylesheet" href="css/hero.css">
+	<link rel="stylesheet" href="css/sections-cards.css">
+	<link rel="stylesheet" href="css/footer.css">
+	<link rel="stylesheet" href="css/buttons.css">
+	<link rel="stylesheet" href="css/login.css">
+	<link rel="stylesheet" href="css/responsive.css">
+	<link rel="stylesheet" href="css/event-detail.css">
+	<link rel="stylesheet" href="css/map.css">
+	<script src="javascript/app.js" defer></script>
+	<script src="javascript/favorites.js" defer></script>
+	<script src="javascript/header-menu.js" defer></script>
+	<script src="javascript/events.js" defer></script>
+	<script src="javascript/event-detail.js" defer></script>
+	<script src="javascript/login-dialog.js" defer></script>
+	<script src="javascript/login-form.js" defer></script>
+
+    <!-- API Leaflet-->
+
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@2.0.0-alpha.1/dist/leaflet.css"
+     integrity="sha256-P+hWJNlpL+GBSRYC7cdsDbQH91URmpDeOzLp7DbFRtE="
+     crossorigin=""/>
+
+	 <script type="importmap">
+ {
+     "imports": {
+         "leaflet": "https://cdn.jsdelivr.net/npm/leaflet@2.0.0-alpha.1/dist/leaflet.js"
+     },
+     "integrity": {
+         "https://cdn.jsdelivr.net/npm/leaflet@2.0.0-alpha.1/dist/leaflet.js": "sha256-gj5JhNAaMi6LCs+jVFOk8sXDe1sWSS2Zlc87m+trLiQ="
+     }
+ }
+ </script>
+
+	<title>momentum | Evento</title>
+</head>
+<body>
+	<div data-app-header></div>
+
+	<main id="home">
+		<section class="event-detail section" aria-label="Detalle del evento">
+			<h1 class="section__title event-detail__heading" data-event-title></h1>
+
+			<div class="hero__image-wrap event-detail__media">
+				<img class="hero__image" data-event-image src="assets/event-typography.png" alt="">
+				<span class="event-card__category" data-event-category></span>
+			</div>
+
+			<div class="event-detail__aside">
+				<aside class="event-detail__info" aria-label="Información del evento">
+					<div class="event-detail__info-top">
+						<button class="event-card__favorite" type="button" data-event-favorite aria-label="Añadir a favoritos" aria-pressed="false"><svg class="event-card__favorite-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78Z" /></svg></button>
+						<p class="event-card__title" data-event-price></p>
+					</div>
+					<div class="attending__rule" aria-hidden="true"></div>
+					<p class="event-card__title" data-event-date></p>
+					<p class="event-card__venue" data-event-location></p>
+					<p class="event-card__venue">Organizado por <strong data-event-organizer></strong></p>
+					<button class="button button--secondary" type="button" data-event-attend aria-pressed="false">Asistir</button>
+				</aside>
+			</div>
+
+			<section class="event-detail__description" aria-labelledby="event-description-title">
+				<h2 class="section__title" id="event-description-title">Descripción</h2>
+				<div data-event-description></div>
+			</section>
+
+			<section class="event-detail__members" aria-labelledby="event-members-title">
+				<h2 class="section__title" id="event-members-title">Asistiendo</h2>
+				<p data-event-members></p>
+				<div class="event-detail__avatars" data-event-avatars></div>
+			</section>
+
+			<div class="hero__image-wrap event-detail__map" id="event-map" role="region" aria-label="Mapa con la ubicación del evento"></div>
+		</section>
+
+		<section class="events section" id="related" aria-label="Te podría interesar">
+			<div class="section__heading">
+				<h2 class="section__title">Te podría interesar</h2>
+				<a class="button button--secondary-outline" href="explorar.html">View all</a>
+			</div>
+			<div class="events__grid" data-related-grid></div>
+		</section>
+	</main>
+
+	<footer class="footer">
+		<div class="footer__main">
+			<div class="footer__brand-column">
+				<a class="footer__brand" href="index.html">momentum</a>
+				<p class="footer__tagline">Eventos de diseño para creativos</p>
+				<div class="footer__socials" aria-label="Social media">
+					<a href="#social" aria-label="Social media"><img src="assets/icon-social.svg" alt="" loading="lazy"></a>
+					<a href="#social" aria-label="Social media"><img src="assets/icon-social.svg" alt="" loading="lazy"></a>
+					<a href="#social" aria-label="Social media"><img src="assets/icon-social.svg" alt="" loading="lazy"></a>
+					<a href="#social" aria-label="Social media"><img src="assets/icon-social.svg" alt="" loading="lazy"></a>
+				</div>
+			</div>
+			<div class="footer__column"><h2 class="footer__heading">About</h2><a href="#about">Sobre nosotros</a></div>
+			<div class="footer__column"><h2 class="footer__heading">Cuenta</h2><a href="#profile">Mi perfil</a><a href="#my-events">Mis eventos</a><a href="#settings">Configuración</a></div>
+			<div class="footer__column"><h2 class="footer__heading">Support</h2><a href="#contact">Contacto</a><a href="#faq">FAQ</a></div>
+			<div class="footer__column"><h2 class="footer__heading">Eventos</h2><a href="explorar.html">Explorar eventos</a><a href="#host-event">Crear evento</a><a href="map.html">Explora el Mapa</a></div>
+			<div class="footer__column footer__column--download">
+				<h2 class="footer__heading">Descargar app</h2>
+				<a class="store-badge" href="#app-store"><span class="store-badge__icon" aria-hidden="true"></span><span><small>Download on the</small><strong>App Store</strong></span></a>
+				<a class="store-badge" href="#google-play"><span class="store-badge__icon" aria-hidden="true"></span><span><small>GET IT ON</small><strong>Google Play</strong></span></a>
+			</div>
+		</div>
+		<img class="footer__divider" src="assets/footer-divider.svg" alt="" loading="lazy">
+		<div class="footer__bottom">
+			<p>© 2026 Momentum. Todos los derechos reservados.</p>
+			<nav aria-label="Legal information"><a href="#terms">Términos y condiciones</a><a href="#privacy">Política de privacidad</a><a href="#cookies">Cookies</a><a href="#legal">Aviso legal</a></nav>
+		</div>
+	</footer>
+
+    	<!-- JavaScript runs after the map container and Leaflet import map are available. -->
+</body>
+</html>

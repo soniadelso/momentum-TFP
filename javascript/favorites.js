@@ -1,25 +1,37 @@
+const favoritesStorageKey = "momentum-favorites";
+const getFavoriteIds = () => JSON.parse(localStorage.getItem(favoritesStorageKey) || "[]");
+
+// Every favorite button for the same event shares one state, wherever it appears.
+const syncFavoriteButtons = () => {
+	const favoriteIds = localStorage.getItem("momentum-authenticated") === "true" ? getFavoriteIds() : [];
+	document.querySelectorAll(".event-card__favorite[data-event-id]").forEach((button) => {
+		button.setAttribute("aria-pressed", String(favoriteIds.includes(button.dataset.eventId)));
+	});
+};
+
+document.addEventListener("DOMContentLoaded", syncFavoriteButtons);
+
 document.addEventListener("click", (event) => {
 	const favoriteButton = event.target.closest(".event-card__favorite");
 	if (!favoriteButton) {
 		return;
 	}
 
-	const card = favoriteButton.closest(".event-card");
-	const sourceCardId = card.dataset.mapPopupSource || card.id;
-	const isFavorite = favoriteButton.getAttribute("aria-pressed") !== "true";
-	favoriteButton.setAttribute("aria-pressed", String(isFavorite));
-
-	if (!sourceCardId) {
+	if (localStorage.getItem("momentum-authenticated") !== "true") {
+		openLoginDialog();
 		return;
 	}
 
-	const sourceButton = document.getElementById(sourceCardId)?.querySelector(".event-card__favorite");
-	if (sourceButton && sourceButton !== favoriteButton) {
-		sourceButton.setAttribute("aria-pressed", String(isFavorite));
+	const eventId = favoriteButton.dataset.eventId;
+	if (!eventId) {
+		return;
 	}
 
-	const popupButton = document.querySelector(".map-event-popup__content .event-card__favorite");
-	if (popupButton && popupButton !== favoriteButton) {
-		popupButton.setAttribute("aria-pressed", String(isFavorite));
-	}
+	const favoriteIds = getFavoriteIds();
+	localStorage.setItem(
+		favoritesStorageKey,
+		JSON.stringify(favoriteIds.includes(eventId) ? favoriteIds.filter((id) => id !== eventId) : [...favoriteIds, eventId])
+	);
+	syncFavoriteButtons();
+	document.dispatchEvent(new Event("favorites-changed"));
 });

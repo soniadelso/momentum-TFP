@@ -88,6 +88,11 @@
         display: initial;
     }
 
+    /* The avatar already links to the profile on tablet and desktop. */
+    .header__link--profile {
+        display: none;
+    }
+
     .header__nav {
         gap: var(--space-4);
     }

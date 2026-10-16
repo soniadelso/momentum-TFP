@@ -66,7 +66,7 @@
     padding: var(--space-3) var(--space-4);
     border: 1px solid var(--color-text-muted);
     border-radius: var(--radius-card);
-    background: var(--color-field-background);
+    background: var(--color-background);
     color: var(--color-text-primary);
     font-family: var(--font-body);
     font-size: var(--font-size-xs);
@@ -80,6 +80,38 @@
 
 .login-field__control .login-field__input {
     padding-right: var(--space-10);
+}
+
+/* Login popup reused wherever a login is required. */
+.login-dialog {
+    margin: auto;
+    position: relative;
+}
+
+.login-dialog:not([open]) {
+    display: none;
+}
+
+.login-dialog::backdrop {
+    background: rgb(39 39 39 / 0.6);
+}
+
+.login-dialog__close {
+    position: absolute;
+    top: var(--space-3);
+    right: var(--space-3);
+    display: grid;
+    width: 2rem;
+    height: 2rem;
+    place-items: center;
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius-pill);
+    background: transparent;
+    color: var(--color-text-primary);
+    font-size: var(--font-size-m);
+    line-height: 1;
+    cursor: pointer;
 }
 
 @media (max-width: 700px) {

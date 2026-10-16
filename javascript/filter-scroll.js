@@ -10,7 +10,7 @@ document.querySelectorAll(".explore-filters__group").forEach((group) => {
     };
 
     group.addEventListener("pointerdown", (event) => {
-        if (event.pointerType === "touch" || event.button !== 0 || event.target.closest(".map-filter-trigger")) {
+        if (event.pointerType === "touch" || event.button !== 0 || event.target.closest(".map-filter-trigger, select, .explore-filters__facet-dropdown")) {
             return;
         }
 
@@ -18,7 +18,6 @@ document.querySelectorAll(".explore-filters__group").forEach((group) => {
         startScrollLeft = group.scrollLeft;
         isDragging = true;
         didDrag = false;
-        group.setPointerCapture(event.pointerId);
     });
 
     group.addEventListener("pointermove", (event) => {
@@ -28,6 +27,11 @@ document.querySelectorAll(".explore-filters__group").forEach((group) => {
 
         const distance = event.clientX - startX;
         if (Math.abs(distance) > 4) {
+            // Capture only once dragging starts, otherwise clicks get retargeted away from the buttons.
+            if (!didDrag) {
+                group.setPointerCapture(event.pointerId);
+            }
+
             didDrag = true;
             group.style.cursor = "grabbing";
             group.scrollLeft = startScrollLeft - distance;

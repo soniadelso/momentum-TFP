@@ -1,0 +1,109 @@
+/* Event detail: layout only; cards, buttons and typography come from shared styles. */
+.event-detail {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr);
+	gap: var(--space-6);
+}
+
+.event-detail__info {
+	display: grid;
+	align-content: start;
+	gap: var(--space-4);
+	padding: var(--space-6);
+	border: 1px solid var(--color-neutral-line);
+	border-radius: var(--radius-card);
+}
+
+.event-detail__info-top {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.event-detail__info .event-card__favorite {
+	position: static;
+	border: 1px solid var(--color-border-strong);
+}
+
+.event-detail__info .button {
+	justify-self: center;
+	padding-inline: var(--space-8);
+}
+
+.event-detail__info [data-event-location] {
+	white-space: pre-line;
+}
+
+.event-detail__description,
+.event-detail__members {
+	display: grid;
+	align-content: start;
+	gap: var(--space-3);
+}
+
+.event-detail__description > div {
+	display: grid;
+	gap: var(--space-3);
+}
+
+.event-detail__avatars {
+	display: flex;
+	gap: var(--space-2);
+}
+
+.event-detail__more {
+	display: grid;
+	width: 2rem;
+	height: 2rem;
+	flex: 0 0 2rem;
+	place-items: center;
+	border-radius: 50%;
+	background: var(--color-accent);
+	font-weight: var(--font-weight-semibold);
+}
+
+@media (min-width: 701px) {
+	.event-detail {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		column-gap: var(--space-8);
+		align-items: start;
+	}
+
+	.event-detail__heading {
+		grid-column: 1 / -1;
+	}
+
+	/* Card stays pinned beside the image and description; its wrapper bounds the sticky range. */
+	.event-detail__aside {
+		grid-column: 2;
+		grid-row: 2 / 4;
+		align-self: stretch;
+		justify-self: start;
+		width: min(100%, 20rem);
+	}
+
+	.event-detail__info {
+		position: sticky;
+		top: var(--space-4);
+	}
+
+	.event-detail__media {
+		grid-column: 1;
+		grid-row: 2;
+	}
+
+	.event-detail__description {
+		grid-column: 1;
+		grid-row: 3;
+	}
+
+	.event-detail__map {
+		grid-column: 2;
+		grid-row: 4;
+	}
+
+	.event-detail__members {
+		grid-column: 1;
+		grid-row: 4;
+	}
+}

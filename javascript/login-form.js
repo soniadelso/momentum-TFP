@@ -20,6 +20,6 @@ if (loginForm) {
     loginForm.addEventListener("submit", (event) => {
         event.preventDefault();
         localStorage.setItem("momentum-authenticated", "true");
-        window.location.assign("index-logged-in.html");
+        window.location.assign(loginForm.hasAttribute("data-login-stay") ? window.location.href : "index-logged-in.html");
     });
 }
