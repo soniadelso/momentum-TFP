@@ -22,8 +22,7 @@
 			"Trabajarás sobre una maqueta propia y saldrás con un sistema de rejilla reutilizable para tus próximos proyectos."
 		],
 		"members": 124,
-		"map": { "top": "42%", "left": "12%" },
-		"coordinates": [41.3892, 2.1595]
+		"coordinates": [41.386042, 2.161431]
 	},
 	{
 		"id": "art-direction",
@@ -49,7 +48,7 @@
 		],
 		"members": 86,
 		"map": { "top": "30%", "left": "52%" },
-		"coordinates": [41.3993, 2.1898]
+		"coordinates": [41.39755128208063, 2.193559252335854]
 	},
 	{
 		"id": "networking",
@@ -75,7 +74,7 @@
 		],
 		"members": 212,
 		"map": { "top": "20%", "left": "30%" },
-		"coordinates": [41.4027, 2.1567]
+		"coordinates": [41.40445400058082, 2.156355610008332]
 	},
 	{
 		"id": "accessibility",
@@ -100,8 +99,7 @@
 			"Saldrás con una checklist para revisar la accesibilidad de tus diseños antes de entregarlos."
 		],
 		"members": 97,
-		"map": { "top": "50%", "left": "66%" },
-		"coordinates": [41.4011, 2.1714]
+		"coordinates": [41.40099921284318, 2.167922999782697]
 	},
 	{
 		"id": "after-effects",
@@ -126,8 +124,7 @@
 			"Al final animarás una pieza sencilla que podrás añadir a tu portfolio."
 		],
 		"members": 158,
-		"map": { "top": "74%", "left": "17%" },
-		"coordinates": [41.4069, 2.1842]
+		"coordinates": [41.40932123159794, 2.184913411861063]
 	},
 	{
 		"id": "interviews",
@@ -152,8 +149,7 @@
 			"Practicaremos en parejas con guiones reales y recibirás feedback del equipo de Research Lab."
 		],
 		"members": 73,
-		"map": { "top": "58%", "left": "50%" },
-		"coordinates": [41.3957, 2.1592]
+		"coordinates": [41.39753847099767, 2.164702438844058]
 	},
 	{
 		"id": "illustration",
@@ -178,8 +174,7 @@
 			"No hace falta experiencia previa; trae tu portátil o tableta."
 		],
 		"members": 134,
-		"map": { "top": "70%", "left": "48%" },
-		"coordinates": [41.4007, 2.1565]
+		"coordinates": [441.40102442076166, 2.1586812965163906]
 	},
 	{
 		"id": "ai-workshop",
@@ -204,8 +199,7 @@
 			"Haremos ejercicios prácticos y debatiremos sobre límites, autoría y buenas prácticas."
 		],
 		"members": 189,
-		"map": { "top": "38%", "left": "82%" },
-		"coordinates": [41.3975, 2.1765]
+		"coordinates": [41.39950586860836, 2.1746282100081062]
 	},
 	{
 		"id": "uxui-talks",
@@ -230,7 +224,6 @@
 			"Tras las ponencias habrá un turno de preguntas y un rato para conocer a otros profesionales del sector."
 		],
 		"members": 143,
-		"map": { "top": "62%", "left": "36%" },
-		"coordinates": [41.3915, 2.1604]
+		"coordinates": [41.39476968931403, 2.155852510007852]
 	}
 ]
