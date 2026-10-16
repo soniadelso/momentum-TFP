@@ -9,6 +9,7 @@ const filterSheet = document.querySelector("#map-filter-sheet");
 const barcelonaCenter = [41.3874, 2.1686];
 const eventDataById = new Map();
 const searchQuery = new URLSearchParams(window.location.search).get("q") || "";
+const selectedCategory = new URLSearchParams(window.location.search).get("category") || "";
 const exploreTitle = document.querySelector("#interests .section__title");
 if (exploreTitle && searchQuery) {
 	exploreTitle.textContent = `Explorar ${searchQuery.toLocaleLowerCase("es")}`;
@@ -46,6 +47,12 @@ if (desktopFilterHost) {
 categoryButtons.forEach((button) => {
 	button.dataset.category = button.textContent.trim();
 });
+
+// Activa la disciplina indicada en la URL si coincide con una categoría disponible.
+const matchingCategoryButton = categoryButtons.find((button) => button.dataset.category === selectedCategory);
+if (matchingCategoryButton) {
+	activeCategories.add(matchingCategoryButton.dataset.category);
+}
 
 const setButtonState = (button, isActive) => {
 	button.setAttribute("aria-pressed", String(isActive));
