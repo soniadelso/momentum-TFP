@@ -22,6 +22,7 @@
 	<script src="javascript/app.js" defer></script>
 	<script src="javascript/favorites.js?v=3" defer></script>
 	<script src="javascript/events.js" defer></script>
+	<script src="javascript/attending.js?v=3" defer></script>
 	<script src="javascript/login-dialog.js" defer></script>
 	<script src="javascript/login-form.js" defer></script>
 	<script src="javascript/header-menu.js" defer></script>
@@ -45,7 +46,7 @@
 			<div class="profile-stats">
 				<div class="profile-stat">
 					<p class="profile-stat__label">Asistiendo a eventos</p>
-					<p class="profile-stat__value">4</p>
+					<p class="profile-stat__value" data-attending-count>0</p>
 				</div>
 				<div class="profile-stat">
 					<p class="profile-stat__label">Eventos asistidos</p>
@@ -56,6 +57,12 @@
 					<p class="profile-stat__value">6</p>
 				</div>
 			</div>
+		</section>
+
+		<section class="profile-section" aria-label="Eventos a los que asistirás">
+			<h2 class="section__title">Eventos a los que asistirás</h2>
+			<div class="attending__groups" data-attending-groups></div>
+			<p data-attending-empty hidden>Todavía no te has apuntado a ningún evento.</p>
 		</section>
 
 		<section class="profile-section" aria-label="Favoritos">

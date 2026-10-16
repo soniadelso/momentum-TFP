@@ -10,10 +10,14 @@ const barcelonaCenter = [41.3874, 2.1686];
 let locationCenter = barcelonaCenter;
 let mapViewportBounds = null;
 const eventDataById = new Map();
-const searchQuery = new URLSearchParams(window.location.search).get("q") || "";
-const selectedCategory = new URLSearchParams(window.location.search).get("category") || "";
+const pageParameters = new URLSearchParams(window.location.search);
+const searchQuery = pageParameters.get("q") || "";
+const selectedCategories = pageParameters.getAll("category");
+const sectionTitle = pageParameters.get("title") || "";
 const exploreTitle = document.querySelector("#interests .section__title");
-if (exploreTitle && searchQuery) {
+if (exploreTitle && sectionTitle) {
+	exploreTitle.textContent = sectionTitle;
+} else if (exploreTitle && searchQuery) {
 	exploreTitle.textContent = `Explorar ${searchQuery.toLocaleLowerCase("es")}`;
 }
 const filterDefinitions = [
@@ -51,11 +55,10 @@ categoryButtons.forEach((button) => {
 	button.dataset.category = button.textContent.trim();
 });
 
-// Activa la disciplina indicada en la URL si coincide con una categoría disponible.
-const matchingCategoryButton = categoryButtons.find((button) => button.dataset.category === selectedCategory);
-if (matchingCategoryButton) {
-	activeCategories.add(matchingCategoryButton.dataset.category);
-}
+// Activa las disciplinas indicadas en la URL si coinciden con categorías disponibles.
+categoryButtons
+	.filter((button) => selectedCategories.includes(button.dataset.category))
+	.forEach((button) => activeCategories.add(button.dataset.category));
 
 const setButtonState = (button, isActive) => {
 	button.setAttribute("aria-pressed", String(isActive));
