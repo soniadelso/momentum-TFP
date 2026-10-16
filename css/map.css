@@ -52,6 +52,21 @@ main#home[aria-label="Mapa de eventos"] > .map-canvas {
 	box-shadow: 0 2px 5px rgb(0 0 0 / 30%);
 }
 
+.map-event-marker__heart {
+	position: absolute;
+	inset: 0;
+	width: 16px;
+	height: 16px;
+	margin: auto;
+	color: var(--color-text-primary);
+	fill: var(--color-surface-strong);
+	stroke: currentColor;
+	stroke-width: 1.8;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+	pointer-events: none;
+}
+
 .map-event-marker__pin::after {
 	position: absolute;
 	bottom: -9px;

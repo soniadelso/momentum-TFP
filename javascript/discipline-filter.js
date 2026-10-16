@@ -7,6 +7,7 @@ const filterCounts = [...document.querySelectorAll("[data-filter-count]")];
 const filterTrigger = document.querySelector(".map-filter-trigger");
 const filterSheet = document.querySelector("#map-filter-sheet");
 const barcelonaCenter = [41.3874, 2.1686];
+let locationCenter = barcelonaCenter;
 const eventDataById = new Map();
 const searchQuery = new URLSearchParams(window.location.search).get("q") || "";
 const selectedCategory = new URLSearchParams(window.location.search).get("category") || "";
@@ -17,7 +18,8 @@ if (exploreTitle && searchQuery) {
 const filterDefinitions = [
 	{ key: "format", label: "Formato", options: [["", "Todos"], ["presencial", "Presencial"], ["online", "Online"]] },
 	{ key: "date", label: "Fechas", options: [["", "Cualquier fecha"], ["today", "Hoy"], ["week", "Esta semana"], ["month", "Este mes"]] },
-	{ key: "location", label: "Ubicación", options: [["", "Cualquier distancia"], ["5", "5 km"], ["10", "10 km"], ["25", "25 km"], ["50", "50 km"], ["100", "100 km"], ["150", "150 km"]] },
+	// Cerca de mí filtra a 1 km y acerca más que la opción de 3 km.
+	{ key: "location", label: "Ubicación", options: [["", "Cualquier distancia"], ["1", "Cerca de mí"], ["3", "3 km"], ["5", "5 km"], ["10", "10 km"], ["25", "25 km"], ["50", "50 km"], ["100", "100 km"], ["150", "150 km"]] },
 	{ key: "price", label: "Precio", options: [["", "Cualquier precio"], ["free", "Gratuito"], ["paid", "De pago"]] }
 ];
 
@@ -124,7 +126,7 @@ const syncFilterControls = () => {
 	filterTrigger?.setAttribute("aria-label", count ? `Abrir filtros, ${count} activos` : "Abrir filtros");
 };
 
-const applyFilters = () => {
+const applyFilters = ({ fitMap = false } = {}) => {
 	if (allButton) {
 		setButtonState(allButton, activeCategories.size === 0);
 		allButton.setAttribute("aria-pressed", String(activeCategories.size === 0));
@@ -156,7 +158,7 @@ const applyFilters = () => {
 		const matchesFormat = !filterValues.format || eventData.format === filterValues.format;
 		const matchesDate = !filterValues.date || matchesDateRange(eventData.startsAt, filterValues.date);
 		const matchesLocation = !filterValues.location
-			|| getDistanceKm(barcelonaCenter, eventData.coordinates) <= Number(filterValues.location);
+			|| getDistanceKm(locationCenter, eventData.coordinates) <= Number(filterValues.location);
 		const matchesPrice = !filterValues.price
 			|| (filterValues.price === "free" ? eventData.priceAmount === 0 : eventData.priceAmount > 0);
 		card.hidden = !(matchesSearch && matchesCategory && matchesFormat && matchesDate && matchesLocation && matchesPrice);
@@ -171,7 +173,9 @@ const applyFilters = () => {
 	}
 
 	syncFilterControls();
-	document.dispatchEvent(new Event("map-events-filtered"));
+	document.dispatchEvent(new CustomEvent("map-events-filtered", {
+		detail: { fitMap, locationDistance: filterValues.location, locationCenter }
+	}));
 };
 
 disciplineGroup?.addEventListener("click", (event) => {
@@ -188,7 +192,7 @@ disciplineGroup?.addEventListener("click", (event) => {
 		activeCategories.add(button.dataset.category);
 	}
 
-	applyFilters();
+	applyFilters({ fitMap: true });
 });
 
 document.addEventListener("click", (event) => {
@@ -199,7 +203,7 @@ document.addEventListener("click", (event) => {
 
 	filterValues[option.dataset.filterOption] = option.dataset.filterValue;
 	option.closest("details")?.removeAttribute("open");
-	applyFilters();
+	applyFilters({ fitMap: true });
 });
 
 document.addEventListener("click", (event) => {
@@ -214,8 +218,14 @@ document.querySelectorAll("[data-clear-filters]").forEach((button) => {
 	button.addEventListener("click", () => {
 		activeCategories.clear();
 		Object.keys(filterValues).forEach((key) => { filterValues[key] = ""; });
-		applyFilters();
+		applyFilters({ fitMap: true });
 	});
+});
+
+// Usa la ubicación obtenida por el mapa como origen del filtro por distancia.
+document.addEventListener("user-location-found", (event) => {
+	locationCenter = event.detail.coordinates;
+	applyFilters();
 });
 
 if (filterTrigger && filterSheet) {
