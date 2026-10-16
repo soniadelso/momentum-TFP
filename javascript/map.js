@@ -2,6 +2,22 @@
 import { Circle, CircleMarker, DivIcon, LeafletMap, Marker, TileLayer } from "leaflet";
 
 const map = new LeafletMap("map", { zoomSnap: 0.25 }).setView([41.3874, 2.1686], 13);
+// Informa al filtro qué eventos caben en la vista actual del mapa.
+const dispatchMapViewport = () => {
+	const bounds = map.getBounds();
+	document.dispatchEvent(new CustomEvent("map-viewport-changed", {
+		detail: {
+			bounds: {
+				south: bounds.getSouth(),
+				west: bounds.getWest(),
+				north: bounds.getNorth(),
+				east: bounds.getEast()
+			}
+		}
+	}));
+};
+map.on("moveend", dispatchMapViewport);
+
 // Desplaza la ubicación del navegador 500 m para no mostrar el punto exacto.
 const getApproximateCoordinates = ([latitude, longitude]) => {
 	const bearing = Math.random() * Math.PI * 2;
@@ -37,9 +53,10 @@ new TileLayer('https://basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png
 const getFavoriteIds = () => localStorage.getItem("momentum-authenticated") === "true"
 	? JSON.parse(localStorage.getItem("momentum-favorites") || "[]")
 	: [];
+const favoriteHeartMarkup = '<svg class="map-event-marker__heart" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78Z" /></svg>';
 const createMapMarkerIcon = (isFavorite) => new DivIcon({
 	className: "map-event-marker",
-	html: `<span class="map-event-marker__pin" aria-hidden="true">${isFavorite ? '<svg class="map-event-marker__heart" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78Z" /></svg>' : ""}</span>`,
+	html: `<span class="map-event-marker__pin" aria-hidden="true">${isFavorite ? favoriteHeartMarkup : ""}</span>`,
 	iconSize: [36, 42],
 	iconAnchor: [18, 41],
 	popupAnchor: [0, -38]
@@ -51,7 +68,12 @@ const syncFavoriteMarkers = () => {
 	const favoriteIds = new Set(getFavoriteIds());
 	mapMarkers.forEach((marker, cardId) => {
 		const isFavorite = favoriteIds.has(cardId.replace("map-event-", ""));
-		marker.setIcon(createMapMarkerIcon(isFavorite));
+		const pin = marker.getElement()?.querySelector(".map-event-marker__pin");
+		if (pin) {
+			pin.innerHTML = isFavorite ? favoriteHeartMarkup : "";
+		} else {
+			marker.setIcon(createMapMarkerIcon(isFavorite));
+		}
 		marker.getPopup().getContent().querySelector(".event-card__favorite")
 			?.setAttribute("aria-pressed", String(isFavorite));
 	});
@@ -105,6 +127,7 @@ window.eventsDataReady.then((eventsData) => {
 	mapMarkers.set(sourceCard.id, marker);
 	});
 	syncMapMarkersWithFilters();
+	dispatchMapViewport();
 });
 
 const syncMapMarkersWithFilters = (event) => {
@@ -123,7 +146,7 @@ const syncMapMarkersWithFilters = (event) => {
 	});
 
 	// Ajusta el zoom al radio elegido; sin radio, encuadra los marcadores visibles.
-	if (event?.detail?.locationDistance) {
+	if (event?.detail?.fitMap && event?.detail?.locationDistance) {
 		const distanceCircle = new Circle(event.detail.locationCenter, {
 			radius: Number(event.detail.locationDistance) * 1000
 		}).addTo(map);

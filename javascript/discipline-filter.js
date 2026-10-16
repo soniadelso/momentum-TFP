@@ -8,6 +8,7 @@ const filterTrigger = document.querySelector(".map-filter-trigger");
 const filterSheet = document.querySelector("#map-filter-sheet");
 const barcelonaCenter = [41.3874, 2.1686];
 let locationCenter = barcelonaCenter;
+let mapViewportBounds = null;
 const eventDataById = new Map();
 const searchQuery = new URLSearchParams(window.location.search).get("q") || "";
 const selectedCategory = new URLSearchParams(window.location.search).get("category") || "";
@@ -60,17 +61,6 @@ const setButtonState = (button, isActive) => {
 	button.setAttribute("aria-pressed", String(isActive));
 	button.classList.toggle("button--secondary", isActive);
 	button.classList.toggle("button--secondary-outline", !isActive);
-};
-
-const getDistanceKm = (first, second) => {
-	const radians = (degrees) => (degrees * Math.PI) / 180;
-	const [firstLat, firstLon] = first.map(radians);
-	const [secondLat, secondLon] = second.map(radians);
-	const latitudeDelta = secondLat - firstLat;
-	const longitudeDelta = secondLon - firstLon;
-	const haversine = Math.sin(latitudeDelta / 2) ** 2
-		+ Math.cos(firstLat) * Math.cos(secondLat) * Math.sin(longitudeDelta / 2) ** 2;
-	return 6371 * 2 * Math.atan2(Math.sqrt(haversine), Math.sqrt(1 - haversine));
 };
 
 const matchesDateRange = (startsAt, range) => {
@@ -157,11 +147,14 @@ const applyFilters = ({ fitMap = false } = {}) => {
 		const matchesCategory = activeCategories.size === 0 || activeCategories.has(eventData.category);
 		const matchesFormat = !filterValues.format || eventData.format === filterValues.format;
 		const matchesDate = !filterValues.date || matchesDateRange(eventData.startsAt, filterValues.date);
-		const matchesLocation = !filterValues.location
-			|| getDistanceKm(locationCenter, eventData.coordinates) <= Number(filterValues.location);
+		const matchesMapViewport = !mapViewportBounds || (eventData.coordinates
+			&& eventData.coordinates[0] >= mapViewportBounds.south
+			&& eventData.coordinates[0] <= mapViewportBounds.north
+			&& eventData.coordinates[1] >= mapViewportBounds.west
+			&& eventData.coordinates[1] <= mapViewportBounds.east);
 		const matchesPrice = !filterValues.price
 			|| (filterValues.price === "free" ? eventData.priceAmount === 0 : eventData.priceAmount > 0);
-		card.hidden = !(matchesSearch && matchesCategory && matchesFormat && matchesDate && matchesLocation && matchesPrice);
+		card.hidden = !(matchesSearch && matchesCategory && matchesFormat && matchesDate && matchesPrice && matchesMapViewport);
 		if (!card.hidden) {
 			visibleCardCount += 1;
 		}
@@ -177,6 +170,12 @@ const applyFilters = ({ fitMap = false } = {}) => {
 		detail: { fitMap, locationDistance: filterValues.location, locationCenter }
 	}));
 };
+
+// Mantiene la lista de eventos en sincronía con el área visible del mapa.
+document.addEventListener("map-viewport-changed", (event) => {
+	mapViewportBounds = event.detail.bounds;
+	applyFilters();
+});
 
 disciplineGroup?.addEventListener("click", (event) => {
 	const button = event.target.closest("button");
