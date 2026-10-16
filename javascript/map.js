@@ -2,18 +2,32 @@
 import { Circle, CircleMarker, DivIcon, LeafletMap, Marker, TileLayer } from "leaflet";
 
 const map = new LeafletMap("map", { zoomSnap: 0.25 }).setView([41.3874, 2.1686], 13);
-const mapColors = getComputedStyle(document.documentElement);
-let userLocationMarker;
+// Desplaza la ubicación del navegador 500 m para no mostrar el punto exacto.
+const getApproximateCoordinates = ([latitude, longitude]) => {
+	const bearing = Math.random() * Math.PI * 2;
+	const latitudeOffset = (500 * Math.cos(bearing)) / 111320;
+	const longitudeOffset = (500 * Math.sin(bearing)) / (111320 * Math.cos((latitude * Math.PI) / 180));
+	return [latitude + latitudeOffset, longitude + longitudeOffset];
+};
+
 // Solicita la ubicación y centra el mapa en ella si el usuario da permiso.
 if (navigator.geolocation) {
 	navigator.geolocation.getCurrentPosition(({ coords }) => {
-		const userCoordinates = [coords.latitude, coords.longitude];
+		const userCoordinates = getApproximateCoordinates([coords.latitude, coords.longitude]);
 		map.setView(userCoordinates, 13);
-		userLocationMarker = new CircleMarker(userCoordinates, {
+		new Circle(userCoordinates, {
+			radius: 500,
+			color: "#3388ff",
+			weight: 1,
+			fillColor: "#3388ff",
+			fillOpacity: 0.15,
+			interactive: false
+		}).addTo(map);
+		new CircleMarker(userCoordinates, {
 			radius: 8,
-			color: mapColors.getPropertyValue("--color-text-primary").trim(),
-			weight: 3,
-			fillColor: mapColors.getPropertyValue("--color-accent").trim(),
+			color: "#fff",
+			weight: 2,
+			fillColor: "#3388ff",
 			fillOpacity: 1,
 			interactive: false
 		}).addTo(map);
