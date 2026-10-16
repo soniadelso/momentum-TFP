@@ -1,5 +1,30 @@
 const favoritesStorageKey = "momentum-favorites";
 const getFavoriteIds = () => JSON.parse(localStorage.getItem(favoritesStorageKey) || "[]");
+let favoriteNotice;
+let favoriteNoticeTimeout;
+
+// Muestra el total actualizado de favoritos durante un segundo junto al perfil.
+const showFavoriteAddedNotice = (count) => {
+	if (!favoriteNotice) {
+		favoriteNotice = document.createElement("div");
+		favoriteNotice.className = "favorite-added-notice";
+		favoriteNotice.setAttribute("role", "status");
+		favoriteNotice.setAttribute("aria-live", "polite");
+		favoriteNotice.setAttribute("aria-atomic", "true");
+		favoriteNotice.innerHTML = '<span>Añadido a mi <a class="favorite-added-notice__link" href="user-profile.html" aria-label="Ver mi perfil">perfil</a></span><span class="favorite-added-notice__count" aria-hidden="true"></span>';
+		(document.querySelector(".header") || document.body).append(favoriteNotice);
+	}
+
+	favoriteNotice.querySelector(".favorite-added-notice__count").textContent = String(count);
+	favoriteNotice.hidden = false;
+	favoriteNotice.classList.remove("is-visible");
+	requestAnimationFrame(() => favoriteNotice.classList.add("is-visible"));
+	clearTimeout(favoriteNoticeTimeout);
+	favoriteNoticeTimeout = setTimeout(() => {
+		favoriteNotice.classList.remove("is-visible");
+		favoriteNotice.hidden = true;
+	}, 1800);
+};
 
 // Every favorite button for the same event shares one state, wherever it appears.
 const syncFavoriteButtons = () => {
@@ -28,10 +53,14 @@ document.addEventListener("click", (event) => {
 	}
 
 	const favoriteIds = getFavoriteIds();
-	localStorage.setItem(
-		favoritesStorageKey,
-		JSON.stringify(favoriteIds.includes(eventId) ? favoriteIds.filter((id) => id !== eventId) : [...favoriteIds, eventId])
-	);
+	const isRemoving = favoriteIds.includes(eventId);
+	const updatedFavoriteIds = isRemoving
+		? favoriteIds.filter((id) => id !== eventId)
+		: [...favoriteIds, eventId];
+	localStorage.setItem(favoritesStorageKey, JSON.stringify(updatedFavoriteIds));
+	if (!isRemoving) {
+		showFavoriteAddedNotice(updatedFavoriteIds.length);
+	}
 	syncFavoriteButtons();
 	document.dispatchEvent(new Event("favorites-changed"));
 });
