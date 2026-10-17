@@ -1,6 +1,8 @@
 const attendingStorageKey = "momentum-attending";
 const getAttendingIds = () => JSON.parse(localStorage.getItem(attendingStorageKey) || "[]");
 const setAttendingIds = (ids) => localStorage.setItem(attendingStorageKey, JSON.stringify(ids));
+const mapEventGrid = document.querySelector("[data-map-events]");
+mapEventGrid?.replaceChildren();
 
 const eventsDataReady = fetch("events.json")
 	.then((response) => {
@@ -19,11 +21,13 @@ window.setAttendingIds = setAttendingIds;
 
 eventsDataReady.then((eventsData) => {
 	const eventsByTitle = new Map(eventsData.flatMap((item) => item.aliases.map((alias) => [alias.toLowerCase(), item])));
-	const mapCardIds = new Set([...document.querySelectorAll(".event-card-map[id^='map-event-']")]
-		.map((card) => card.id.replace("map-event-", "")));
-	const searchableEvents = mapCardIds.size
-		? eventsData.filter((item) => mapCardIds.has(item.id))
-		: eventsData;
+	const mapEvents = mapEventGrid
+		? eventsData.filter((item) => item.format === "presencial"
+			&& Array.isArray(item.coordinates)
+			&& Math.abs(item.coordinates[0]) <= 90
+			&& Math.abs(item.coordinates[1]) <= 180)
+		: [];
+	const searchableEvents = mapEventGrid ? mapEvents : eventsData;
 	const categorySearchTranslations = {
 		"Digital Product": "Diseño de producto",
 		"Brand & Graphic": "Diseño gráfico",
@@ -56,8 +60,11 @@ eventsDataReady.then((eventsData) => {
 			{ label: "Audiovisual y animación", value: "Audiovisual y animación" }
 		]
 	};
-	const eventCardMarkup = (item) => `
-		<article class="event-card" data-event-id="${item.id}">
+	const eventCardMarkup = (item, isMapCard = false) => {
+		const cardClass = isMapCard ? "event-card event-card-map" : "event-card";
+		const mapCardId = isMapCard ? ` id="map-event-${item.id}"` : "";
+		return `
+		<article class="${cardClass}"${mapCardId} data-event-id="${item.id}">
 			<div class="event-card__visual">
 				<img class="event-card__image" src="${item.image}" alt="${item.imageAlt}" loading="lazy">
 				<button class="event-card__favorite" type="button" data-event-id="${item.id}" aria-label="Añadir ${item.title} a favoritos" aria-pressed="false"><svg class="event-card__favorite-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78Z" /></svg></button>
@@ -65,6 +72,7 @@ eventsDataReady.then((eventsData) => {
 			</div>
 			<div class="event-card__details"><h3 class="event-card__title"><a href="event-detail.html?id=${item.id}">${item.title}</a></h3><div class="event-card__meta"><span>${item.date}</span><span class="event-card__price">${item.price}</span></div><p class="event-card__venue">${item.organizer}</p></div>
 		</article>`;
+	};
 	window.eventCardMarkup = eventCardMarkup;
 	const normalizeSearchText = (value) => value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase("es");
 	const searchEvents = (query) => {
@@ -211,6 +219,10 @@ eventsDataReady.then((eventsData) => {
 	eventGrids.forEach((grid, index) => {
 		grid.innerHTML = gridLists[index].map((id) => eventCardMarkup(eventsData.find((item) => item.id === id))).join("");
 	});
+
+	if (mapEventGrid) {
+		mapEventGrid.innerHTML = mapEvents.map((item) => eventCardMarkup(item, true)).join("");
+	}
 
 	const syncAttendingLabels = () => {
 		const isUserAuthenticated = localStorage.getItem("momentum-authenticated") === "true";

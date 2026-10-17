@@ -27,6 +27,9 @@ const filterDefinitions = [
 	{ key: "location", label: "Ubicación", options: [["", "Cualquier distancia"], ["1", "Cerca de mí"], ["3", "3 km"], ["5", "5 km"], ["10", "10 km"], ["25", "25 km"], ["50", "50 km"], ["100", "100 km"], ["150", "150 km"]] },
 	{ key: "price", label: "Precio", options: [["", "Cualquier precio"], ["free", "Gratuito"], ["paid", "De pago"]] }
 ];
+const visibleFilterDefinitions = document.querySelector(".map-canvas")
+	? filterDefinitions.filter(({ key }) => key !== "format")
+	: filterDefinitions;
 
 const buildFilterDropdown = ({ key, label, options }) => `
 	<details class="explore-filters__facet-dropdown" data-filter-dropdown="${key}">
@@ -41,11 +44,18 @@ const buildFilterDropdown = ({ key, label, options }) => `
 const desktopFilterHost = document.querySelector("[data-desktop-filters]");
 const mobileFilterHost = document.querySelector("[data-mobile-filter-fields]");
 if (desktopFilterHost) {
-	desktopFilterHost.innerHTML = filterDefinitions.map(buildFilterDropdown).join("");
+	desktopFilterHost.innerHTML = visibleFilterDefinitions.map(buildFilterDropdown).join("");
 	if (mobileFilterHost) {
-		filterDefinitions.forEach((definition) => {
+		visibleFilterDefinitions.forEach((definition) => {
 			const dropdown = desktopFilterHost.querySelector(`[data-filter-dropdown="${definition.key}"]`).cloneNode(true);
 			dropdown.classList.add("map-filter-sheet__facet-dropdown");
+			const arrow = dropdown.querySelector('summary > span[aria-hidden="true"]');
+			if (arrow) {
+				arrow.style.rotate = "0deg";
+				dropdown.addEventListener("toggle", () => {
+					arrow.style.rotate = dropdown.open ? "180deg" : "0deg";
+				});
+			}
 			mobileFilterHost.append(dropdown);
 		});
 	}

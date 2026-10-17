@@ -287,6 +287,10 @@ main#home[aria-label="Mapa de eventos"] .events__grid {
 
 /* Keep the tablet map panel readable with one desktop-style card per row. */
 @media (max-width: 1100px) {
+	.header {
+		z-index: 1100;
+	}
+
 	/* Stack the map above the results on tablet. */
 	main#home[aria-label="Mapa de eventos"] {
 		height: auto;
@@ -389,7 +393,7 @@ main#home[aria-label="Mapa de eventos"] .events__grid {
 
 	/* Preserve the map's proportions while capping its height. */
 	main#home[aria-label="Mapa de eventos"] > .map-canvas {
-		height: min(72dvh, 42rem);
+		height: min(50dvh, 42rem);
 		aspect-ratio: auto;
 		max-height: none;
 	}

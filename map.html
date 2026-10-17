@@ -15,14 +15,14 @@
 	<link rel="stylesheet" href="css/tokens.css">
 	<link rel="stylesheet" href="css/typography.css">
 	<link rel="stylesheet" href="css/styles.css">
-	<link rel="stylesheet" href="css/header.css?v=5">
+	<link rel="stylesheet" href="css/header.css?v=8">
 	<link rel="stylesheet" href="css/sections-cards.css">
 	<link rel="stylesheet" href="css/footer.css">
 	<link rel="stylesheet" href="css/buttons.css">
 	<link rel="stylesheet" href="css/login.css">
-	<link rel="stylesheet" href="css/filters.css">
+	<link rel="stylesheet" href="css/filters.css?v=6">
 	<link rel="stylesheet" href="css/responsive.css">
-	<link rel="stylesheet" href="css/map.css?v=4">
+	<link rel="stylesheet" href="css/map.css?v=6">
 
 	<!-- API Leaflet-->
 
@@ -74,13 +74,13 @@
 					</div>
 					<form method="dialog" class="map-filter-sheet__form">
 						<div class="map-filter-sheet__fields" data-mobile-filter-fields></div>
-						<div class="map-filter-sheet__actions"><button class="button button--secondary-outline" type="button" data-clear-filters>Limpiar</button><button class="button button--primary" type="submit">Listo</button></div>
+						<div class="map-filter-sheet__actions"><button class="header__link header__link--button" type="button" data-clear-filters>Limpiar</button><button class="button button--primary" type="submit">Listo</button></div>
 					</form>
 				</dialog>
 			</section>
 
 			<h1 class="section__title">Eventos en Barcelona</h1>
-			<div class="events__grid">
+			<div class="events__grid" data-map-events>
 				<article class="event-card event-card-map" id="map-event-typography">
 					<div class="event-card__visual">
 						<img class="event-card__image" src="assets/event-typography.png" alt="Espacio de trabajo de diseño editorial">
@@ -220,13 +220,13 @@
 	<!-- JavaScript runs after the map container and Leaflet import map are available. -->
 	<script src="javascript/app.js?v=3"></script>
 	<script src="javascript/favorites.js?v=3"></script>
-	<script src="javascript/events.js"></script>
+	<script src="javascript/events.js?v=2"></script>
 	<script src="javascript/login-dialog.js"></script>
 	<script src="javascript/login-form.js"></script>
-	<script src="javascript/discipline-filter.js?v=4"></script>
+	<script src="javascript/discipline-filter.js?v=6"></script>
 	<script src="javascript/header-menu.js"></script>
 	<script src="javascript/filter-scroll.js"></script>
-	<script type="module" src="javascript/map.js?v=5"></script>
+	<script type="module" src="javascript/map.js?v=7"></script>
 </body>
 </html>
  
