@@ -12,7 +12,7 @@
 - Reutilizar los tokens, componentes y estilos existentes del proyecto; revisar lo disponible antes de crear nuevos y evitar duplicaciones.
 - De necesitar crear un nuevo componente o estilo pregunta a la usuaria.
 - No crees estilos de más, la estructura ha de ser sencilla para todos los tipos de archivo (CSS, HTML, JS,...) para que su mantenimiento sea fácil evitando romper el código.
-- También quiero que por cada código en Javascript expliques o pongas comentarios de lo que estás haciendo en castellano.
+- También quiero que por cada archivo que no sea html o css expliques o pongas comentarios de lo que estás haciendo en castellano.
 
 ## Alcance del registro
 

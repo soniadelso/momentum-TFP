@@ -13,18 +13,19 @@
     <link rel="stylesheet" href="css/tokens.css">
     <link rel="stylesheet" href="css/typography.css">
     <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="css/header.css?v=5">
+    <link rel="stylesheet" href="css/header.css?v=10">
     <link rel="stylesheet" href="css/hero.css">
-    <link rel="stylesheet" href="css/sections-cards.css">
+    <link rel="stylesheet" href="css/sections-cards.css?v=1">
     <link rel="stylesheet" href="css/footer.css">
     <link rel="stylesheet" href="css/buttons.css">
-    <link rel="stylesheet" href="css/login.css">
+    <link rel="stylesheet" href="css/login.css?v=15">
     <link rel="stylesheet" href="css/responsive.css?v=2">
-    <script src="javascript/app.js?v=3" defer></script>
-    <script src="javascript/favorites.js?v=3" defer></script>
+    <script src="javascript/app.js?v=12" defer></script>
+    <script src="javascript/favorites.js?v=9" defer></script>
     <script src="javascript/events.js" defer></script>
-    <script src="javascript/login-dialog.js" defer></script>
-    <script src="javascript/login-form.js" defer></script>
+    <script src="javascript/login-dialog.js?v=5" defer></script>
+    <script src="javascript/login-form.js?v=6" defer></script>
+    <script src="javascript/attending.js" defer></script>
     <script src="javascript/header-menu.js" defer></script>
 
     <title>momentum | Design events</title>
@@ -34,11 +35,11 @@
     <div data-app-header></div>
 
     <main id="home">
-        <section class="hero" aria-labelledby="hero-title">
+        <section class="hero" aria-labelledby="hero-title" data-home-guest>
             <div class="hero__content">
                 <div class="hero__copy">
-                    <h1 class="hero__title" id="hero-title">Main Title</h1>
-                    <p class="hero__description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore.</p>
+                    <h1 class="hero__title" id="hero-title">momentum</h1>
+                    <p class="hero__description"> La plataforma de eventos, workshops y networking diseñada específicamente para la comunidad creativa y tecnológica. Impulsa proyectos, talento y conexiones locales de forma orgánica.</p>
                 </div>
             </div>
             <div class="hero__media">
@@ -51,9 +52,15 @@
             </div>
         </section>
 
+        <section class="attending section" aria-label="Eventos a los que asistirás" data-home-authenticated hidden>
+            <h1 class="section__title">Eventos a los que asistirás</h1>
+            <div class="attending__groups" data-attending-groups></div>
+            <p data-attending-empty hidden>Todavía no te has apuntado a ningún evento.</p>
+        </section>
+
         <section class="events section" id="events" aria-label="Popular events in Barcelona">
             <div class="section__heading">
-            <h2 class="section__title">Popular events in Barcelona</h2>
+            <h2 class="section__title">Eventos populares en Barcelona</h2>
                 <a class="button button--secondary-outline" href="explorar.html?title=Popular%20events%20in%20Barcelona&amp;q=Barcelona">View all</a>
             </div>
 
@@ -197,7 +204,7 @@
         </section>
 
         <section class="disciplines section" id="disciplines" aria-label="Explore by discipline">
-            <h2 class="section__title">Explore by discipline</h2>
+            <h2 class="section__title">Explora por disciplina</h2>
             <div class="disciplines__grid">
                 <a class="discipline-item" href="explorar.html?category=Digital%20Product">
                     <span class="discipline-card">
@@ -226,15 +233,15 @@
             </div>
         </section>
 
-        <section class="how-it-works section" id="how-it-works" aria-label="How it works">
+        <section class="how-it-works section" id="how-it-works" aria-label="How it works" data-home-guest-only>
             <div class="how-it-works__intro">
-            <h2 class="section__title">How it works</h2>
-                <p>Find design events near you, connect with professionals, and get involved in the creative community.</p>
+            <h2 class="section__title">Cómo funciona</h2>
+                <p>Encuentra eventos de diseño cerca de ti, conéctate con profesionales y participa en la comunidad creativa.</p>
             </div>
             <ol class="steps__grid">
                 <li class="step-card">
                     <span class="step-card__number">1</span>
-                    <div class="step-card__copy"><h3>Discover events</h3><p>Explore design, UX, and creativity events in your city.</p></div>
+                    <div class="step-card__copy"><h3>Descubre eventos</h3><p>Explora eventos de diseño, UX y creatividad en tu ciudad.</p></div>
                 </li>
                 <li class="step-card">
                     <span class="step-card__number">2</span>
@@ -278,7 +285,7 @@
             </div>
             <div class="footer__column">
                 <h2 class="footer__heading">Eventos</h2>
-                <a href="#events">Explorar eventos</a><a href="#host-event">Crear evento</a><a href="#map">Explora el Mapa</a>
+                <a href="#events">Explorar eventos</a><a href="host-event.html">Crear evento</a><a href="#map">Explora el Mapa</a>
             </div>
             <div class="footer__column footer__column--download">
                 <h2 class="footer__heading">Descargar app</h2>

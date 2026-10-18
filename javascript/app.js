@@ -2,13 +2,27 @@ const authStorageKey = "momentum-authenticated";
 const headerMount = document.querySelector("[data-app-header]");
 const currentPage = window.location.pathname.split("/").pop() || "index.html";
 const isAuthenticated = localStorage.getItem(authStorageKey) === "true";
-const homeHref = isAuthenticated ? "index-logged-in.html" : "index.html";
+const homeHref = "index.html";
+
+// Alterna el contenido de inicio según el estado de sesión.
+const guestHome = document.querySelector("[data-home-guest]");
+const authenticatedHome = document.querySelector("[data-home-authenticated]");
+if (guestHome && authenticatedHome) {
+	guestHome.hidden = isAuthenticated;
+	authenticatedHome.hidden = !isAuthenticated;
+	document.querySelectorAll("[data-home-guest-only]").forEach((section) => {
+		section.hidden = isAuthenticated;
+	});
+}
 
 if (headerMount) {
-	const homeCurrent = ["index.html", "index-logged-in.html"].includes(currentPage) ? ' aria-current="page"' : "";
+	const homeCurrent = currentPage === "index.html" ? ' aria-current="page"' : "";
 	const exploreCurrent = currentPage === "explorar.html" ? ' aria-current="page"' : "";
 	const mapCurrent = currentPage === "map.html" ? ' aria-current="page"' : "";
 	const profileCurrent = currentPage === "user-profile.html" ? ' aria-current="page"' : "";
+	// Marca la página del formulario en la navegación compartida.
+	const hostCurrent = currentPage === "host-event.html" ? ' aria-current="page"' : "";
+	const loginCurrent = currentPage === "log-in.html" ? ' aria-current="page"' : "";
 	const authenticatedLink = isAuthenticated
 		? `<a class="header__link header__link--profile" href="user-profile.html"${profileCurrent}>My profile</a>`
 		: "";
@@ -17,19 +31,19 @@ if (headerMount) {
 		: `<a class="button button--primary" href="log-in.html">Log In</a>`;
 	const mobileProfileAction = isAuthenticated
 		? `<a class="mobile-bottom-nav__link" href="user-profile.html"${profileCurrent}><span class="mobile-bottom-nav__avatar" aria-hidden="true"><img src="assets/profile-avatar-2.jpg" alt=""></span><span>Perfil</span></a>`
-		: `<a class="mobile-bottom-nav__link" href="log-in.html"><span class="mobile-bottom-nav__user" aria-hidden="true"><img src="assets/icon-user.svg" alt=""></span><span>Log In</span></a>`;
+		: `<a class="mobile-bottom-nav__link" href="log-in.html"${loginCurrent}><span class="mobile-bottom-nav__user" aria-hidden="true"><img src="assets/icon-user.svg" alt=""></span><span>Log In</span></a>`;
 	const searchAction = currentPage === "map.html" ? "map.html" : "explorar.html";
 
 	headerMount.innerHTML = `
 		<header class="header">
 			<a class="header__brand" href="${homeHref}" aria-label="momentum home">momentum</a>
-			<a class="button button--primary header__host-mobile" href="index.html#how-it-works">Host Event</a>
+			<a class="button button--primary header__host-mobile" href="host-event.html"${hostCurrent}>Modo Anfitrión</a>
 			<div class="header__menu">
 				<button class="header__menu-toggle" type="button" aria-controls="header-nav" aria-expanded="false" aria-label="Open navigation menu">
 					<span class="header__menu-icon" aria-hidden="true"></span>
 				</button>
 				<nav class="header__nav" id="header-nav" aria-label="Main navigation">
-					<a class="header__link header__link--host" href="index.html#how-it-works">Host Event</a>
+					<a class="header__link header__link--host" href="host-event.html"${hostCurrent}>Modo Anfitrión</a>
 					<a class="header__link" href="explorar.html"${exploreCurrent}>Explore</a>
 					<a class="header__map" href="map.html" aria-label="Map"${mapCurrent}>
 						<span>Map</span>
@@ -64,6 +78,55 @@ if (headerMount) {
 		</nav>`;
 
 }
+
+document.addEventListener("momentum-login-success", () => {
+	if (currentPage !== "index.html") {
+		return;
+	}
+
+	const scrollPosition = window.scrollY;
+	const pendingFavoriteId = sessionStorage.getItem("momentum-pending-favorite");
+	const pendingFavoriteTop = sessionStorage.getItem("momentum-pending-favorite-top");
+	const pendingFavoriteButton = [...document.querySelectorAll(".event-card__favorite[data-event-id]")]
+		.find((button) => button.dataset.eventId === pendingFavoriteId);
+	document.documentElement.style.overflowAnchor = "none";
+	if (guestHome && authenticatedHome) {
+		guestHome.hidden = true;
+		authenticatedHome.hidden = false;
+		document.querySelectorAll("[data-home-guest-only]").forEach((section) => {
+			section.hidden = true;
+		});
+	}
+
+	const desktopLogin = headerMount?.querySelector(".header > a.button--primary:not(.header__host-mobile)");
+	if (desktopLogin) {
+		desktopLogin.outerHTML = '<a class="header__profile" href="user-profile.html" aria-label="Your profile"><img src="assets/profile-avatar-2.jpg" alt=""></a>';
+	}
+
+	const mainNavigation = headerMount?.querySelector(".header__nav");
+	if (mainNavigation && !mainNavigation.querySelector(".header__link--profile")) {
+		mainNavigation.insertAdjacentHTML("beforeend", '<a class="header__link header__link--profile" href="user-profile.html">My profile</a>');
+	}
+
+	const mobileLogin = headerMount?.querySelector('.mobile-bottom-nav > a[href="log-in.html"]');
+	if (mobileLogin) {
+		mobileLogin.outerHTML = '<a class="mobile-bottom-nav__link" href="user-profile.html"><span class="mobile-bottom-nav__avatar" aria-hidden="true"><img src="assets/profile-avatar-2.jpg" alt=""></span><span>Perfil</span></a>';
+	}
+	document.dispatchEvent(new Event("attending-changed"));
+	requestAnimationFrame(() => {
+		document.documentElement.style.scrollBehavior = "auto";
+		if (pendingFavoriteButton && pendingFavoriteTop !== null) {
+			const offset = pendingFavoriteButton.getBoundingClientRect().top - Number(pendingFavoriteTop);
+			window.scrollTo(0, scrollPosition + offset);
+		} else {
+			window.scrollTo(0, scrollPosition);
+		}
+		requestAnimationFrame(() => {
+			document.documentElement.style.removeProperty("overflow-anchor");
+			document.documentElement.style.removeProperty("scroll-behavior");
+		});
+	});
+});
 
 const searchInput = document.querySelector(".search-form__input");
 const initialSearchQuery = new URLSearchParams(window.location.search).get("q") || "";

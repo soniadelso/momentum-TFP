@@ -1,4 +1,12 @@
 const favoritesStorageKey = "momentum-favorites";
+const pendingFavoriteStorageKey = "momentum-pending-favorite";
+const pendingFavoriteTopStorageKey = "momentum-pending-favorite-top";
+const pendingFavoriteNoticeStorageKey = "momentum-pending-favorite-notice";
+const pendingFavoriteScrollStorageKey = "momentum-pending-favorite-scroll";
+const shouldRestoreFavoriteScroll = sessionStorage.getItem(pendingFavoriteScrollStorageKey) !== null;
+if (shouldRestoreFavoriteScroll) {
+	history.scrollRestoration = "manual";
+}
 const getFavoriteIds = () => JSON.parse(localStorage.getItem(favoritesStorageKey) || "[]");
 let favoriteNotice;
 let favoriteNoticeTimeout;
@@ -34,7 +42,52 @@ const syncFavoriteButtons = () => {
 	});
 };
 
-document.addEventListener("DOMContentLoaded", syncFavoriteButtons);
+document.addEventListener("DOMContentLoaded", () => {
+	syncFavoriteButtons();
+	window.eventsDataReady?.then(syncFavoriteButtons);
+	const pendingCount = Number(sessionStorage.getItem(pendingFavoriteNoticeStorageKey));
+	if (pendingCount) {
+		sessionStorage.removeItem(pendingFavoriteNoticeStorageKey);
+		showFavoriteAddedNotice(pendingCount);
+	}
+	const pendingScrollY = sessionStorage.getItem(pendingFavoriteScrollStorageKey);
+	if (pendingScrollY !== null) {
+		sessionStorage.removeItem(pendingFavoriteScrollStorageKey);
+		window.eventsDataReady?.then(() => {
+			requestAnimationFrame(() => {
+				window.scrollTo(0, Number(pendingScrollY));
+				history.scrollRestoration = "auto";
+			});
+		});
+	}
+});
+
+document.addEventListener("momentum-login-success", () => {
+	const pendingFavoriteId = sessionStorage.getItem(pendingFavoriteStorageKey);
+	if (!pendingFavoriteId) {
+		return;
+	}
+
+	const favoriteIds = getFavoriteIds();
+	const updatedFavoriteIds = favoriteIds.includes(pendingFavoriteId)
+		? favoriteIds
+		: [...favoriteIds, pendingFavoriteId];
+	localStorage.setItem(favoritesStorageKey, JSON.stringify(updatedFavoriteIds));
+	const currentPage = window.location.pathname.split("/").pop() || "index.html";
+	sessionStorage.removeItem(pendingFavoriteTopStorageKey);
+	if (currentPage === "index.html") {
+		sessionStorage.removeItem(pendingFavoriteNoticeStorageKey);
+		sessionStorage.removeItem(pendingFavoriteScrollStorageKey);
+		showFavoriteAddedNotice(updatedFavoriteIds.length);
+	} else {
+		sessionStorage.setItem(pendingFavoriteNoticeStorageKey, String(updatedFavoriteIds.length));
+		sessionStorage.setItem(pendingFavoriteScrollStorageKey, String(window.scrollY));
+	}
+	if (updatedFavoriteIds.length) {
+		sessionStorage.removeItem(pendingFavoriteStorageKey);
+	}
+	syncFavoriteButtons();
+});
 
 document.addEventListener("click", (event) => {
 	const favoriteButton = event.target.closest(".event-card__favorite");
@@ -42,12 +95,16 @@ document.addEventListener("click", (event) => {
 		return;
 	}
 
+	const eventId = favoriteButton.dataset.eventId;
 	if (localStorage.getItem("momentum-authenticated") !== "true") {
+		if (eventId) {
+			sessionStorage.setItem(pendingFavoriteStorageKey, eventId);
+			sessionStorage.setItem(pendingFavoriteTopStorageKey, String(favoriteButton.getBoundingClientRect().top));
+		}
 		openLoginDialog();
 		return;
 	}
 
-	const eventId = favoriteButton.dataset.eventId;
 	if (!eventId) {
 		return;
 	}

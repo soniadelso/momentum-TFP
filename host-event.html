@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="Propón un evento para la comunidad momentum.">
+	<meta name="theme-color" content="#fffef5">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Instrument+Sans:wght@400;600&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="css/reset.css">
+	<link rel="stylesheet" href="css/tokens.css">
+	<link rel="stylesheet" href="css/typography.css">
+	<link rel="stylesheet" href="css/styles.css">
+	<link rel="stylesheet" href="css/header.css?v=10">
+	<link rel="stylesheet" href="css/footer.css">
+	<link rel="stylesheet" href="css/login.css?v=15">
+	<link rel="stylesheet" href="css/profile.css">
+	<link rel="stylesheet" href="css/buttons.css">
+	<link rel="stylesheet" href="css/filters.css?v=6">
+	<link rel="stylesheet" href="css/responsive.css">
+	<script src="javascript/app.js?v=12" defer></script>
+	<script src="javascript/events.js" defer></script>
+	<script src="javascript/login-dialog.js?v=5" defer></script>
+	<script src="javascript/login-form.js?v=6" defer></script>
+	<script src="javascript/header-menu.js" defer></script>
+	<script src="javascript/host-event-form.js?v=6" defer></script>
+	<title>momentum | Host Event</title>
+	<link rel="icon" href="assets/favicon-momentum.svg" type="image/svg+xml">
+</head>
+<body>
+	<div data-app-header></div>
+
+	<main class="host-event-page">
+		<section class="login-main host-event-guest" data-host-event-guest hidden>
+			<div class="login-card">
+				<div class="login-card__heading">
+					<h1 class="login-card__title">Gestiona tus propios eventos</h1>
+					<p class="login-card__description">Crea eventos y forma parte de la comunidad momentum</p>
+				</div>
+				<button class="login-form__submit" type="button" data-host-event-login>Iniciar sesión</button>
+			</div>
+		</section>
+
+		<section class="host-event-main" data-host-event-private hidden>
+			<section class="profile-summary host-event-created" aria-labelledby="host-event-created-title">
+				<div class="profile-summary__top">
+					<div class="profile-summary__identity">
+						<h1 class="profile-summary__name" id="host-event-created-title">Eventos creados</h1>
+					</div>
+				</div>
+				<div class="profile-summary__divider" aria-hidden="true"></div>
+				<p class="profile-summary__role">Aún no has creado ningún evento.</p>
+			</section>
+
+			<section class="login-card host-event-form-panel" aria-label="Publicar evento">
+				<div class="host-event-form-disclosure">
+					<div class="login-card__heading">
+						<h2 class="login-card__title">Crear evento</h2>
+						<p class="login-card__description">Rellena el formulario para proponer un evento.</p>
+					</div>
+
+					<form class="login-form" data-host-event-form>
+				<div class="login-field">
+					<label class="login-field__label" for="event-image">Imagen del evento *</label>
+					<input class="login-field__input" id="event-image" name="image" type="file" accept=".jpg,.jpeg,.png,.gif,.webp" required>
+				</div>
+
+				<div class="login-field">
+					<p class="login-field__label" id="event-category-label">Categoría *</p>
+					<details class="explore-filters__facet-dropdown map-filter-sheet__facet-dropdown" data-host-dropdown="category" aria-labelledby="event-category-label">
+						<summary class="button button--filter-outline explore-filters__facet">
+							<span data-host-dropdown-label>Selecciona una categoría</span><span aria-hidden="true">▾</span>
+						</summary>
+						<div class="explore-filters__facet-menu" role="listbox" aria-labelledby="event-category-label">
+							<button type="button" role="option" aria-selected="false" data-host-option data-value="Brand &amp; Graphic">Brand &amp; Graphic</button>
+							<button type="button" role="option" aria-selected="false" data-host-option data-value="Digital Product">Digital Product</button>
+							<button type="button" role="option" aria-selected="false" data-host-option data-value="Industrial Design">Industrial Design</button>
+							<button type="button" role="option" aria-selected="false" data-host-option data-value="Media &amp; Motion">Media &amp; Motion</button>
+						</div>
+					</details>
+					<input id="event-category" name="category" type="hidden">
+				</div>
+
+				<div class="login-field">
+					<label class="login-field__label" for="event-title">Título *</label>
+					<input class="login-field__input" id="event-title" name="title" type="text" autocomplete="off" required>
+				</div>
+
+				<div class="login-field">
+					<label class="login-field__label" for="event-description">Descripción del evento *</label>
+					<textarea class="login-field__input" id="event-description" name="description" rows="4" required></textarea>
+				</div>
+
+				<div class="login-field">
+					<label class="login-field__label" for="event-date">Fecha y hora *</label>
+					<input class="login-field__input" id="event-date" name="date" type="datetime-local" required>
+				</div>
+
+				<div class="login-field">
+					<p class="login-field__label" id="event-format-label">Formato *</p>
+					<details class="explore-filters__facet-dropdown map-filter-sheet__facet-dropdown" data-host-dropdown="format" aria-labelledby="event-format-label">
+						<summary class="button button--filter-outline explore-filters__facet">
+							<span data-host-dropdown-label>Selecciona un formato</span><span aria-hidden="true">▾</span>
+						</summary>
+						<div class="explore-filters__facet-menu" role="listbox" aria-labelledby="event-format-label">
+							<button type="button" role="option" aria-selected="false" data-host-option data-value="presencial">Presencial</button>
+							<button type="button" role="option" aria-selected="false" data-host-option data-value="online">Online</button>
+						</div>
+					</details>
+					<input id="event-format" name="format" type="hidden">
+				</div>
+
+				<div class="login-field">
+					<label class="login-field__label" for="event-price">Precio (€) *</label>
+					<input class="login-field__input" id="event-price" name="price" type="number" min="0" step="0.01" value="0" required>
+				</div>
+
+				<div class="login-field">
+					<label class="login-field__label" for="event-organizer">Organizador o espacio *</label>
+					<input class="login-field__input" id="event-organizer" name="organizer" type="text" required>
+				</div>
+
+				<div class="login-field">
+					<label class="login-field__label" for="event-location">Dirección o enlace *</label>
+					<input class="login-field__input" id="event-location" name="location" type="text" required>
+				</div>
+
+				<div class="login-field">
+					<label class="login-field__label" for="event-notes">Notas adicionales</label>
+					<textarea class="login-field__input" id="event-notes" name="notes" rows="4"></textarea>
+				</div>
+
+				<p class="login-card__description" data-host-event-error role="alert" hidden></p>
+				<button class="login-form__submit" type="submit">Enviar evento</button>
+			</form>
+
+			<div class="login-card__heading" data-host-event-confirmation role="status" aria-live="polite" hidden>
+				<h2 class="login-card__title">Gracias por formar parte de momentum</h2>
+				<p class="login-card__description">Esta demostración no envía ni guarda los datos.</p>
+			</div>
+				</div>
+		</section>
+		</section>
+	</main>
+
+	<footer class="footer">
+		<div class="footer__main">
+			<div class="footer__brand-column">
+				<a class="footer__brand" href="index.html">momentum</a>
+				<p class="footer__tagline">Eventos de diseño para creativos</p>
+				<div class="footer__socials" aria-label="Redes sociales">
+					<a href="#social" aria-label="Red social"><img src="assets/icon-social.svg" alt="" loading="lazy"></a>
+					<a href="#social" aria-label="Red social"><img src="assets/icon-social.svg" alt="" loading="lazy"></a>
+					<a href="#social" aria-label="Red social"><img src="assets/icon-social.svg" alt="" loading="lazy"></a>
+					<a href="#social" aria-label="Red social"><img src="assets/icon-social.svg" alt="" loading="lazy"></a>
+				</div>
+			</div>
+			<div class="footer__column"><h2 class="footer__heading">About</h2><a href="#about">Sobre nosotros</a></div>
+			<div class="footer__column"><h2 class="footer__heading">Cuenta</h2><a href="user-profile.html">Mi perfil</a><a href="#my-events">Mis eventos</a><a href="#settings">Configuración</a></div>
+			<div class="footer__column"><h2 class="footer__heading">Support</h2><a href="#contact">Contacto</a><a href="#faq">FAQ</a></div>
+			<div class="footer__column"><h2 class="footer__heading">Eventos</h2><a href="explorar.html">Explorar eventos</a><a href="host-event.html" aria-current="page">Crear evento</a><a href="map.html">Explora el Mapa</a></div>
+			<div class="footer__column footer__column--download">
+				<h2 class="footer__heading">Descargar app</h2>
+				<a class="store-badge" href="#app-store"><span class="store-badge__icon" aria-hidden="true"></span><span><small>Download on the</small><strong>App Store</strong></span></a>
+				<a class="store-badge" href="#google-play"><span class="store-badge__icon" aria-hidden="true"></span><span><small>GET IT ON</small><strong>Google Play</strong></span></a>
+			</div>
+		</div>
+		<img class="footer__divider" src="assets/footer-divider.svg" alt="" loading="lazy">
+		<div class="footer__bottom">
+			<p>© 2026 Momentum. Todos los derechos reservados.</p>
+			<nav aria-label="Información legal"><a href="#terms">Términos y condiciones</a><a href="#privacy">Política de privacidad</a><a href="#cookies">Cookies</a><a href="#legal">Aviso legal</a></nav>
+		</div>
+	</footer>
+</body>
+</html>

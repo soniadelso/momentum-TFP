@@ -3,13 +3,18 @@
     padding-block: var(--section-space);
 }
 
-main > section:last-child {
+main > section:last-child,
+main#home > .disciplines:has(+ .how-it-works[hidden]) {
     padding-bottom: calc(var(--section-space) * 2);
 }
 
 .events {
     display: grid;
     gap: var(--space-6);
+}
+
+main > .explore-filters + .events {
+    padding-top: var(--space-4);
 }
 
 .section__heading {
@@ -260,6 +265,12 @@ main > section:last-child {
     gap: var(--space-6);
     padding-top: var(--space-16);
     padding-bottom: var(--space-8);
+}
+
+#home > [data-home-guest][hidden],
+#home > [data-home-authenticated][hidden],
+#home > [data-home-guest-only][hidden] {
+    display: none;
 }
 
 .attending__groups {

@@ -214,10 +214,12 @@ eventsDataReady.then((eventsData) => {
 	}
 
 	const eventGrids = [...document.querySelectorAll("[data-event-ids]")];
-	const gridLists = eventGrids.map((grid) => grid.dataset.eventIds.split(","));
-
-	eventGrids.forEach((grid, index) => {
-		grid.innerHTML = gridLists[index].map((id) => eventCardMarkup(eventsData.find((item) => item.id === id))).join("");
+	eventGrids.forEach((grid) => {
+		const eventIds = grid.dataset.eventIds.trim();
+		const gridEvents = eventIds === "all"
+			? eventsData
+			: eventIds.split(",").map((id) => eventsData.find((item) => item.id === id)).filter(Boolean);
+		grid.innerHTML = gridEvents.map((item) => eventCardMarkup(item)).join("");
 	});
 
 	if (mapEventGrid) {

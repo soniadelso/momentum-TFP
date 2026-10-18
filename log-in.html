@@ -12,15 +12,15 @@
 	<link rel="stylesheet" href="css/tokens.css">
 	<link rel="stylesheet" href="css/typography.css">
 	<link rel="stylesheet" href="css/styles.css">
-	<link rel="stylesheet" href="css/header.css?v=5">
+	<link rel="stylesheet" href="css/header.css?v=10">
 	<link rel="stylesheet" href="css/footer.css">
-	<link rel="stylesheet" href="css/login.css">
+	<link rel="stylesheet" href="css/login.css?v=15">
 	<link rel="stylesheet" href="css/buttons.css">
 	<link rel="stylesheet" href="css/responsive.css">
-	<script src="javascript/app.js?v=3" defer></script>
+	<script src="javascript/app.js?v=12" defer></script>
 	<script src="javascript/events.js" defer></script>
 	<script src="javascript/header-menu.js" defer></script>
-	<script src="javascript/login-form.js" defer></script>
+	<script src="javascript/login-form.js?v=6" defer></script>
 	<title>momentum | Iniciar sesión</title>
 	<link rel="icon" href="assets/favicon-momentum.svg" type="image/svg+xml">
 </head>
@@ -34,7 +34,7 @@
 				<p class="login-card__description">Ingresa con cualquier correo y contraseña para iniciar sesión.</p>
 			</div>
 
-			<form class="login-form">
+			<form class="login-form" novalidate>
 				<div class="login-field">
 					<label class="login-field__label" for="login-email">Correo electrónico</label>
 					<input class="login-field__input" id="login-email" name="email" type="email" placeholder="tu@email.com" autocomplete="email" required>
@@ -50,6 +50,7 @@
 					</div>
 				</div>
 
+				<p class="login-card__description" data-login-error role="alert" hidden></p>
 				<button class="login-form__submit" type="submit">Iniciar sesión</button>
 			</form>
 		</section>
@@ -81,7 +82,7 @@
 			</div>
 			<div class="footer__column">
 				<h2 class="footer__heading">Eventos</h2>
-				<a href="index.html#events">Explorar eventos</a><a href="#host-event">Crear evento</a><a href="index.html#disciplines">Explora el Mapa</a>
+				<a href="index.html#events">Explorar eventos</a><a href="host-event.html">Crear evento</a><a href="index.html#disciplines">Explora el Mapa</a>
 			</div>
 			<div class="footer__column footer__column--download">
 				<h2 class="footer__heading">Descargar app</h2>

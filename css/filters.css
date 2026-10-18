@@ -1,7 +1,12 @@
 .explore-filters {
     display: grid;
     gap: var(--space-4);
-    padding-block: var(--space-8);
+    padding-block: var(--section-space);
+    padding-block-start: var(--space-16);
+}
+
+main > .explore-filters + .events {
+    padding-block-start: var(--space-4);
 }
 
 .explore-filters__group {
