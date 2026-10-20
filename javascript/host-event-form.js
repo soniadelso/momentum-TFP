@@ -1,5 +1,7 @@
 const hostEventForm = document.querySelector("[data-host-event-form]");
 const hostEventConfirmation = document.querySelector("[data-host-event-confirmation]");
+const hostEventFormHeading = document.querySelector("[data-host-event-form-heading]");
+const hostEventNewButton = document.querySelector("[data-host-event-new]");
 const hostEventError = document.querySelector("[data-host-event-error]");
 const hostEventGuest = document.querySelector("[data-host-event-guest]");
 const hostEventPrivate = document.querySelector("[data-host-event-private]");
@@ -112,6 +114,31 @@ if (hostEventForm && hostEventConfirmation) {
         }
 
         hostEventForm.hidden = true;
+        hostEventFormHeading.hidden = true;
         hostEventConfirmation.hidden = false;
+    });
+
+    hostEventNewButton.addEventListener("click", () => {
+        hostEventForm.reset();
+        document.querySelectorAll("[data-host-dropdown]").forEach((dropdown) => {
+            const valueInput = document.getElementById(`event-${dropdown.dataset.hostDropdown}`);
+            const selectedLabel = dropdown.querySelector("[data-host-dropdown-label]");
+            valueInput.value = "";
+            selectedLabel.textContent = dropdown.dataset.hostDropdown === "category"
+                ? "Selecciona una categoría"
+                : "Selecciona un formato";
+            dropdown.removeAttribute("aria-invalid");
+            dropdown.querySelectorAll("[data-host-option]").forEach((option) => {
+                option.setAttribute("aria-selected", "false");
+                option.classList.remove("is-selected");
+            });
+        });
+
+        hasAttemptedSubmit = false;
+        hostEventError.hidden = true;
+        hostEventForm.hidden = false;
+        hostEventFormHeading.hidden = false;
+        hostEventConfirmation.hidden = true;
+        hostEventForm.querySelector("#event-title").focus();
     });
 }

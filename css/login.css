@@ -92,12 +92,16 @@
 }
 
 .login-card [data-host-event-form][hidden],
-.login-card [data-host-event-confirmation][hidden] {
+.login-card [data-host-event-confirmation][hidden],
+.login-card [data-host-event-form-heading][hidden],
+.login-card [data-contact-form][hidden],
+.login-card [data-contact-confirmation][hidden],
+.login-card [data-contact-heading][hidden] {
     display: none;
 }
 
 .login-card [data-login-error] {
-    color: #c62828;
+    color: var(--color-error);
 }
 
 .login-card__title {
@@ -150,11 +154,12 @@
 
 .login-field__input[aria-invalid="true"],
 .login-field [data-host-dropdown][aria-invalid="true"] > summary {
-    border-color: #c62828;
+    border-color: var(--color-error);
 }
 
-[data-host-event-error] {
-    color: #c62828;
+[data-host-event-error],
+[data-contact-error] {
+    color: var(--color-error);
 }
 
 .login-field__input::placeholder {

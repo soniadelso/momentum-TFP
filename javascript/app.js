@@ -15,6 +15,15 @@ if (guestHome && authenticatedHome) {
 	});
 }
 
+// Muestra el formulario de acceso o el perfil según el estado de sesión.
+const guestProfile = document.querySelector("[data-profile-guest]");
+if (guestProfile) {
+	guestProfile.hidden = isAuthenticated;
+	document.querySelectorAll("[data-profile-private]").forEach((section) => {
+		section.hidden = !isAuthenticated;
+	});
+}
+
 if (headerMount) {
 	const homeCurrent = currentPage === "index.html" ? ' aria-current="page"' : "";
 	const exploreCurrent = currentPage === "explorar.html" ? ' aria-current="page"' : "";

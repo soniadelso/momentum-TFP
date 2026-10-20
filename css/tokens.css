@@ -16,6 +16,7 @@
     --color-neutral-line: #8c8c8c;
     --color-footer-line: #3c3c3c;
     --color-text-subtle: #666666;
+    --color-error: #c62828;
 
     /* Typography */
     --font-display: "Recoleta", "DM Serif Display", Georgia, serif;

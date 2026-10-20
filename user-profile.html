@@ -33,7 +33,33 @@
 	<div data-app-header></div>
 
 	<main class="user-profile-main" id="profile">
-		<section class="profile-summary" aria-label="Perfil de usuario">
+		<section class="login-main user-profile-login" aria-labelledby="profile-login-title" data-profile-guest hidden>
+			<div class="login-card">
+				<div class="login-card__heading">
+					<h1 class="login-card__title" id="profile-login-title">Iniciar sesión</h1>
+					<p class="login-card__description">Ingresa con cualquier correo y contraseña para iniciar sesión.</p>
+				</div>
+				<form class="login-form" data-login-stay novalidate>
+					<div class="login-field">
+						<label class="login-field__label" for="profile-login-email">Correo electrónico</label>
+						<input class="login-field__input" id="profile-login-email" name="email" type="email" placeholder="tu@email.com" autocomplete="email" required>
+					</div>
+					<div class="login-field">
+						<label class="login-field__label" for="profile-login-password">Contraseña</label>
+						<div class="login-field__control">
+							<input class="login-field__input" id="profile-login-password" name="password" type="password" placeholder="Ingresa tu contraseña" autocomplete="current-password" required>
+							<button class="login-field__visibility" type="button" aria-controls="profile-login-password" aria-label="Show password" aria-pressed="false">
+								<img src="assets/eye-icon.svg" alt="">
+							</button>
+						</div>
+					</div>
+					<p class="login-card__description" data-login-error role="alert" hidden></p>
+					<button class="login-form__submit" type="submit">Iniciar sesión</button>
+				</form>
+			</div>
+		</section>
+
+		<section class="profile-summary" aria-label="Perfil de usuario" data-profile-private>
 			<div class="profile-summary__top">
 				<img class="profile-summary__avatar" src="assets/profile-avatar-2.jpg" alt="Foto de perfil de Nombre Apellido">
 				<div class="profile-summary__identity">
@@ -59,19 +85,19 @@
 			</div>
 		</section>
 
-		<section class="profile-section" aria-label="Eventos a los que asistirás">
+		<section class="profile-section" aria-label="Eventos a los que asistirás" data-profile-private>
 			<h2 class="section__title">Eventos a los que asistirás</h2>
 			<div class="attending__groups" data-attending-groups></div>
 			<p data-attending-empty hidden>Todavía no te has apuntado a ningún evento.</p>
 		</section>
 
-		<section class="profile-section" aria-label="Favoritos">
+		<section class="profile-section" aria-label="Favoritos" data-profile-private>
 			<h2 class="section__title">Favoritos</h2>
 			<div class="events__grid" data-favorites-grid></div>
 			<p data-favorites-empty hidden>Aún no tienes eventos favoritos, sigue explorando para encontrar el tuyo :)</p>
 		</section>
 
-		<section class="profile-section" aria-label="Grupos">
+		<section class="profile-section" aria-label="Grupos" data-profile-private>
 			<h2 class="section__title">Grupos</h2>
 			<div class="profile-groups-grid">
 				<article class="profile-group"><img class="profile-group__avatar" src="assets/diseño-uiux.jpg" alt=""><div class="profile-group__info"><h3>Diseño UI/UX</h3><p>124 miembros</p></div></article>
@@ -83,7 +109,7 @@
 			</div>
 		</section>
 
-		<section class="profile-section" aria-label="Ajustes y Cuenta">
+		<section class="profile-section" aria-label="Ajustes y Cuenta" data-profile-private>
 			<h2 class="section__title">Ajustes y Cuenta</h2>
 			<a class="button button--secondary-outline profile-logout" href="index.html" data-logout hidden><svg class="profile-logout__icon" width="16" height="16" viewBox="0 0 35 36" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M2.4 11.8A16.4 16.4 0 1 1 2.4 23.8M1 17.8H23M17.6 12l5.8 5.8-5.8 5.8" /></svg>Cerrar sesión</a>
 			<div class="profile-settings-grid" hidden>
@@ -109,7 +135,7 @@
 		<div class="footer__main">
 			<div class="footer__brand-column">
 				<a class="footer__brand" href="index.html">momentum</a>
-				<p class="footer__tagline">Eventos de diseño para creativos</p>
+				<p class="footer__tagline">Eventos de diseño para la comunidad creativa.</p>
 				<div class="footer__socials" aria-label="Social media">
 					<a href="#social" aria-label="Social media"><img src="assets/icon-social.svg" alt="" loading="lazy"></a>
 					<a href="#social" aria-label="Social media"><img src="assets/icon-social.svg" alt="" loading="lazy"></a>
@@ -117,10 +143,10 @@
 					<a href="#social" aria-label="Social media"><img src="assets/icon-social.svg" alt="" loading="lazy"></a>
 				</div>
 			</div>
-			<div class="footer__column"><h2 class="footer__heading">About</h2><a href="#about">Sobre nosotros</a></div>
-			<div class="footer__column"><h2 class="footer__heading">Cuenta</h2><a href="#profile">Mi perfil</a><a href="#my-events">Mis eventos</a><a href="#settings">Configuración</a></div>
-			<div class="footer__column"><h2 class="footer__heading">Support</h2><a href="#contact">Contacto</a><a href="#faq">FAQ</a></div>
-			<div class="footer__column"><h2 class="footer__heading">Eventos</h2><a href="index.html#events">Explorar eventos</a><a href="host-event.html">Crear evento</a><a href="index.html#disciplines">Explora el Mapa</a></div>
+			<div class="footer__column"><h2 class="footer__heading">Conócenos</h2><a href="about.html">Sobre momentum</a></div>
+			<div class="footer__column"><h2 class="footer__heading">Cuenta</h2><a href="user-profile.html">Mi perfil</a><a href="host-event.html">Modo Anfitrión</a></div>
+			<div class="footer__column"><h2 class="footer__heading">Contacto</h2><a href="contact.html">Escríbenos</a></div>
+			<div class="footer__column"><h2 class="footer__heading">Eventos</h2><a href="explorar.html">Explorar eventos</a><a href="host-event.html">Crear evento</a><a href="map.html">Explora el mapa</a></div>
 			<div class="footer__column footer__column--download">
 				<h2 class="footer__heading">Descargar app</h2>
 				<a class="store-badge" href="#app-store"><span class="store-badge__icon" aria-hidden="true"></span><span><small>Download on the</small><strong>App Store</strong></span></a>

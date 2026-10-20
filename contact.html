@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="Contacta con el equipo de momentum.">
+	<meta name="theme-color" content="#fffef5">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Instrument+Sans:wght@400;600&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="css/reset.css">
+	<link rel="stylesheet" href="css/tokens.css">
+	<link rel="stylesheet" href="css/typography.css">
+	<link rel="stylesheet" href="css/styles.css">
+	<link rel="stylesheet" href="css/header.css?v=10">
+	<link rel="stylesheet" href="css/footer.css">
+	<link rel="stylesheet" href="css/login.css?v=15">
+	<link rel="stylesheet" href="css/buttons.css">
+	<link rel="stylesheet" href="css/responsive.css">
+	<script src="javascript/app.js?v=12" defer></script>
+	<script src="javascript/events.js" defer></script>
+	<script src="javascript/header-menu.js" defer></script>
+	<script src="javascript/contact-form.js" defer></script>
+	<title>momentum | Contacto</title>
+	<link rel="icon" href="assets/favicon-momentum.svg" type="image/svg+xml">
+</head>
+<body>
+	<div data-app-header></div>
+
+	<main class="login-main">
+		<section class="login-card" aria-labelledby="contact-title">
+			<div class="login-card__heading" data-contact-heading>
+				<h1 class="login-card__title" id="contact-title">Contacto</h1>
+				<p class="login-card__description">Cuéntanos en qué podemos ayudarte.</p>
+			</div>
+
+			<form class="login-form" data-contact-form>
+				<div class="login-field">
+					<label class="login-field__label" for="contact-name">Nombre *</label>
+					<input class="login-field__input" id="contact-name" name="name" type="text" autocomplete="given-name" required>
+				</div>
+
+				<div class="login-field">
+					<label class="login-field__label" for="contact-surname">Apellidos (opcional)</label>
+					<input class="login-field__input" id="contact-surname" name="surname" type="text" autocomplete="family-name">
+				</div>
+
+				<div class="login-field">
+					<label class="login-field__label" for="contact-phone">Teléfono (opcional)</label>
+					<input class="login-field__input" id="contact-phone" name="phone" type="tel" autocomplete="tel">
+				</div>
+
+				<div class="login-field">
+					<label class="login-field__label" for="contact-email">Correo electrónico *</label>
+					<input class="login-field__input" id="contact-email" name="email" type="email" autocomplete="email" placeholder="tu@email.com" required>
+				</div>
+
+				<div class="login-field">
+					<label class="login-field__label" for="contact-message">Descripción *</label>
+					<textarea class="login-field__input" id="contact-message" name="message" rows="5" required></textarea>
+				</div>
+
+				<p class="login-card__description" data-contact-error role="alert" hidden></p>
+				<button class="login-form__submit" type="submit">Enviar mensaje</button>
+			</form>
+
+			<div class="login-card__heading" data-contact-confirmation role="status" aria-live="polite" hidden>
+				<h2 class="login-card__title">Gracias por contactarnos</h2>
+				<p class="login-card__description">Te responderemos en breve.</p>
+			</div>
+		</section>
+	</main>
+
+	<footer class="footer">
+		<div class="footer__main">
+			<div class="footer__brand-column">
+				<a class="footer__brand" href="index.html">momentum</a>
+				<p class="footer__tagline">Eventos de diseño para la comunidad creativa.</p>
+				<div class="footer__socials" aria-label="Redes sociales">
+					<a href="#social" aria-label="Red social"><img src="assets/icon-social.svg" alt="" loading="lazy"></a>
+					<a href="#social" aria-label="Red social"><img src="assets/icon-social.svg" alt="" loading="lazy"></a>
+					<a href="#social" aria-label="Red social"><img src="assets/icon-social.svg" alt="" loading="lazy"></a>
+					<a href="#social" aria-label="Red social"><img src="assets/icon-social.svg" alt="" loading="lazy"></a>
+				</div>
+			</div>
+			<div class="footer__column"><h2 class="footer__heading">Conócenos</h2><a href="about.html">Sobre momentum</a></div>
+			<div class="footer__column"><h2 class="footer__heading">Cuenta</h2><a href="user-profile.html">Mi perfil</a><a href="host-event.html">Modo Anfitrión</a></div>
+			<div class="footer__column"><h2 class="footer__heading">Contacto</h2><a href="contact.html" aria-current="page">Escríbenos</a></div>
+			<div class="footer__column"><h2 class="footer__heading">Eventos</h2><a href="explorar.html">Explorar eventos</a><a href="host-event.html">Crear evento</a><a href="map.html">Explora el mapa</a></div>
+			<div class="footer__column footer__column--download">
+				<h2 class="footer__heading">Descargar app</h2>
+				<a class="store-badge" href="#app-store"><span class="store-badge__icon" aria-hidden="true"></span><span><small>Download on the</small><strong>App Store</strong></span></a>
+				<a class="store-badge" href="#google-play"><span class="store-badge__icon" aria-hidden="true"></span><span><small>GET IT ON</small><strong>Google Play</strong></span></a>
+			</div>
+		</div>
+		<img class="footer__divider" src="assets/footer-divider.svg" alt="" loading="lazy">
+		<div class="footer__bottom">
+			<p>© 2026 Momentum. Todos los derechos reservados.</p>
+			<nav aria-label="Información legal"><a href="#terms">Términos y condiciones</a><a href="#privacy">Política de privacidad</a><a href="#cookies">Cookies</a><a href="#legal">Aviso legal</a></nav>
+		</div>
+	</footer>
+</body>
+</html>

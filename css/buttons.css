@@ -290,6 +290,12 @@
     font-size: var(--font-size-xs);
     font-weight: var(--font-weight-semibold);
     cursor: pointer;
+
+    &:hover {
+        background: var(--color-accent);
+        color: var(--color-text-primary);
+        transition: background 160ms var(--transition-ease), color 160ms var(--transition-ease);
+    }
 }
 
 /* App Store and Google Play badge links */
