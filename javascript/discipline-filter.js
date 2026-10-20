@@ -7,6 +7,8 @@ const filterCounts = [...document.querySelectorAll("[data-filter-count]")];
 const filterTrigger = document.querySelector(".map-filter-trigger");
 const filterSheet = document.querySelector("#map-filter-sheet");
 const barcelonaCenter = [41.3874, 2.1686];
+const hasMapCanvas = Boolean(document.querySelector(".map-canvas"));
+const locationError = document.querySelector("[data-location-error]");
 let locationCenter = barcelonaCenter;
 let mapViewportBounds = null;
 const eventDataById = new Map();
@@ -108,6 +110,18 @@ const matchesDateRange = (startsAt, range) => {
 	return true;
 };
 
+// Calcula la distancia entre dos coordenadas geográficas en kilómetros.
+const distanceBetweenCoordinates = (firstCoordinates, secondCoordinates) => {
+	const toRadians = (degrees) => degrees * Math.PI / 180;
+	const latitudeDifference = toRadians(secondCoordinates[0] - firstCoordinates[0]);
+	const longitudeDifference = toRadians(secondCoordinates[1] - firstCoordinates[1]);
+	const haversine = Math.sin(latitudeDifference / 2) ** 2
+		+ Math.cos(toRadians(firstCoordinates[0]))
+		* Math.cos(toRadians(secondCoordinates[0]))
+		* Math.sin(longitudeDifference / 2) ** 2;
+	return 6371 * 2 * Math.atan2(Math.sqrt(haversine), Math.sqrt(1 - haversine));
+};
+
 const syncFilterControls = () => {
 	document.querySelectorAll("[data-filter-label]").forEach((label) => {
 		const value = filterValues[label.dataset.filterLabel];
@@ -160,6 +174,8 @@ const applyFilters = ({ fitMap = false } = {}) => {
 		const matchesCategory = activeCategories.size === 0 || activeCategories.has(eventData.category);
 		const matchesFormat = !filterValues.format || eventData.format === filterValues.format;
 		const matchesDate = !filterValues.date || matchesDateRange(eventData.startsAt, filterValues.date);
+		const matchesLocation = !filterValues.location || (eventData.coordinates
+			&& distanceBetweenCoordinates(locationCenter, eventData.coordinates) <= Number(filterValues.location));
 		const matchesMapViewport = !mapViewportBounds || (eventData.coordinates
 			&& eventData.coordinates[0] >= mapViewportBounds.south
 			&& eventData.coordinates[0] <= mapViewportBounds.north
@@ -167,7 +183,7 @@ const applyFilters = ({ fitMap = false } = {}) => {
 			&& eventData.coordinates[1] <= mapViewportBounds.east);
 		const matchesPrice = !filterValues.price
 			|| (filterValues.price === "free" ? eventData.priceAmount === 0 : eventData.priceAmount > 0);
-		card.hidden = !(matchesSearch && matchesCategory && matchesFormat && matchesDate && matchesPrice && matchesMapViewport);
+		card.hidden = !(matchesSearch && matchesCategory && matchesFormat && matchesDate && matchesLocation && matchesPrice && matchesMapViewport);
 		if (!card.hidden) {
 			visibleCardCount += 1;
 		}
@@ -175,7 +191,10 @@ const applyFilters = ({ fitMap = false } = {}) => {
 
 	const emptySearchMessage = document.querySelector("[data-search-empty]");
 	if (emptySearchMessage) {
-		emptySearchMessage.hidden = !searchQuery || visibleCardCount > 0;
+		emptySearchMessage.textContent = filterValues.location
+			? "No se encontraron eventos en esta distancia."
+			: "No se encontraron eventos para esa búsqueda.";
+		emptySearchMessage.hidden = !(searchQuery || filterValues.location) || visibleCardCount > 0;
 	}
 
 	syncFilterControls();
@@ -213,8 +232,44 @@ document.addEventListener("click", (event) => {
 		return;
 	}
 
-	filterValues[option.dataset.filterOption] = option.dataset.filterValue;
+	const filterKey = option.dataset.filterOption;
+	const filterValue = option.dataset.filterValue;
 	option.closest("details")?.removeAttribute("open");
+	if (filterKey === "location" && filterValue && !hasMapCanvas) {
+		if (!navigator.geolocation) {
+			filterValues.location = "";
+			if (locationError) {
+				locationError.textContent = "Este navegador no permite acceder a la ubicación.";
+				locationError.hidden = false;
+			}
+			syncFilterControls();
+			applyFilters();
+			return;
+		}
+
+		navigator.geolocation.getCurrentPosition(({ coords }) => {
+			locationCenter = [coords.latitude, coords.longitude];
+			filterValues.location = filterValue;
+			if (locationError) {
+				locationError.hidden = true;
+			}
+			applyFilters({ fitMap: true });
+		}, () => {
+			filterValues.location = "";
+			if (locationError) {
+				locationError.textContent = "No se pudo acceder a tu ubicación. Revisa los permisos del navegador.";
+				locationError.hidden = false;
+			}
+			syncFilterControls();
+			applyFilters();
+		}, { maximumAge: 300000, timeout: 10000 });
+		return;
+	}
+
+	filterValues[filterKey] = filterValue;
+	if (filterKey === "location" && !filterValue && locationError) {
+		locationError.hidden = true;
+	}
 	applyFilters({ fitMap: true });
 });
 
@@ -230,6 +285,9 @@ document.querySelectorAll("[data-clear-filters]").forEach((button) => {
 	button.addEventListener("click", () => {
 		activeCategories.clear();
 		Object.keys(filterValues).forEach((key) => { filterValues[key] = ""; });
+		if (locationError) {
+			locationError.hidden = true;
+		}
 		applyFilters({ fitMap: true });
 	});
 });
