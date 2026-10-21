@@ -1,3 +1,4 @@
+// Comparte el estado de asistencia entre páginas mediante el almacenamiento local.
 const attendingStorageKey = "momentum-attending";
 const getAttendingIds = () => JSON.parse(localStorage.getItem(attendingStorageKey) || "[]");
 const setAttendingIds = (ids) => localStorage.setItem(attendingStorageKey, JSON.stringify(ids));
@@ -9,6 +10,7 @@ const fuseLibraryReady = import("https://cdn.jsdelivr.net/npm/fuse.js@7.1.0/dist
 	.then(({ default: Fuse }) => Fuse)
 	.catch(() => null);
 
+// Descarga una sola vez el catálogo y comparte su promesa con los demás scripts.
 const eventsDataReady = fetch("events.json")
 	.then((response) => {
 		if (!response.ok) {
@@ -24,8 +26,8 @@ window.eventsDataReady = eventsDataReady;
 window.getAttendingIds = getAttendingIds;
 window.setAttendingIds = setAttendingIds;
 
-eventsDataReady.then(async (eventsData) => {
-	const Fuse = await fuseLibraryReady;
+// Prepara las tarjetas, filtros y búsquedas después de cargar el catálogo.
+eventsDataReady.then((eventsData) => {
 	const eventsByTitle = new Map(eventsData.flatMap((item) => item.aliases.map((alias) => [alias.toLowerCase(), item])));
 	const mapEvents = mapEventGrid
 		? eventsData.filter((item) => item.format === "presencial"
@@ -34,6 +36,7 @@ eventsDataReady.then(async (eventsData) => {
 			&& Math.abs(item.coordinates[1]) <= 180)
 		: [];
 	const searchableEvents = mapEventGrid ? mapEvents : eventsData;
+	// Amplía la búsqueda con traducciones y alias de categorías.
 	const categorySearchTranslations = {
 		"Digital Product": "Diseño de producto",
 		"Brand & Graphic": "Diseño gráfico",
@@ -54,6 +57,7 @@ eventsDataReady.then(async (eventsData) => {
 			{ label: "Diseño de producto", value: "Diseño de producto" }
 		],
 		"Brand & Graphic": [
+			{ label: "Brand & Graphic", value: "Brand & Graphic", aliases: ["Graphic Design"] },
 			{ label: "Graphic Design", value: "Graphic Design", aliases: ["Brand & Graphic"] },
 			{ label: "Diseño gráfico", value: "Diseño gráfico" }
 		],
@@ -66,6 +70,7 @@ eventsDataReady.then(async (eventsData) => {
 			{ label: "Audiovisual y animación", value: "Audiovisual y animación" }
 		]
 	};
+	// Genera una tarjeta reutilizable en listas, favoritos, mapa y eventos relacionados.
 	const eventCardMarkup = (item, isMapCard = false) => {
 		const cardClass = isMapCard ? "event-card event-card-map" : "event-card";
 		const mapCardId = isMapCard ? ` id="map-event-${item.id}"` : "";
@@ -80,6 +85,7 @@ eventsDataReady.then(async (eventsData) => {
 		</article>`;
 	};
 	window.eventCardMarkup = eventCardMarkup;
+	// Normaliza texto y prepara los registros que utilizarán Fuse y la búsqueda de respaldo.
 	const normalizeSearchText = (value) => value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase("es");
 	const searchableRecords = searchableEvents.map((item) => ({
 		event: item,
@@ -97,11 +103,8 @@ eventsDataReady.then(async (eventsData) => {
 			item.location
 		].join(" "))
 	}));
-	const fuzzySearch = Fuse ? new Fuse(searchableRecords, {
-		keys: ["text"],
-		ignoreLocation: true,
-		threshold: 0.32
-	}) : null;
+	let fuzzySearch = null;
+	// Filtra eventos por todos los términos, con Fuse o búsqueda literal de respaldo.
 	const searchEvents = (query) => {
 		const terms = normalizeSearchText(query).split(/\s+/).filter(Boolean);
 		if (!terms.length) {
@@ -135,6 +138,7 @@ eventsDataReady.then(async (eventsData) => {
 		});
 	};
 	window.searchEvents = searchEvents;
+	// Construye sugerencias únicas de ciudades, categorías y palabras clave.
 	const searchSuggestions = [...new Map(searchableEvents.flatMap((item) => [
 		{ label: [item.city, item.autonomousCommunity, item.country].filter(Boolean).join(" · "), value: item.city },
 		...(categorySearchSuggestions[item.category] || [{ label: item.category, value: item.category }]),
@@ -144,14 +148,28 @@ eventsDataReady.then(async (eventsData) => {
 			aliases: keywordSearchAliases[keyword] || []
 		}))
 	]).map((suggestion) => [normalizeSearchText(suggestion.label), suggestion])).values()];
-	const fuzzySuggestionSearch = Fuse ? new Fuse(searchSuggestions.map((suggestion) => ({
-		suggestion,
-		text: normalizeSearchText([suggestion.label, ...(suggestion.aliases || [])].join(" "))
-	})), {
-		keys: ["text"],
-		ignoreLocation: true,
-		threshold: 0.32
-	}) : null;
+	let fuzzySuggestionSearch = null;
+	// Inicializa los índices de Fuse en segundo plano sin bloquear otras páginas.
+	fuseLibraryReady.then((Fuse) => {
+		if (!Fuse) {
+			return;
+		}
+
+		fuzzySearch = new Fuse(searchableRecords, {
+			keys: ["text"],
+			ignoreLocation: true,
+			threshold: 0.32
+		});
+		fuzzySuggestionSearch = new Fuse(searchSuggestions.map((suggestion) => ({
+			suggestion,
+			text: normalizeSearchText([suggestion.label, ...(suggestion.aliases || [])].join(" "))
+		})), {
+			keys: ["text"],
+			ignoreLocation: true,
+			threshold: 0.32
+		});
+	});
+	// Busca sugerencias difusas y conserva el filtrado literal si Fuse no está disponible.
 	const findSearchSuggestions = (query) => {
 		const normalizedQuery = normalizeSearchText(query.trim());
 		if (fuzzySuggestionSearch) {
@@ -166,6 +184,7 @@ eventsDataReady.then(async (eventsData) => {
 			.slice(0, 6);
 	};
 
+	// Conecta el campo de búsqueda y mantiene el formulario sincronizado con sus sugerencias.
 	const searchInput = document.querySelector("#event-search");
 	const clearSearchButton = document.querySelector("[data-search-clear]");
 	const suggestionsList = document.querySelector("#event-search-suggestions");
@@ -201,6 +220,7 @@ eventsDataReady.then(async (eventsData) => {
 		searchInput.setAttribute("aria-expanded", "false");
 	};
 
+	// Gestiona sugerencias mientras se escribe, selección, Escape y clic exterior.
 	if (searchInput && suggestionsList) {
 		searchInput.addEventListener("input", () => {
 			clearTimeout(suggestionTimer);
@@ -263,6 +283,7 @@ eventsDataReady.then(async (eventsData) => {
 		});
 	}
 
+	// Rellena las cuadrículas de eventos y la lista de marcadores del mapa.
 	const eventGrids = [...document.querySelectorAll("[data-event-ids]")];
 	eventGrids.forEach((grid) => {
 		const eventIds = grid.dataset.eventIds.trim();
@@ -276,6 +297,7 @@ eventsDataReady.then(async (eventsData) => {
 		mapEventGrid.innerHTML = mapEvents.map((item) => eventCardMarkup(item, true)).join("");
 	}
 
+	// Añade o quita la etiqueta «Asistiré» según el estado guardado de cada evento.
 	const syncAttendingLabels = () => {
 		const isUserAuthenticated = localStorage.getItem("momentum-authenticated") === "true";
 		const attendedIds = getAttendingIds();
@@ -307,6 +329,7 @@ eventsDataReady.then(async (eventsData) => {
 		});
 	};
 
+	// Renderiza los favoritos de la sesión y los sincroniza cuando cambian.
 	const favoritesGrid = document.querySelector("[data-favorites-grid]");
 	if (favoritesGrid) {
 		const renderFavorites = () => {
@@ -322,6 +345,7 @@ eventsDataReady.then(async (eventsData) => {
 		document.addEventListener("favorites-changed", renderFavorites);
 	}
 
+	// Relaciona las tarjetas estáticas con los datos y añade su enlace al detalle.
 	document.querySelectorAll(".event-card__title").forEach((title) => {
 		const item = eventsByTitle.get(title.textContent.trim().toLowerCase());
 		if (item) {
@@ -345,6 +369,7 @@ eventsDataReady.then(async (eventsData) => {
 		title.replaceChildren(link);
 	});
 
+	// Sincroniza la asistencia y permite abrir el detalle al pulsar la tarjeta.
 	syncAttendingLabels();
 	document.addEventListener("attending-changed", syncAttendingLabels);
 	document.addEventListener("click", (event) => {

@@ -1,4 +1,7 @@
+// Obtiene el identificador del evento solicitado en la URL.
 const eventId = new URLSearchParams(window.location.search).get("id");
+
+// Rellena la ficha cuando el catálogo de eventos termina de cargar.
 window.eventsDataReady.then((eventsData) => {
 	const currentEvent = eventsData.find((item) => item.id === eventId);
 
@@ -7,6 +10,7 @@ window.eventsDataReady.then((eventsData) => {
 		return;
 	}
 
+	// Prepara los datos de la ficha y los elementos compartidos del evento.
 	const avatarCount = 14;
 	const eventIndex = eventsData.indexOf(currentEvent);
 	const memberAvatars = Array.from({ length: 6 }, (_, i) => `assets/${((eventIndex * 3 + i) % avatarCount) + 1}avatar.jpg`);
@@ -50,6 +54,7 @@ window.eventsDataReady.then((eventsData) => {
 	moreAvatars.textContent = "+";
 	document.querySelector("[data-event-avatars]").append(moreAvatars);
 
+	// Carga Leaflet solo si el evento dispone de coordenadas.
 	const mapElement = document.querySelector("#event-map");
 	if (mapElement && currentEvent.coordinates) {
 		import("leaflet").then(({ DivIcon, LeafletMap, Marker, TileLayer }) => {
@@ -73,6 +78,7 @@ window.eventsDataReady.then((eventsData) => {
 		}).catch((error) => console.error("Could not load the event map.", error));
 	}
 
+	// Muestra eventos relacionados y actualiza el estado de asistencia compartido.
 	document.querySelector("[data-related-grid]").innerHTML = eventsData
 		.filter((item) => item.id !== currentEvent.id)
 		.slice(0, 4)
@@ -80,6 +86,7 @@ window.eventsDataReady.then((eventsData) => {
 		.join("");
 	document.dispatchEvent(new Event("attending-changed"));
 
+	// Sincroniza el botón «Asistir» y guarda los cambios en la sesión activa.
 	const attendButton = document.querySelector("[data-event-attend]");
 	const renderAttendButton = () => {
 		const isAttending = localStorage.getItem(authStorageKey) === "true" && window.getAttendingIds().includes(currentEvent.id);

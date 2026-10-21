@@ -1,9 +1,11 @@
+// Permite arrastrar horizontalmente los grupos de filtros en escritorio.
 document.querySelectorAll(".explore-filters__group").forEach((group) => {
     let startX = 0;
     let startScrollLeft = 0;
     let isDragging = false;
     let didDrag = false;
 
+    // Evita que soltar tras arrastrar active accidentalmente un filtro.
     const preventClickAfterDrag = (event) => {
         event.preventDefault();
         event.stopPropagation();
@@ -27,7 +29,7 @@ document.querySelectorAll(".explore-filters__group").forEach((group) => {
 
         const distance = event.clientX - startX;
         if (Math.abs(distance) > 4) {
-            // Capture only once dragging starts, otherwise clicks get retargeted away from the buttons.
+            // Captura el puntero solo al empezar el arrastre para preservar los clics normales.
             if (!didDrag) {
                 group.setPointerCapture(event.pointerId);
             }

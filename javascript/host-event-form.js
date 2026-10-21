@@ -1,3 +1,4 @@
+// Localiza el formulario, sus mensajes y las vistas según el estado de sesión.
 const hostEventForm = document.querySelector("[data-host-event-form]");
 const hostEventConfirmation = document.querySelector("[data-host-event-confirmation]");
 const hostEventFormHeading = document.querySelector("[data-host-event-form-heading]");
@@ -19,7 +20,7 @@ document.querySelector("[data-host-event-login]")?.addEventListener("click", () 
     document.querySelector(".login-dialog")?.showModal();
 });
 
-// Sincroniza cada opción visual con el valor oculto que se envía al servidor.
+// Comprueba campos nativos y opciones personalizadas antes de permitir el envío.
 const updateHostEventValidation = () => {
     const requiredControls = [...hostEventForm.querySelectorAll("[required]")];
     const invalidControls = requiredControls.filter((control) => !control.checkValidity());
@@ -63,6 +64,7 @@ if (hostEventForm) {
     });
 }
 
+// Sincroniza los menús visuales con los campos ocultos que valida el formulario.
 document.querySelectorAll("[data-host-dropdown]").forEach((dropdown) => {
     const valueInput = document.getElementById(`event-${dropdown.dataset.hostDropdown}`);
     const selectedLabel = dropdown.querySelector("[data-host-dropdown-label]");
@@ -92,6 +94,7 @@ document.querySelectorAll("[data-host-dropdown]").forEach((dropdown) => {
     });
 });
 
+// Valida el envío, muestra la confirmación y permite iniciar un formulario nuevo.
 if (hostEventForm && hostEventConfirmation) {
     hostEventForm.addEventListener("submit", (event) => {
         // Muestra una confirmación de demostración sin guardar ni enviar los datos.

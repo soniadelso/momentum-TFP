@@ -1,3 +1,6 @@
+// ============================================================
+// Compartido por Explorar y Mapa: estado, controles y filtrado.
+// ============================================================
 const disciplineGroup = document.querySelector('.explore-filters__group[aria-label="Disciplina"]');
 const allButton = disciplineGroup?.querySelector("button");
 const categoryButtons = disciplineGroup ? [...disciplineGroup.querySelectorAll("button")].slice(1) : [];
@@ -7,21 +10,24 @@ const filterCounts = [...document.querySelectorAll("[data-filter-count]")];
 const filterTrigger = document.querySelector(".map-filter-trigger");
 const filterSheet = document.querySelector("#map-filter-sheet");
 const barcelonaCenter = [41.3874, 2.1686];
-const hasMapCanvas = Boolean(document.querySelector(".map-canvas"));
+const isMapPage = Boolean(document.querySelector(".map-canvas"));
 const locationError = document.querySelector("[data-location-error]");
 let locationCenter = barcelonaCenter;
 let mapViewportBounds = null;
 const eventDataById = new Map();
+// Compartido: lee la búsqueda y filtros iniciales enviados en la URL.
 const pageParameters = new URLSearchParams(window.location.search);
 const searchQuery = pageParameters.get("q") || "";
 const selectedCategories = pageParameters.getAll("category");
 const sectionTitle = pageParameters.get("title") || "";
 const exploreTitle = document.querySelector("#interests .section__title");
+// Solo Explorar: actualiza el título de resultados según la URL.
 if (exploreTitle && sectionTitle) {
 	exploreTitle.textContent = sectionTitle;
 } else if (exploreTitle && searchQuery) {
 	exploreTitle.textContent = `Explorar ${searchQuery.toLocaleLowerCase("es")}`;
 }
+// Compartido: define las opciones de filtro para las dos páginas.
 const filterDefinitions = [
 	{ key: "format", label: "Formato", options: [["", "Todos"], ["presencial", "Presencial"], ["online", "Online"]] },
 	{ key: "date", label: "Fechas", options: [["", "Cualquier fecha"], ["today", "Hoy"], ["week", "Esta semana"], ["month", "Este mes"]] },
@@ -29,10 +35,12 @@ const filterDefinitions = [
 	{ key: "location", label: "Ubicación", options: [["", "Cualquier distancia"], ["1", "Cerca de mí"], ["3", "3 km"], ["5", "5 km"], ["10", "10 km"], ["25", "25 km"], ["50", "50 km"], ["100", "100 km"], ["150", "150 km"]] },
 	{ key: "price", label: "Precio", options: [["", "Cualquier precio"], ["free", "Gratuito"], ["paid", "De pago"]] }
 ];
-const visibleFilterDefinitions = document.querySelector(".map-canvas")
+// Solo Mapa: oculta formato, ya que el mapa muestra eventos presenciales.
+const visibleFilterDefinitions = isMapPage
 	? filterDefinitions.filter(({ key }) => key !== "format")
 	: filterDefinitions;
 
+// Compartido: genera el HTML de cada menú de filtro.
 const buildFilterDropdown = ({ key, label, options }) => `
 	<details class="explore-filters__facet-dropdown" data-filter-dropdown="${key}">
 		<summary class="button button--filter-outline explore-filters__facet">
@@ -45,6 +53,7 @@ const buildFilterDropdown = ({ key, label, options }) => `
 
 const desktopFilterHost = document.querySelector("[data-desktop-filters]");
 const mobileFilterHost = document.querySelector("[data-mobile-filter-fields]");
+// Compartido: inserta filtros en escritorio y los copia al panel móvil.
 if (desktopFilterHost) {
 	desktopFilterHost.innerHTML = visibleFilterDefinitions.map(buildFilterDropdown).join("");
 	if (mobileFilterHost) {
@@ -72,12 +81,14 @@ categoryButtons
 	.filter((button) => selectedCategories.includes(button.dataset.category))
 	.forEach((button) => activeCategories.add(button.dataset.category));
 
+// Sincroniza el aspecto de cada botón de disciplina con su estado seleccionado.
 const setButtonState = (button, isActive) => {
 	button.setAttribute("aria-pressed", String(isActive));
 	button.classList.toggle("button--secondary", isActive);
 	button.classList.toggle("button--secondary-outline", !isActive);
 };
 
+// Compartido: comprueba si una fecha pertenece al periodo elegido.
 const matchesDateRange = (startsAt, range) => {
 	const eventDate = new Date(startsAt);
 	if (Number.isNaN(eventDate.getTime())) {
@@ -110,7 +121,7 @@ const matchesDateRange = (startsAt, range) => {
 	return true;
 };
 
-// Calcula la distancia entre dos coordenadas geográficas en kilómetros.
+// Compartido: calcula la distancia geográfica para filtrar eventos por radio.
 const distanceBetweenCoordinates = (firstCoordinates, secondCoordinates) => {
 	const toRadians = (degrees) => degrees * Math.PI / 180;
 	const latitudeDifference = toRadians(secondCoordinates[0] - firstCoordinates[0]);
@@ -122,6 +133,7 @@ const distanceBetweenCoordinates = (firstCoordinates, secondCoordinates) => {
 	return 6371 * 2 * Math.atan2(Math.sqrt(haversine), Math.sqrt(1 - haversine));
 };
 
+// Actualiza etiquetas, selecciones y contador de filtros activos.
 const syncFilterControls = () => {
 	document.querySelectorAll("[data-filter-label]").forEach((label) => {
 		const value = filterValues[label.dataset.filterLabel];
@@ -143,6 +155,7 @@ const syncFilterControls = () => {
 	filterTrigger?.setAttribute("aria-label", count ? `Abrir filtros, ${count} activos` : "Abrir filtros");
 };
 
+// Compartido: combina criterios y oculta las tarjetas que no coinciden.
 const applyFilters = ({ fitMap = false } = {}) => {
 	if (allButton) {
 		setButtonState(allButton, activeCategories.size === 0);
@@ -176,6 +189,7 @@ const applyFilters = ({ fitMap = false } = {}) => {
 		const matchesDate = !filterValues.date || matchesDateRange(eventData.startsAt, filterValues.date);
 		const matchesLocation = !filterValues.location || (eventData.coordinates
 			&& distanceBetweenCoordinates(locationCenter, eventData.coordinates) <= Number(filterValues.location));
+		// Solo Mapa: limita resultados a los límites visibles del mapa.
 		const matchesMapViewport = !mapViewportBounds || (eventData.coordinates
 			&& eventData.coordinates[0] >= mapViewportBounds.south
 			&& eventData.coordinates[0] <= mapViewportBounds.north
@@ -198,17 +212,19 @@ const applyFilters = ({ fitMap = false } = {}) => {
 	}
 
 	syncFilterControls();
+	// Solo Mapa: envía al mapa el resultado y el centro/radio elegidos.
 	document.dispatchEvent(new CustomEvent("map-events-filtered", {
 		detail: { fitMap, locationDistance: filterValues.location, locationCenter }
 	}));
 };
 
-// Mantiene la lista de eventos en sincronía con el área visible del mapa.
+// Solo Mapa: vuelve a filtrar cuando cambia el área visible.
 document.addEventListener("map-viewport-changed", (event) => {
 	mapViewportBounds = event.detail.bounds;
 	applyFilters();
 });
 
+// Alterna disciplinas y vuelve a calcular los eventos visibles.
 disciplineGroup?.addEventListener("click", (event) => {
 	const button = event.target.closest("button");
 	if (!button) {
@@ -226,6 +242,7 @@ disciplineGroup?.addEventListener("click", (event) => {
 	applyFilters({ fitMap: true });
 });
 
+// Compartido; solo Explorar solicita permiso al elegir un radio de ubicación.
 document.addEventListener("click", (event) => {
 	const option = event.target.closest("[data-filter-option]");
 	if (!option) {
@@ -235,7 +252,7 @@ document.addEventListener("click", (event) => {
 	const filterKey = option.dataset.filterOption;
 	const filterValue = option.dataset.filterValue;
 	option.closest("details")?.removeAttribute("open");
-	if (filterKey === "location" && filterValue && !hasMapCanvas) {
+	if (filterKey === "location" && filterValue && !isMapPage) {
 		if (!navigator.geolocation) {
 			filterValues.location = "";
 			if (locationError) {
@@ -273,6 +290,7 @@ document.addEventListener("click", (event) => {
 	applyFilters({ fitMap: true });
 });
 
+// Cierra los desplegables abiertos cuando el clic ocurre fuera de ellos.
 document.addEventListener("click", (event) => {
 	document.querySelectorAll("details[data-filter-dropdown][open]").forEach((dropdown) => {
 		if (!dropdown.contains(event.target)) {
@@ -281,6 +299,7 @@ document.addEventListener("click", (event) => {
 	});
 });
 
+// Restablece criterios y avisos desde los botones «Limpiar».
 document.querySelectorAll("[data-clear-filters]").forEach((button) => {
 	button.addEventListener("click", () => {
 		activeCategories.clear();
@@ -292,12 +311,13 @@ document.querySelectorAll("[data-clear-filters]").forEach((button) => {
 	});
 });
 
-// Usa la ubicación obtenida por el mapa como origen del filtro por distancia.
+// Solo Mapa: usa el evento de geolocalización como centro del filtro por radio.
 document.addEventListener("user-location-found", (event) => {
 	locationCenter = event.detail.coordinates;
 	applyFilters();
 });
 
+// Compartido: controla la apertura y cierre del panel de filtros móvil.
 if (filterTrigger && filterSheet) {
 	filterTrigger.addEventListener("click", () => {
 		filterSheet.showModal();
@@ -313,6 +333,7 @@ if (filterTrigger && filterSheet) {
 	filterSheet.addEventListener("close", () => filterTrigger.setAttribute("aria-expanded", "false"));
 }
 
+// Compartido: indexa los eventos y aplica los filtros iniciales al cargar datos.
 window.eventsDataReady.then((eventsData) => {
 	eventsData.forEach((item) => eventDataById.set(item.id, item));
 	applyFilters();

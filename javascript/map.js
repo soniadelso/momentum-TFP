@@ -1,6 +1,8 @@
 
+// Importa los elementos de Leaflet usados para el mapa y sus capas.
 import { Circle, DivIcon, LeafletMap, Marker, TileLayer } from "leaflet";
 
+// Inicia el mapa de Barcelona y publica sus límites para filtrar eventos.
 const map = new LeafletMap("map", { zoomSnap: 0.25 }).setView([41.3874, 2.1686], 13);
 // Informa al filtro qué eventos caben en la vista actual del mapa.
 const dispatchMapViewport = () => {
@@ -26,7 +28,7 @@ const getApproximateCoordinates = ([latitude, longitude]) => {
 	return [latitude + latitudeOffset, longitude + longitudeOffset];
 };
 
-// Solicita la ubicación y centra el mapa en ella si el usuario da permiso.
+// Solicita permiso y muestra una ubicación aproximada si está disponible.
 if (navigator.geolocation) {
 	navigator.geolocation.getCurrentPosition(({ coords }) => {
 		const userCoordinates = getApproximateCoordinates([coords.latitude, coords.longitude]);
@@ -49,11 +51,13 @@ if (navigator.geolocation) {
 	});
 }
 
+// Añade el mapa base de CARTO.
 new TileLayer('https://basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png?key=cb1_4iai_1_1d3ce10022d7a760e0ece1ee', {
   maxZoom: 20,
   attribution: '&copy; OpenStreetMap &copy; CARTO'
 }).addTo(map);
 
+// Limita los favoritos del mapa a la sesión activa y prepara el icono del marcador.
 const getFavoriteIds = () => localStorage.getItem("momentum-authenticated") === "true"
 	? JSON.parse(localStorage.getItem("momentum-favorites") || "[]")
 	: [];
@@ -67,7 +71,7 @@ const createMapMarkerIcon = (isFavorite) => new DivIcon({
 });
 const mapMarkers = new Map();
 
-// Actualiza los iconos de los pines cuando cambia el estado de favoritos.
+// Actualiza los corazones de los marcadores tras cualquier cambio de favoritos.
 const syncFavoriteMarkers = () => {
 	const favoriteIds = new Set(getFavoriteIds());
 	mapMarkers.forEach((marker, cardId) => {
@@ -84,6 +88,7 @@ const syncFavoriteMarkers = () => {
 };
 document.addEventListener("favorites-changed", syncFavoriteMarkers);
 
+// Crea marcadores y tarjetas emergentes para los eventos con coordenadas.
 window.eventsDataReady.then((eventsData) => {
 	const favoriteIds = new Set(getFavoriteIds());
 	eventsData.forEach((eventData) => {
@@ -134,6 +139,7 @@ window.eventsDataReady.then((eventsData) => {
 	dispatchMapViewport();
 });
 
+// Refleja los filtros en el mapa y ajusta el zoom al área o radio seleccionado.
 const syncMapMarkersWithFilters = (event) => {
 	const visibleMarkers = [];
 	mapMarkers.forEach((marker, cardId) => {

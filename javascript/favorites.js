@@ -1,6 +1,8 @@
+// Mantiene las claves que comparten el flujo de favoritos y el acceso.
 const favoritesStorageKey = "momentum-favorites";
 const pendingFavoriteStorageKey = "momentum-pending-favorite";
 const pendingFavoriteTopStorageKey = "momentum-pending-favorite-top";
+const pendingFavoriteLeftStorageKey = "momentum-pending-favorite-left";
 const pendingFavoriteNoticeStorageKey = "momentum-pending-favorite-notice";
 const pendingFavoriteScrollStorageKey = "momentum-pending-favorite-scroll";
 const shouldRestoreFavoriteScroll = sessionStorage.getItem(pendingFavoriteScrollStorageKey) !== null;
@@ -11,8 +13,8 @@ const getFavoriteIds = () => JSON.parse(localStorage.getItem(favoritesStorageKey
 let favoriteNotice;
 let favoriteNoticeTimeout;
 
-// Muestra el total actualizado de favoritos durante un segundo junto al perfil.
-const showFavoriteAddedNotice = (count) => {
+// Muestra brevemente el total de favoritos y enlaza el aviso al perfil.
+const showFavoriteAddedNotice = (count, anchorPosition) => {
 	if (!favoriteNotice) {
 		favoriteNotice = document.createElement("a");
 		favoriteNotice.className = "favorite-added-notice";
@@ -25,6 +27,23 @@ const showFavoriteAddedNotice = (count) => {
 
 	favoriteNotice.querySelector(".favorite-added-notice__count").textContent = String(count);
 	favoriteNotice.hidden = false;
+	if (anchorPosition) {
+		const noticeBounds = favoriteNotice.getBoundingClientRect();
+		const edgeGap = 8;
+		let top = anchorPosition.top - noticeBounds.height - edgeGap;
+		if (top < edgeGap) {
+			top = anchorPosition.top + 40;
+		}
+		top = Math.min(top, window.innerHeight - noticeBounds.height - edgeGap);
+		const minCenter = noticeBounds.width / 2 + edgeGap;
+		const maxCenter = window.innerWidth - noticeBounds.width / 2 - edgeGap;
+		const center = Math.max(minCenter, Math.min(anchorPosition.left, maxCenter));
+		favoriteNotice.style.top = `${Math.max(edgeGap, top)}px`;
+		favoriteNotice.style.left = `${center}px`;
+	} else {
+		favoriteNotice.style.removeProperty("top");
+		favoriteNotice.style.removeProperty("left");
+	}
 	favoriteNotice.classList.remove("is-visible");
 	requestAnimationFrame(() => favoriteNotice.classList.add("is-visible"));
 	clearTimeout(favoriteNoticeTimeout);
@@ -34,7 +53,7 @@ const showFavoriteAddedNotice = (count) => {
 	}, 1800);
 };
 
-// Every favorite button for the same event shares one state, wherever it appears.
+// Sincroniza todos los botones del mismo evento con los favoritos guardados.
 const syncFavoriteButtons = () => {
 	const favoriteIds = localStorage.getItem("momentum-authenticated") === "true" ? getFavoriteIds() : [];
 	document.querySelectorAll(".event-card__favorite[data-event-id]").forEach((button) => {
@@ -42,13 +61,21 @@ const syncFavoriteButtons = () => {
 	});
 };
 
+// Restaura estados, avisos pendientes y posición después de cargar la página.
 document.addEventListener("DOMContentLoaded", () => {
 	syncFavoriteButtons();
 	window.eventsDataReady?.then(syncFavoriteButtons);
 	const pendingCount = Number(sessionStorage.getItem(pendingFavoriteNoticeStorageKey));
 	if (pendingCount) {
 		sessionStorage.removeItem(pendingFavoriteNoticeStorageKey);
-		showFavoriteAddedNotice(pendingCount);
+		const pendingTop = sessionStorage.getItem(pendingFavoriteTopStorageKey);
+		const pendingLeft = sessionStorage.getItem(pendingFavoriteLeftStorageKey);
+		const anchorPosition = pendingTop !== null && pendingLeft !== null
+			? { top: Number(pendingTop), left: Number(pendingLeft) }
+			: null;
+		showFavoriteAddedNotice(pendingCount, anchorPosition);
+		sessionStorage.removeItem(pendingFavoriteTopStorageKey);
+		sessionStorage.removeItem(pendingFavoriteLeftStorageKey);
 	}
 	const pendingScrollY = sessionStorage.getItem(pendingFavoriteScrollStorageKey);
 	if (pendingScrollY !== null) {
@@ -62,6 +89,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	}
 });
 
+// Completa el favorito pendiente cuando el login modal emite éxito.
 document.addEventListener("momentum-login-success", () => {
 	const pendingFavoriteId = sessionStorage.getItem(pendingFavoriteStorageKey);
 	if (!pendingFavoriteId) {
@@ -74,11 +102,22 @@ document.addEventListener("momentum-login-success", () => {
 		: [...favoriteIds, pendingFavoriteId];
 	localStorage.setItem(favoritesStorageKey, JSON.stringify(updatedFavoriteIds));
 	const currentPage = window.location.pathname.split("/").pop() || "index.html";
-	sessionStorage.removeItem(pendingFavoriteTopStorageKey);
+	const pendingFavoriteButton = [...document.querySelectorAll(".event-card__favorite[data-event-id]")]
+		.find((button) => button.dataset.eventId === pendingFavoriteId);
+	const pendingBounds = pendingFavoriteButton?.getBoundingClientRect();
+	const pendingTop = sessionStorage.getItem(pendingFavoriteTopStorageKey);
+	const pendingLeft = sessionStorage.getItem(pendingFavoriteLeftStorageKey);
+	const anchorPosition = pendingTop !== null && pendingLeft !== null
+			? { top: Number(pendingTop), left: Number(pendingLeft) }
+		: pendingBounds
+			? { top: pendingBounds.top, left: pendingBounds.left + pendingBounds.width / 2 }
+			: null;
 	if (currentPage === "index.html") {
 		sessionStorage.removeItem(pendingFavoriteNoticeStorageKey);
 		sessionStorage.removeItem(pendingFavoriteScrollStorageKey);
-		showFavoriteAddedNotice(updatedFavoriteIds.length);
+		showFavoriteAddedNotice(updatedFavoriteIds.length, anchorPosition);
+		sessionStorage.removeItem(pendingFavoriteTopStorageKey);
+		sessionStorage.removeItem(pendingFavoriteLeftStorageKey);
 	} else {
 		sessionStorage.setItem(pendingFavoriteNoticeStorageKey, String(updatedFavoriteIds.length));
 		sessionStorage.setItem(pendingFavoriteScrollStorageKey, String(window.scrollY));
@@ -89,6 +128,7 @@ document.addEventListener("momentum-login-success", () => {
 	syncFavoriteButtons();
 });
 
+// Guarda o elimina favoritos; si falta sesión, conserva el evento para después del login.
 document.addEventListener("click", (event) => {
 	const favoriteButton = event.target.closest(".event-card__favorite");
 	if (!favoriteButton) {
@@ -99,7 +139,9 @@ document.addEventListener("click", (event) => {
 	if (localStorage.getItem("momentum-authenticated") !== "true") {
 		if (eventId) {
 			sessionStorage.setItem(pendingFavoriteStorageKey, eventId);
-			sessionStorage.setItem(pendingFavoriteTopStorageKey, String(favoriteButton.getBoundingClientRect().top));
+			const bounds = favoriteButton.getBoundingClientRect();
+			sessionStorage.setItem(pendingFavoriteTopStorageKey, String(bounds.top));
+			sessionStorage.setItem(pendingFavoriteLeftStorageKey, String(bounds.left + bounds.width / 2));
 		}
 		openLoginDialog();
 		return;
@@ -116,7 +158,8 @@ document.addEventListener("click", (event) => {
 		: [...favoriteIds, eventId];
 	localStorage.setItem(favoritesStorageKey, JSON.stringify(updatedFavoriteIds));
 	if (!isRemoving) {
-		showFavoriteAddedNotice(updatedFavoriteIds.length);
+		const bounds = favoriteButton.getBoundingClientRect();
+		showFavoriteAddedNotice(updatedFavoriteIds.length, { top: bounds.top, left: bounds.left + bounds.width / 2 });
 	}
 	syncFavoriteButtons();
 	document.dispatchEvent(new Event("favorites-changed"));

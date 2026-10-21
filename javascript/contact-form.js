@@ -1,3 +1,4 @@
+// Conecta la validación y confirmación únicamente si esta página tiene el formulario.
 const contactForm = document.querySelector("[data-contact-form]");
 
 if (contactForm) {
@@ -7,7 +8,7 @@ if (contactForm) {
     const requiredFields = [...contactForm.querySelectorAll("[required]")];
     let hasAttemptedSubmit = false;
 
-    // Valida los campos obligatorios y marca los que necesitan corregirse.
+    // Marca errores, actualiza el mensaje accesible y devuelve los campos inválidos.
     const updateContactValidation = () => {
         const invalidFields = requiredFields.filter((field) => !field.checkValidity());
         requiredFields.forEach((field) => {
@@ -28,6 +29,7 @@ if (contactForm) {
         return invalidFields;
     };
 
+    // Desactiva los avisos nativos para mostrar el mismo error que el resto del sitio.
     contactForm.noValidate = true;
     ["input", "change"].forEach((eventName) => {
         contactForm.addEventListener(eventName, () => {
@@ -37,6 +39,7 @@ if (contactForm) {
         });
     });
 
+    // Evita un envío ficticio y cambia el formulario por el mensaje de confirmación.
     contactForm.addEventListener("submit", (event) => {
         event.preventDefault();
         hasAttemptedSubmit = true;

@@ -291,22 +291,6 @@ main[aria-label="Mapa de eventos"] .explore-filters__group--facets:has(details[o
         background: rgb(0 0 0 / 45%);
     }
 
-    .map-filter-sheet__header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: var(--space-4);
-    }
-
-    .map-filter-sheet__header h2 {
-        font-size: var(--font-size-m);
-    }
-
-    .map-filter-sheet__close {
-        display: grid;
-        width: 2rem;
-        height: 2rem;
-        flex: 0 0 2rem;
         place-items: center;
         padding: 0;
         border: 0;
@@ -325,23 +309,6 @@ main[aria-label="Mapa de eventos"] .explore-filters__group--facets:has(details[o
     .map-filter-sheet__form {
         display: grid;
         gap: var(--space-4);
-    }
-
-    .map-filter-sheet__field {
-        display: grid;
-        gap: var(--space-2);
-        font-weight: var(--font-weight-semibold);
-    }
-
-    .map-filter-sheet__field select {
-        width: 100%;
-        min-height: 2.75rem;
-        padding: 0 var(--space-3);
-        border: 1px solid var(--color-border-strong);
-        border-radius: var(--radius-small);
-        background: var(--background-white);
-        color: var(--color-text-primary);
-        font: inherit;
     }
 
     .map-filter-sheet__actions {

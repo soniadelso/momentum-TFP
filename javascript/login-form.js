@@ -13,12 +13,13 @@ document.querySelectorAll(".login-field__visibility").forEach((passwordToggle) =
     });
 });
 
-// Valida el formulario de acceso y deja intacto el envío del formulario Host Event.
+// Valida cada formulario de acceso sin interceptar el formulario de Host Event.
 document.querySelectorAll('.login-form:not([data-host-event-form])').forEach((loginForm) => {
     const errorMessage = loginForm.querySelector("[data-login-error]");
     const requiredFields = [...loginForm.querySelectorAll("[required]")];
     let hasAttemptedSubmit = false;
 
+    // Marca los campos inválidos y actualiza el mensaje común de error.
     const updateLoginValidation = () => {
         const invalidFields = requiredFields.filter((field) => !field.checkValidity());
         requiredFields.forEach((field) => {
@@ -37,6 +38,7 @@ document.querySelectorAll('.login-form:not([data-host-event-form])').forEach((lo
         return invalidFields;
     };
 
+    // Actualiza la validación al editar y procesa el acceso cuando el formulario es válido.
     loginForm.noValidate = true;
     ["input", "change"].forEach((eventName) => {
         loginForm.addEventListener(eventName, () => {

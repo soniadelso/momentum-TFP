@@ -1,5 +1,7 @@
+// Expone una función común para abrir el diálogo desde otras interacciones.
 const openLoginDialog = () => document.querySelector(".login-dialog")?.showModal();
 
+// Crea el formulario modal solo cuando la persona todavía no ha iniciado sesión.
 if (localStorage.getItem("momentum-authenticated") !== "true") {
 	document.body.insertAdjacentHTML(
 		"beforeend",
@@ -29,12 +31,14 @@ if (localStorage.getItem("momentum-authenticated") !== "true") {
 		</dialog>`
 	);
 
+	// Conecta el cierre manual, el clic fuera y la limpieza de acciones pendientes.
 	const loginDialog = document.querySelector(".login-dialog");
 	loginDialog.querySelector("[data-login-dialog-close]").addEventListener("click", () => loginDialog.close());
 	loginDialog.addEventListener("close", () => {
 		if (localStorage.getItem("momentum-authenticated") !== "true") {
 			sessionStorage.removeItem("momentum-pending-favorite");
 			sessionStorage.removeItem("momentum-pending-favorite-top");
+			sessionStorage.removeItem("momentum-pending-favorite-left");
 		}
 	});
 	loginDialog.addEventListener("click", (event) => {

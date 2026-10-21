@@ -1,9 +1,12 @@
+// Obtiene los elementos del perfil que resumen los eventos guardados para asistir.
 const attendingGroups = document.querySelector("[data-attending-groups]");
 const attendingEmpty = document.querySelector("[data-attending-empty]");
 const attendingCount = document.querySelector("[data-attending-count]");
 
+// Espera el catálogo y sincroniza las tarjetas, el contador y el estado vacío.
 window.eventsDataReady.then((eventsData) => {
 	const eventIds = new Set(eventsData.map((item) => item.id));
+	// Agrupa los eventos guardados por fecha y actualiza el perfil.
 	const syncAttendingProfile = () => {
 		const attendingIds = window.getAttendingIds?.() || [];
 		if (attendingCount) {
@@ -37,6 +40,7 @@ window.eventsDataReady.then((eventsData) => {
 	if (attendingGroups) {
 		document.dispatchEvent(new Event("attending-changed"));
 	}
+	// Reacciona a cambios desde otras vistas y a cambios hechos en otra pestaña.
 	document.addEventListener("attending-changed", syncAttendingProfile);
 	window.addEventListener("storage", (event) => {
 		if (event.key === "momentum-attending") {
