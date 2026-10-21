@@ -4,6 +4,14 @@ const currentPage = window.location.pathname.split("/").pop() || "index.html";
 const isAuthenticated = localStorage.getItem(authStorageKey) === "true";
 const homeHref = "index.html";
 
+// Registra la caché offline en localhost o cuando la página usa HTTPS.
+if ("serviceWorker" in navigator) {
+	window.addEventListener("load", () => {
+		navigator.serviceWorker.register("service-worker.js")
+			.catch((error) => console.error("No se pudo registrar la PWA.", error));
+	});
+}
+
 const guestHome = document.querySelector("[data-home-guest]");
 const authenticatedHome = document.querySelector("[data-home-authenticated]");
 // Alterna la portada para mostrar solo el contenido correspondiente a la sesión.
