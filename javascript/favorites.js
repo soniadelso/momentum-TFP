@@ -19,7 +19,7 @@ const showFavoriteAddedNotice = (count) => {
 		favoriteNotice.href = "user-profile.html";
 		favoriteNotice.setAttribute("aria-live", "polite");
 		favoriteNotice.setAttribute("aria-atomic", "true");
-		favoriteNotice.innerHTML = '<span>Añadido a mi perfil</span><span class="favorite-added-notice__count" aria-hidden="true"></span>';
+		favoriteNotice.innerHTML = '<span>Añadido a mi <span class="favorite-added-notice__link-label">perfil</span></span><span class="favorite-added-notice__count" aria-hidden="true"></span>';
 		document.body.append(favoriteNotice);
 	}
 

@@ -4,6 +4,11 @@ const setAttendingIds = (ids) => localStorage.setItem(attendingStorageKey, JSON.
 const mapEventGrid = document.querySelector("[data-map-events]");
 mapEventGrid?.replaceChildren();
 
+// Carga Fuse.js para permitir búsquedas tolerantes a errores tipográficos.
+const fuseLibraryReady = import("https://cdn.jsdelivr.net/npm/fuse.js@7.1.0/dist/fuse.mjs")
+	.then(({ default: Fuse }) => Fuse)
+	.catch(() => null);
+
 const eventsDataReady = fetch("events.json")
 	.then((response) => {
 		if (!response.ok) {
@@ -19,7 +24,8 @@ window.eventsDataReady = eventsDataReady;
 window.getAttendingIds = getAttendingIds;
 window.setAttendingIds = setAttendingIds;
 
-eventsDataReady.then((eventsData) => {
+eventsDataReady.then(async (eventsData) => {
+	const Fuse = await fuseLibraryReady;
 	const eventsByTitle = new Map(eventsData.flatMap((item) => item.aliases.map((alias) => [alias.toLowerCase(), item])));
 	const mapEvents = mapEventGrid
 		? eventsData.filter((item) => item.format === "presencial"
@@ -75,10 +81,40 @@ eventsDataReady.then((eventsData) => {
 	};
 	window.eventCardMarkup = eventCardMarkup;
 	const normalizeSearchText = (value) => value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase("es");
+	const searchableRecords = searchableEvents.map((item) => ({
+		event: item,
+		text: normalizeSearchText([
+			item.title,
+			...item.aliases,
+			item.category,
+			categorySearchTranslations[item.category],
+			...(categorySearchAliases[item.category] || []),
+			...(item.keywords || []),
+			item.city,
+			item.autonomousCommunity,
+			item.country,
+			item.organizer,
+			item.location
+		].join(" "))
+	}));
+	const fuzzySearch = Fuse ? new Fuse(searchableRecords, {
+		keys: ["text"],
+		ignoreLocation: true,
+		threshold: 0.32
+	}) : null;
 	const searchEvents = (query) => {
 		const terms = normalizeSearchText(query).split(/\s+/).filter(Boolean);
 		if (!terms.length) {
 			return searchableEvents;
+		}
+
+		if (fuzzySearch) {
+			const resultsByTerm = terms.map((term) => fuzzySearch.search(term).map(({ item }) => item));
+			const matchingIdsByTerm = resultsByTerm.slice(1)
+				.map((results) => new Set(results.map(({ event }) => event.id)));
+			return resultsByTerm[0]
+				.filter(({ event }) => matchingIdsByTerm.every((ids) => ids.has(event.id)))
+				.map(({ event }) => event);
 		}
 
 		return searchableEvents.filter((item) => {
@@ -108,8 +144,22 @@ eventsDataReady.then((eventsData) => {
 			aliases: keywordSearchAliases[keyword] || []
 		}))
 	]).map((suggestion) => [normalizeSearchText(suggestion.label), suggestion])).values()];
+	const fuzzySuggestionSearch = Fuse ? new Fuse(searchSuggestions.map((suggestion) => ({
+		suggestion,
+		text: normalizeSearchText([suggestion.label, ...(suggestion.aliases || [])].join(" "))
+	})), {
+		keys: ["text"],
+		ignoreLocation: true,
+		threshold: 0.32
+	}) : null;
 	const findSearchSuggestions = (query) => {
 		const normalizedQuery = normalizeSearchText(query.trim());
+		if (fuzzySuggestionSearch) {
+			return fuzzySuggestionSearch.search(normalizedQuery)
+				.slice(0, 6)
+				.map(({ item }) => item.suggestion);
+		}
+
 		return searchSuggestions
 			.filter((suggestion) => [suggestion.label, ...(suggestion.aliases || [])]
 				.some((value) => normalizeSearchText(value).includes(normalizedQuery)))

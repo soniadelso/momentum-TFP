@@ -53,9 +53,9 @@ if (headerMount) {
 				</button>
 				<nav class="header__nav" id="header-nav" aria-label="Main navigation">
 					<a class="header__link header__link--host" href="host-event.html"${hostCurrent}>Modo Anfitrión</a>
-					<a class="header__link" href="explorar.html"${exploreCurrent}>Explore</a>
-					<a class="header__map" href="map.html" aria-label="Map"${mapCurrent}>
-						<span>Map</span>
+					<a class="header__link" href="explorar.html"${exploreCurrent}>Explorar</a>
+					<a class="header__map" href="map.html" aria-label="Mapa"${mapCurrent}>
+						<span>Mapa</span>
 						<img src="assets/icon-map.svg" alt="">
 					</a>
 					${authenticatedLink}
