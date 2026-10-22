@@ -57,7 +57,8 @@ window.eventsDataReady.then((eventsData) => {
 	// Carga Leaflet solo si el evento dispone de coordenadas.
 	const mapElement = document.querySelector("#event-map");
 	if (mapElement && currentEvent.coordinates) {
-		import("leaflet").then(({ DivIcon, LeafletMap, Marker, TileLayer }) => {
+		const leafletModule = "leaflet";
+		import(/* @vite-ignore */ leafletModule).then(({ DivIcon, LeafletMap, Marker, TileLayer }) => {
 			const eventMap = new LeafletMap(mapElement).setView(currentEvent.coordinates, 16);
 			new TileLayer("https://basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png?key=cb1_4iai_1_1d3ce10022d7a760e0ece1ee", {
 				maxZoom: 20,

@@ -62,7 +62,7 @@
 	font-weight: var(--font-weight-semibold);
 }
 
-@media (min-width: 701px) {
+@media (min-width: 768px) {
 	.event-detail {
 		grid-template-columns: repeat(2, minmax(0, 1fr));
 		column-gap: var(--space-8);

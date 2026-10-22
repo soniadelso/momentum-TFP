@@ -20,7 +20,7 @@
 	<link rel="stylesheet" href="css/footer.css">
 	<link rel="stylesheet" href="css/buttons.css">
 	<link rel="stylesheet" href="css/login.css?v=15">
-	<link rel="stylesheet" href="css/filters.css?v=8">
+	<link rel="stylesheet" href="css/filters.css?v=9">
 	<link rel="stylesheet" href="css/responsive.css">
 	<script src="javascript/general.js?v=12" defer></script>
 	<script src="javascript/header-menu.js" defer></script>
@@ -30,6 +30,7 @@
 	<script src="javascript/login-form.js?v=6" defer></script>
 	<script src="javascript/filters.js" defer></script>
 	<script src="javascript/filter-scroll.js" defer></script>
+	<script type="module" src="/vue-vite/src/explore-main.js"></script>
 	<title>momentum | Explorar</title>
 	<link rel="icon" href="assets/favicon-momentum.svg" type="image/svg+xml">
 </head>
@@ -37,38 +38,40 @@
 	<div data-app-header></div>
 
 	<main id="home">
-		<section class="explore-filters section" aria-label="Filtros de eventos">
-			<div class="explore-filters__discipline-wrap">
-				<div class="explore-filters__group" role="group" aria-label="Disciplina">
-					<button class="button button--secondary" type="button" aria-pressed="true">Todos</button>
-					<button class="button button--secondary-outline" type="button" aria-pressed="false">Digital Product</button>
-					<button class="button button--secondary-outline" type="button" aria-pressed="false">Brand &amp; Graphic</button>
-					<button class="button button--secondary-outline" type="button" aria-pressed="false">Media &amp; Motion</button>
-					<button class="button button--secondary-outline" type="button" aria-pressed="false">Industrial Design</button>
+		<div id="explore-app">
+			<section class="explore-filters section" aria-label="Filtros de eventos">
+				<div class="explore-filters__discipline-wrap">
+					<div class="explore-filters__group" role="group" aria-label="Disciplina">
+						<button class="button button--secondary" type="button" aria-pressed="true">Todos</button>
+						<button class="button button--secondary-outline" type="button" aria-pressed="false">Digital Product</button>
+						<button class="button button--secondary-outline" type="button" aria-pressed="false">Brand &amp; Graphic</button>
+						<button class="button button--secondary-outline" type="button" aria-pressed="false">Media &amp; Motion</button>
+						<button class="button button--secondary-outline" type="button" aria-pressed="false">Industrial Design</button>
+					</div>
+					<button class="button button--secondary map-filter-trigger" type="button" aria-label="Abrir filtros" aria-haspopup="dialog" aria-expanded="false" aria-controls="map-filter-sheet">
+						<img class="map-filter-trigger__icon" src="assets/filters-icon.svg" alt="">
+						<span class="map-filter-trigger__count" data-filter-count hidden></span>
+					</button>
 				</div>
-				<button class="button button--secondary map-filter-trigger" type="button" aria-label="Abrir filtros" aria-haspopup="dialog" aria-expanded="false" aria-controls="map-filter-sheet">
-					<img class="map-filter-trigger__icon" src="assets/filters-icon.svg" alt="">
-					<span class="map-filter-trigger__count" data-filter-count hidden></span>
-				</button>
-			</div>
-			<div class="explore-filters__group explore-filters__group--facets" role="group" aria-label="Más filtros" data-desktop-filters></div>
-			<dialog class="map-filter-sheet" id="map-filter-sheet" aria-labelledby="map-filter-title">
-				<div class="map-filter-sheet__header"><h2 id="map-filter-title">Filtros</h2><button class="map-filter-sheet__close" type="button" aria-label="Cerrar filtros">×</button></div>
-				<form method="dialog" class="map-filter-sheet__form">
-					<div class="map-filter-sheet__fields" data-mobile-filter-fields></div>
-					<div class="map-filter-sheet__actions"><button class="header__link header__link--button" type="button" data-clear-filters>Limpiar</button><button class="button button--primary" type="submit">Listo</button></div>
-				</form>
-			</dialog>
-			<p class="login-card__description" data-location-error role="alert" hidden></p>
-		</section>
+				<div class="explore-filters__group explore-filters__group--facets" role="group" aria-label="Más filtros" data-desktop-filters></div>
+				<dialog class="map-filter-sheet" id="map-filter-sheet" aria-labelledby="map-filter-title">
+					<div class="map-filter-sheet__header"><h2 id="map-filter-title">Filtros</h2><button class="map-filter-sheet__close" type="button" aria-label="Cerrar filtros">×</button></div>
+					<form method="dialog" class="map-filter-sheet__form">
+						<div class="map-filter-sheet__fields" data-mobile-filter-fields></div>
+						<div class="map-filter-sheet__actions"><button class="header__link header__link--button" type="button" data-clear-filters>Limpiar</button><button class="button button--primary" type="submit">Listo</button></div>
+					</form>
+				</dialog>
+				<p class="login-card__description" data-location-error role="alert" hidden></p>
+			</section>
 
-		<section class="events section" id="interests" aria-label="Según tus intereses">
-			<div class="section__heading">
-				<h2 class="section__title">Explorar</h2>
-			</div>
-			<div class="events__grid" id="interests-grid" data-event-ids="all"></div>
-			<p data-search-empty role="status" hidden>No se encontraron eventos para esa búsqueda.</p>
-		</section>
+			<section class="events section" id="interests" aria-label="Según tus intereses">
+				<div class="section__heading">
+					<h2 class="section__title">Explorar</h2>
+				</div>
+				<div class="events__grid" id="interests-grid" data-event-ids="all"></div>
+				<p data-search-empty role="status" hidden>No se encontraron eventos para esa búsqueda.</p>
+			</section>
+		</div>
 	</main>
 
 	<footer class="footer">

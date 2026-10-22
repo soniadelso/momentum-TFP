@@ -228,7 +228,7 @@ main#home[aria-label="Mapa de eventos"] .events__grid {
 }
 
 /* Give map cards more room for their full event details on desktop. */
-@media (min-width: 1101px) {
+@media (min-width: 1024px) {
 	.event-card-map .event-card__visual {
 		height: auto;
 		aspect-ratio: 2.1;
@@ -271,7 +271,7 @@ main#home[aria-label="Mapa de eventos"] .events__grid {
 }
 
 /* Keep the tablet map panel readable with one desktop-style card per row. */
-@media (max-width: 1100px) {
+@media (max-width: 1023px) {
 	.header {
 		z-index: 1100;
 	}
@@ -296,14 +296,22 @@ main#home[aria-label="Mapa de eventos"] .events__grid {
 }
 
 /* Tablet shows three cards per row. */
-@media (min-width: 701px) and (max-width: 1100px) {
+@media (min-width: 768px) and (max-width: 1023px) {
 	main#home[aria-label="Mapa de eventos"] .events__grid {
 		grid-template-columns: repeat(3, minmax(0, 1fr));
+	}
+
+	.event-card-map .event-card__visual {
+		height: 10rem;
+	}
+
+	.event-card-map .event-card__details {
+		min-height: 7.5rem;
 	}
 }
 
 /* Mobile stacks map and results, and repositions the map pins. */
-@media (max-width: 700px) {
+@media (max-width: 767px) {
 	/* Use compact horizontal cards only on phones. */
 	.event-card-map {
 		display: flex;

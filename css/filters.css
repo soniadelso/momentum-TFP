@@ -247,7 +247,7 @@ main[aria-label="Mapa de eventos"] .explore-filters__group--facets:has(details[o
     display: none;
 }
 
-@media (max-width: 700px) {
+@media (max-width: 767px) {
     .explore-filters__discipline-wrap .explore-filters__group {
         width: calc(100% - 2.25rem - var(--space-3));
         padding-right: 0;
@@ -291,14 +291,31 @@ main[aria-label="Mapa de eventos"] .explore-filters__group--facets:has(details[o
         background: rgb(0 0 0 / 45%);
     }
 
+    .map-filter-sheet__header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--space-4);
+    }
+
+    .map-filter-sheet__header h2 {
+        font-size: var(--font-size-m);
+    }
+
+    .map-filter-sheet__close {
+        display: grid;
+        width: 2rem;
+        height: 2rem;
         place-items: center;
         padding: 0;
         border: 0;
+        border-radius: 0;
         background: transparent;
         color: var(--color-text-primary);
-        font-size: var(--font-size-m);
+        font-size: var(--font-size-l);
         line-height: 1;
         cursor: pointer;
+        appearance: none;
 
         &:focus-visible {
             outline: 2px solid var(--color-accent);

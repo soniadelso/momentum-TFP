@@ -1,6 +1,7 @@
 
-// Importa los elementos de Leaflet usados para el mapa y sus capas.
-import { Circle, DivIcon, LeafletMap, Marker, TileLayer } from "leaflet";
+// Carga Leaflet desde el import map de map.html sin empaquetarlo con Vite.
+const leafletModule = "leaflet";
+const { Circle, DivIcon, LeafletMap, Marker, TileLayer } = await import(/* @vite-ignore */ leafletModule);
 
 // Inicia el mapa de Barcelona y publica sus límites para filtrar eventos.
 const map = new LeafletMap("map", { zoomSnap: 0.25 }).setView([41.3874, 2.1686], 13);

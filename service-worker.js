@@ -1,4 +1,5 @@
-const cacheName = "momentum-pwa-v1";
+const cacheName = "momentum-pwa-v6";
+const isLocalDevelopment = self.location.hostname === "localhost" || self.location.hostname === "127.0.0.1";
 const appShell = [
 	"./",
 	"./index.html",
@@ -103,6 +104,11 @@ const appShell = [
 
 // Prepara las páginas principales y espera a que se active la caché nueva.
 self.addEventListener("install", (event) => {
+	if (isLocalDevelopment) {
+		event.waitUntil(self.skipWaiting());
+		return;
+	}
+
 	event.waitUntil(
 		caches.open(cacheName)
 			.then((cache) => cache.addAll(appShell))
@@ -125,6 +131,10 @@ self.addEventListener("activate", (event) => {
 
 // Usa red primero para páginas y caché primero para recursos del mismo origen.
 self.addEventListener("fetch", (event) => {
+	if (isLocalDevelopment) {
+		return;
+	}
+
 	const { request } = event;
 	if (request.method !== "GET" || new URL(request.url).origin !== self.location.origin) {
 		return;

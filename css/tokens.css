@@ -38,9 +38,9 @@
     --transition-ease-in: ease-in;
 
     /* Responsive layout */
-    --breakpoint-mobile: 381px;
-    --breakpoint-tablet: 701px;
-    --breakpoint-desktop: 1101px;
+    --breakpoint-mobile: 767px;
+    --breakpoint-tablet: 768px;
+    --breakpoint-desktop: 1024px;
 
     /* Spacing */
     --section-space: clamp(2rem, 1rem + 3vw, 3.5rem);
