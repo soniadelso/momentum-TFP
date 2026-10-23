@@ -90,7 +90,7 @@ window.eventsDataReady.then((eventsData) => {
 	document.querySelector("[data-related-grid]").innerHTML = eventsData
 		.filter((item) => item.id !== currentEvent.id)
 		.slice(0, 4)
-		.map(window.eventCardMarkup)
+		.map((item) => window.eventCardMarkup(item))
 		.join("");
 	document.dispatchEvent(new Event("attending-changed"));
 
