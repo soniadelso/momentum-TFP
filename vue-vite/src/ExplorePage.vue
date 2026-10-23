@@ -2,24 +2,24 @@
 import { computed, nextTick, onMounted, onUnmounted, reactive, ref, watch } from "vue";
 import events from "../../events.json";
 import filterIcon from "../../assets/filters-icon.svg";
-import eventAccessibilityImage from "../../assets/event-accessibility.png";
-import eventAfterEffectsImage from "../../assets/event-after-effects.png";
-import eventArtDirectionImage from "../../assets/event-art-direction.png";
-import eventInterviewsImage from "../../assets/event-interviews.png";
-import eventNetworkingImage from "../../assets/event-networking.png";
-import eventTypographyImage from "../../assets/event-typography.png";
+import eventAccessibilityImage from "../../assets/event-accessibility.jpg";
+import eventAfterEffectsImage from "../../assets/event-after-effects.jpg";
+import eventArtDirectionImage from "../../assets/event-art-direction.jpg";
+import eventInterviewsImage from "../../assets/event-interviews.jpg";
+import eventNetworkingImage from "../../assets/event-networking.jpg";
+import eventTypographyImage from "../../assets/event-typography.jpg";
 import aiWorkshopsImage from "../../assets/ai-workshops.jpg";
 import illustrationImage from "../../assets/ilustracion-digital.jpg";
 import uxuiTalksImage from "../../assets/uxui-talks.jpg";
 
 // Relaciona cada ruta del JSON con el archivo que Vite incluirá en el build.
 const eventImages = {
-	"assets/event-accessibility.png": eventAccessibilityImage,
-	"assets/event-after-effects.png": eventAfterEffectsImage,
-	"assets/event-art-direction.png": eventArtDirectionImage,
-	"assets/event-interviews.png": eventInterviewsImage,
-	"assets/event-networking.png": eventNetworkingImage,
-	"assets/event-typography.png": eventTypographyImage,
+	"assets/event-accessibility.jpg": eventAccessibilityImage,
+	"assets/event-after-effects.jpg": eventAfterEffectsImage,
+	"assets/event-art-direction.jpg": eventArtDirectionImage,
+	"assets/event-interviews.jpg": eventInterviewsImage,
+	"assets/event-networking.jpg": eventNetworkingImage,
+	"assets/event-typography.jpg": eventTypographyImage,
 	"assets/ai-workshops.jpg": aiWorkshopsImage,
 	"assets/ilustracion-digital.jpg": illustrationImage,
 	"assets/uxui-talks.jpg": uxuiTalksImage

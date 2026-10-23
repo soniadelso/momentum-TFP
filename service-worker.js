@@ -1,4 +1,4 @@
-const cacheName = "momentum-pwa-v6";
+const cacheName = "momentum-pwa-v8";
 const isLocalDevelopment = self.location.hostname === "localhost" || self.location.hostname === "127.0.0.1";
 const appShell = [
 	"./",
@@ -71,7 +71,7 @@ const appShell = [
 	"./assets/filters-icon.svg",
 	"./assets/footer-divider.svg",
 	"./assets/get-nerd-product-design.jpg",
-	"./assets/hero-workshop.png",
+	"./assets/hero-workshop.jpg",
 	"./assets/icon-back.svg",
 	"./assets/icon-brand-graphic-2.svg",
 	"./assets/icon-card-3.svg",
@@ -87,12 +87,12 @@ const appShell = [
 	"./assets/icon-search.svg",
 	"./assets/icon-social.svg",
 	"./assets/icon-user.svg",
-	"./assets/event-typography.png",
-	"./assets/event-art-direction.png",
-	"./assets/event-networking.png",
-	"./assets/event-accessibility.png",
-	"./assets/event-after-effects.png",
-	"./assets/event-interviews.png",
+	"./assets/event-typography.jpg",
+	"./assets/event-art-direction.jpg",
+	"./assets/event-networking.jpg",
+	"./assets/event-accessibility.jpg",
+	"./assets/event-after-effects.jpg",
+	"./assets/event-interviews.jpg",
 	"./assets/ilustracion-digital.jpg",
 	"./assets/jeremy-wallace-BdIszqkcAWU-unsplash.jpg",
 	"./assets/maps-image.png",
