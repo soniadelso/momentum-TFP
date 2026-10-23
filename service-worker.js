@@ -1,4 +1,4 @@
-const cacheName = "momentum-pwa-v11";
+const cacheName = "momentum-pwa-v12";
 const isLocalDevelopment = self.location.hostname === "localhost" || self.location.hostname === "127.0.0.1";
 const appShell = [
 	"./",

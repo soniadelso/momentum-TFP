@@ -71,11 +71,18 @@ window.eventsDataReady.then((eventsData) => {
 				iconSize: [36, 42],
 				iconAnchor: [18, 41]
 			});
-			new Marker(currentEvent.coordinates, {
+			const eventMarker = new Marker(currentEvent.coordinates, {
 				icon: eventIcon,
-				title: currentEvent.title,
+				title: `Abrir ubicación en Google Maps: ${currentEvent.title}`,
 				alt: currentEvent.title
-			}).addTo(eventMap);
+			});
+			eventMarker.on("click", () => {
+				const mapsUrl = new URL("https://www.google.com/maps/search/");
+				mapsUrl.searchParams.set("api", "1");
+				mapsUrl.searchParams.set("query", currentEvent.coordinates.join(","));
+				window.open(mapsUrl.toString(), "_blank", "noopener,noreferrer");
+			});
+			eventMarker.addTo(eventMap);
 		}).catch((error) => console.error("Could not load the event map.", error));
 	}
 
