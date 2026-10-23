@@ -1,4 +1,4 @@
-const cacheName = "momentum-pwa-v8";
+const cacheName = "momentum-pwa-v9";
 const isLocalDevelopment = self.location.hostname === "localhost" || self.location.hostname === "127.0.0.1";
 const appShell = [
 	"./",
@@ -94,9 +94,6 @@ const appShell = [
 	"./assets/event-after-effects.jpg",
 	"./assets/event-interviews.jpg",
 	"./assets/ilustracion-digital.jpg",
-	"./assets/jeremy-wallace-BdIszqkcAWU-unsplash.jpg",
-	"./assets/maps-image.png",
-	"./assets/nordwood-themes-5GzU5_4CNW4-unsplash.jpg",
 	"./assets/profile-avatar-2.jpg",
 	"./assets/profile-avatar.png",
 	"./assets/uxui-talks.jpg"
