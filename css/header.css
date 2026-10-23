@@ -463,6 +463,20 @@
 
     .favorite-added-notice {
         top: calc(4.5rem + var(--space-10) + env(safe-area-inset-top));
+        min-height: 3rem;
+        gap: var(--space-3);
+        padding: var(--space-3) var(--space-4);
+        font-size: var(--font-size-s);
+    }
+
+    .favorite-added-notice > span:first-child {
+        white-space: nowrap;
+    }
+
+    .favorite-added-notice__count {
+        min-width: 1.5rem;
+        height: 1.5rem;
+        font-size: var(--font-size-xs);
     }
 
     body {
