@@ -5,6 +5,19 @@ const { Circle, DivIcon, LeafletMap, Marker, TileLayer } = await import(/* @vite
 
 // Inicia el mapa de Barcelona y publica sus límites para filtrar eventos.
 const map = new LeafletMap("map", { zoomSnap: 0.25 }).setView([41.3874, 2.1686], 13);
+// Mantiene las tarjetas emergentes por encima de los controles del mapa.
+const eventPopupPane = map.createPane("eventPopupPane", map.getContainer());
+eventPopupPane.style.zIndex = "1101";
+eventPopupPane.style.pointerEvents = "none";
+eventPopupPane.style.transformOrigin = "0 0";
+
+// Sincroniza el pane emergente con el movimiento y zoom del mapa.
+const syncEventPopupPane = () => {
+	eventPopupPane.style.transform = getComputedStyle(map.getPane("mapPane")).transform;
+};
+map.on("move zoom zoomanim viewreset", syncEventPopupPane);
+syncEventPopupPane();
+
 // Informa al filtro qué eventos caben en la vista actual del mapa.
 const dispatchMapViewport = () => {
 	const bounds = map.getBounds();
@@ -129,6 +142,8 @@ window.eventsDataReady.then((eventsData) => {
 	marker.bindPopup(popupCard, {
 		maxWidth: 300,
 		minWidth: 240,
+		autoPanPaddingTopLeft: [56, 80],
+		pane: "eventPopupPane",
 		className: "map-event-popup",
 		closeButton: false
 	});
