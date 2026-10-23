@@ -133,6 +133,21 @@ const distanceBetweenCoordinates = (firstCoordinates, secondCoordinates) => {
 	return 6371 * 2 * Math.atan2(Math.sqrt(haversine), Math.sqrt(1 - haversine));
 };
 
+// En Mapa, amplía el radio hasta cubrir el área visible al alejar el zoom.
+const mapViewportRadius = () => {
+	if (!mapViewportBounds) {
+		return 0;
+	}
+
+	const viewportCorners = [
+		[mapViewportBounds.south, mapViewportBounds.west],
+		[mapViewportBounds.south, mapViewportBounds.east],
+		[mapViewportBounds.north, mapViewportBounds.west],
+		[mapViewportBounds.north, mapViewportBounds.east]
+	];
+	return Math.max(...viewportCorners.map((corner) => distanceBetweenCoordinates(locationCenter, corner)));
+};
+
 // Actualiza etiquetas, selecciones y contador de filtros activos.
 const syncFilterControls = () => {
 	document.querySelectorAll("[data-filter-label]").forEach((label) => {
@@ -187,8 +202,12 @@ const applyFilters = ({ fitMap = false } = {}) => {
 		const matchesCategory = activeCategories.size === 0 || activeCategories.has(eventData.category);
 		const matchesFormat = !filterValues.format || eventData.format === filterValues.format;
 		const matchesDate = !filterValues.date || matchesDateRange(eventData.startsAt, filterValues.date);
+		const selectedDistance = Number(filterValues.location);
+		const effectiveDistance = isMapPage
+			? Math.max(selectedDistance, mapViewportRadius())
+			: selectedDistance;
 		const matchesLocation = !filterValues.location || (eventData.coordinates
-			&& distanceBetweenCoordinates(locationCenter, eventData.coordinates) <= Number(filterValues.location));
+			&& distanceBetweenCoordinates(locationCenter, eventData.coordinates) <= effectiveDistance);
 		// Solo Mapa: limita resultados a los límites visibles del mapa.
 		const matchesMapViewport = !mapViewportBounds || (eventData.coordinates
 			&& eventData.coordinates[0] >= mapViewportBounds.south
