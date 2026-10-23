@@ -9,7 +9,7 @@ document.querySelectorAll(".login-field__visibility").forEach((passwordToggle) =
         passwordInput.type = showPassword ? "text" : "password";
         passwordIcon.src = showPassword ? "assets/icon-eye-closed.svg" : "assets/eye-icon.svg";
         passwordToggle.setAttribute("aria-pressed", String(showPassword));
-        passwordToggle.setAttribute("aria-label", showPassword ? "Hide password" : "Show password");
+        passwordToggle.setAttribute("aria-label", showPassword ? "Ocultar contraseña" : "Mostrar contraseña");
     });
 });
 

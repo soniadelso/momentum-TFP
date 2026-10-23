@@ -298,7 +298,7 @@
     }
 }
 
-/* App Store and Google Play badge links */
+/* PWA install action in the footer */
 .store-badge {
     display: flex;
     width: 8.75rem;
@@ -309,14 +309,17 @@
     border: 1px solid #666666;
     border-radius: 6px;
     background: var(--color-surface-strong);
+    color: var(--color-text-inverse);
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
 }
 
 .store-badge__icon {
     width: 1.25rem;
     height: 1.25rem;
     flex: 0 0 1.25rem;
-    border-radius: var(--radius-small);
-    background: #555555;
+    object-fit: contain;
 }
 
 .store-badge small,

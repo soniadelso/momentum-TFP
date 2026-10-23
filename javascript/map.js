@@ -133,6 +133,13 @@ window.eventsDataReady.then((eventsData) => {
 	} else {
 		popupVisual.append(popupCloseButton);
 	}
+	popupCard.addEventListener("click", (clickEvent) => {
+		if (clickEvent.target.closest("button, a")) {
+			return;
+		}
+
+		window.location.assign(`event-detail.html?id=${eventData.id}`);
+	});
 
 	const marker = new Marker(eventData.coordinates, {
 		icon: createMapMarkerIcon(isFavorite),

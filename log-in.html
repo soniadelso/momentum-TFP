@@ -20,7 +20,7 @@
 	<link rel="stylesheet" href="css/buttons.css">
 	<link rel="stylesheet" href="css/filters.css?v=8">
 	<link rel="stylesheet" href="css/responsive.css">
-	<script src="javascript/general.js?v=12" defer></script>
+	<script src="javascript/general.js?v=13" defer></script>
 	<script src="javascript/header-menu.js" defer></script>
 	<script src="javascript/events.js" defer></script>
 	<script src="javascript/login-form.js?v=6" defer></script>
@@ -47,7 +47,7 @@
 					<label class="login-field__label" for="login-password">Contraseña</label>
 					<div class="login-field__control">
 						<input class="login-field__input" id="login-password" name="password" type="password" placeholder="Ingresa tu contraseña" autocomplete="current-password" required>
-						<button class="login-field__visibility" type="button" aria-controls="login-password" aria-label="Show password" aria-pressed="false">
+						<button class="login-field__visibility" type="button" aria-controls="login-password" aria-label="Mostrar contraseña" aria-pressed="false">
 							<img src="assets/eye-icon.svg" alt="">
 						</button>
 					</div>
@@ -64,11 +64,11 @@
 			<div class="footer__brand-column">
 				<a class="footer__brand" href="index.html#home">momentum</a>
 				<p class="footer__tagline">Eventos de diseño para la comunidad creativa.</p>
-				<div class="footer__socials" aria-label="Social media">
-					<a href="#social" aria-label="Social media"><img src="assets/icon-social.svg" alt="" loading="lazy"></a>
-					<a href="#social" aria-label="Social media"><img src="assets/icon-social.svg" alt="" loading="lazy"></a>
-					<a href="#social" aria-label="Social media"><img src="assets/icon-social.svg" alt="" loading="lazy"></a>
-					<a href="#social" aria-label="Social media"><img src="assets/icon-social.svg" alt="" loading="lazy"></a>
+				<div class="footer__socials" aria-label="Redes sociales">
+					<a href="#social" aria-label="Red social"><img src="assets/icon-social.svg" alt="" loading="lazy"></a>
+					<a href="#social" aria-label="Red social"><img src="assets/icon-social.svg" alt="" loading="lazy"></a>
+					<a href="#social" aria-label="Red social"><img src="assets/icon-social.svg" alt="" loading="lazy"></a>
+					<a href="#social" aria-label="Red social"><img src="assets/icon-social.svg" alt="" loading="lazy"></a>
 				</div>
 			</div>
 			<div class="footer__column">
@@ -89,14 +89,13 @@
 			</div>
 			<div class="footer__column footer__column--download">
 				<h2 class="footer__heading">Descargar app</h2>
-				<a class="store-badge" href="#app-store"><span class="store-badge__icon" aria-hidden="true"></span><span><small>Download on the</small><strong>App Store</strong></span></a>
-				<a class="store-badge" href="#google-play"><span class="store-badge__icon" aria-hidden="true"></span><span><small>GET IT ON</small><strong>Google Play</strong></span></a>
+				<button class="store-badge" type="button" data-pwa-install><img class="store-badge__icon" src="assets/favicon-momentum.svg" alt="" aria-hidden="true"><span><strong>Descargar app</strong></span></button>
 			</div>
 		</div>
 		<img class="footer__divider" src="assets/footer-divider.svg" alt="" loading="lazy">
 		<div class="footer__bottom">
 			<p>© 2026 Momentum. Todos los derechos reservados.</p>
-			<nav aria-label="Legal information"><a href="#terms">Términos y condiciones</a><a href="#privacy">Política de privacidad</a><a href="#cookies">Cookies</a><a href="#legal">Aviso legal</a></nav>
+			<nav aria-label="Información legal"><a href="#terms">Términos y condiciones</a><a href="#privacy">Política de privacidad</a><a href="#cookies">Cookies</a><a href="#legal">Aviso legal</a></nav>
 		</div>
 	</footer>
 </body>

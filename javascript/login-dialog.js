@@ -20,7 +20,7 @@ if (localStorage.getItem("momentum-authenticated") !== "true") {
 					<label class="login-field__label" for="login-dialog-password">Contraseña</label>
 					<div class="login-field__control">
 						<input class="login-field__input" id="login-dialog-password" name="password" type="password" placeholder="Ingresa tu contraseña" autocomplete="current-password" required>
-						<button class="login-field__visibility" type="button" aria-controls="login-dialog-password" aria-label="Show password" aria-pressed="false">
+						<button class="login-field__visibility" type="button" aria-controls="login-dialog-password" aria-label="Mostrar contraseña" aria-pressed="false">
 							<img src="assets/eye-icon.svg" alt="">
 						</button>
 					</div>

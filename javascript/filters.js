@@ -29,7 +29,7 @@ if (exploreTitle && sectionTitle) {
 }
 // Compartido: define las opciones de filtro para las dos páginas.
 const filterDefinitions = [
-	{ key: "format", label: "Formato", options: [["", "Todos"], ["presencial", "Presencial"], ["online", "Online"]] },
+	{ key: "format", label: "Formato", options: [["", "Todos"], ["presencial", "Presencial"], ["online", "En línea"]] },
 	{ key: "date", label: "Fechas", options: [["", "Cualquier fecha"], ["today", "Hoy"], ["week", "Esta semana"], ["month", "Este mes"]] },
 	// Cerca de mí filtra a 1 km y acerca más que la opción de 3 km.
 	{ key: "location", label: "Ubicación", options: [["", "Cualquier distancia"], ["1", "Cerca de mí"], ["3", "3 km"], ["5", "5 km"], ["10", "10 km"], ["25", "25 km"], ["50", "50 km"], ["100", "100 km"], ["150", "150 km"]] },

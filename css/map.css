@@ -122,6 +122,10 @@ main#home[aria-label="Mapa de eventos"] .events__grid .event-card:not([hidden]) 
 	}
 }
 
+.leaflet-popup.map-event-popup {
+	pointer-events: auto;
+}
+
 .leaflet-popup.map-event-popup .leaflet-popup-content-wrapper {
 	padding: 0;
 	overflow: hidden;
@@ -143,6 +147,7 @@ main#home[aria-label="Mapa de eventos"] .events__grid .event-card:not([hidden]) 
 .leaflet-popup.map-event-popup .event-card {
 	width: 100%;
 	margin: 0;
+	cursor: pointer;
 }
 
 .leaflet-popup.map-event-popup .event-card__details {

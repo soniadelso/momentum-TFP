@@ -12,6 +12,37 @@ if ("serviceWorker" in navigator) {
 	});
 }
 
+let pendingInstallPrompt;
+window.addEventListener("beforeinstallprompt", (event) => {
+	event.preventDefault();
+	pendingInstallPrompt = event;
+});
+window.addEventListener("appinstalled", () => {
+	pendingInstallPrompt = null;
+});
+
+document.querySelectorAll("[data-pwa-install]").forEach((installButton) => {
+	installButton.addEventListener("click", async () => {
+		if (window.matchMedia("(display-mode: standalone)").matches || navigator.standalone === true) {
+			window.alert("La aplicación ya está instalada.");
+			return;
+		}
+
+		if (!pendingInstallPrompt) {
+			const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+			window.alert(isIOS
+				? "Para instalarla, pulsa Compartir y selecciona Añadir a pantalla de inicio."
+				: "La instalación no está disponible en este navegador. Abre su menú y selecciona Instalar app o Añadir a pantalla de inicio.");
+			return;
+		}
+
+		const installPrompt = pendingInstallPrompt;
+		pendingInstallPrompt = null;
+		await installPrompt.prompt();
+		await installPrompt.userChoice;
+	});
+});
+
 const guestHome = document.querySelector("[data-home-guest]");
 const authenticatedHome = document.querySelector("[data-home-authenticated]");
 // Alterna la portada para mostrar solo el contenido correspondiente a la sesión.
